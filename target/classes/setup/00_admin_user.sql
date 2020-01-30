@@ -1,1 +1,0 @@
-insert into user values (default, 'cmarcelovalls@gmail.com', null, null, '277bd398664ea2dfcab76d9a3955bff2f09ceabadf280c013e5b1b8109736046', 'ACTIVE', 'BACKOFFICE', 'admin');

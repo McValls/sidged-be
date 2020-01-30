@@ -99,7 +99,6 @@ public class CourseService extends GenericService<Course, CourseRepository> {
 		analysisData.setCourseId(courseId);
 		analysisData.setCourseName(course.getName());
 		return analysisData;
-		
 	}
 	
 	@Override

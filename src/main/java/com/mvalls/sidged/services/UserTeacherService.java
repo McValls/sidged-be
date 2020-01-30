@@ -20,5 +20,5 @@ public class UserTeacherService extends GenericService<UserTeacher, UserTeacherR
 	protected UserTeacherRepository getRepository() {
 		return userTeacherRepository;
 	}
-	
+		
 }

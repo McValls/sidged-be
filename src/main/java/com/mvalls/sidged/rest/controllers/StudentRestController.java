@@ -13,32 +13,44 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mvalls.sidged.login.UserStudent;
 import com.mvalls.sidged.mappers.StudentAllMapper;
 import com.mvalls.sidged.mappers.StudentModelMapper;
+import com.mvalls.sidged.mappers.UserStudentAllMapper;
 import com.mvalls.sidged.model.Student;
 import com.mvalls.sidged.rest.dtos.StudentAllDTO;
 import com.mvalls.sidged.rest.dtos.StudentDTO;
 import com.mvalls.sidged.services.StudentService;
+import com.mvalls.sidged.services.UserStudentService;
 
 @RestController
 @RequestMapping("/student")
 public class StudentRestController {
 
-	@Autowired
-	private StudentService studentService;
+	private final StudentService studentService;
+	private final UserStudentService userStudentService;
+	private final StudentAllMapper studentAllMapper;
+	private final UserStudentAllMapper userStudentAllMapper;
+	private final StudentModelMapper studentModelMapper;
 	
 	@Autowired
-	private StudentAllMapper studentAllMapper;
-	
-	@Autowired
-	private StudentModelMapper studentModelMapper;
+	public StudentRestController(StudentService studentService, UserStudentService userStudentService,
+			StudentAllMapper studentAllMapper, UserStudentAllMapper userStudentAllMapper,
+			StudentModelMapper studentModelMapper) {
+		super();
+		this.studentService = studentService;
+		this.userStudentService = userStudentService;
+		this.studentAllMapper = studentAllMapper;
+		this.userStudentAllMapper = userStudentAllMapper;
+		this.studentModelMapper = studentModelMapper;
+	}
 	
 	@GetMapping
 	public Collection<StudentAllDTO> getAll() {
-		Collection<Student> studentsDb = studentService.findAll();
+		Collection<UserStudent> studentsDb = userStudentService.findAll();
 		
 		return studentsDb.stream()
-				.map(student -> studentAllMapper.map(student))
+				.map(student -> userStudentAllMapper.map(student))
 				.collect(Collectors.toList());
 	}
 	

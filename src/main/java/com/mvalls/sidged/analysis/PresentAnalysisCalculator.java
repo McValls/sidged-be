@@ -1,12 +1,14 @@
 package com.mvalls.sidged.analysis;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
@@ -19,6 +21,7 @@ import com.mvalls.sidged.model.analytics.CoursePresentismByMonthData;
 import com.mvalls.sidged.model.analytics.CoursePresentismData;
 import com.mvalls.sidged.model.analytics.PercentageByStudentPresent;
 import com.mvalls.sidged.model.analytics.PresentPercentages;
+import com.mvalls.sidged.model.analytics.PresentismAnalysisData;
 
 @Component
 public class PresentAnalysisCalculator {
@@ -153,6 +156,43 @@ public class PresentAnalysisCalculator {
 			percentage = (value * 100) / (double) total;
 		}
 		return percentage;
+	}
+	
+	public List<PresentismAnalysisData> getPresentismByStudentGroupedByCourse(Collection<ClassStudentPresent> classStudentPresents) {
+		List<PresentismAnalysisData> analysisData = new ArrayList<>();
+		Map<Course, List<ClassStudentPresent>> presentismGroupedByCourse =	classStudentPresents.stream()
+				.collect(Collectors.groupingBy(classStudentPresent -> classStudentPresent.getCourseClass().getCourse()));
+		
+		for(Entry<Course, List<ClassStudentPresent>> listPresentsByCourse: presentismGroupedByCourse.entrySet()) {
+			List<ClassStudentPresent> listPresents = listPresentsByCourse.getValue();
+			int total = listPresents.size();
+			int presents = 0, lates = 0, absents = 0;
+			for(ClassStudentPresent classStudentPresent : listPresents) {
+				switch(classStudentPresent.getPresent()) {
+					case PRESENT:
+						presents++;
+						break;
+					case LATE:
+						lates++;
+						break;
+					case ABSENT:
+						absents++;
+						break;
+				}
+			}
+			PresentismAnalysisData presentismAnalysisData = new PresentismAnalysisData();
+			presentismAnalysisData.setCourseId(listPresentsByCourse.getKey().getId());
+			presentismAnalysisData.setCourseName(listPresentsByCourse.getKey().getName());
+			
+			PercentageByStudentPresent presentsPercentage = new PercentageByStudentPresent(StudentPresent.PRESENT, getPercentage(total, presents).intValue());
+			PercentageByStudentPresent latesPercentage = new PercentageByStudentPresent(StudentPresent.LATE, getPercentage(total, lates).intValue());
+			PercentageByStudentPresent absentsPercentage = new PercentageByStudentPresent(StudentPresent.ABSENT, getPercentage(total, absents).intValue());
+			presentismAnalysisData.setPercentagesByStudentPresent(Arrays.asList(presentsPercentage, latesPercentage, absentsPercentage));
+			
+			analysisData.add(presentismAnalysisData);
+		}
+		
+		return analysisData;
 	}
 
 }

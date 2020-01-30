@@ -11,31 +11,44 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mvalls.sidged.login.UserTeacher;
+import com.mvalls.sidged.mappers.UserTeacherAllMapper;
 import com.mvalls.sidged.mappers.TeacherAllMapper;
 import com.mvalls.sidged.mappers.TeacherModelMapper;
 import com.mvalls.sidged.model.Teacher;
 import com.mvalls.sidged.rest.dtos.TeacherAllDTO;
 import com.mvalls.sidged.services.TeacherService;
+import com.mvalls.sidged.services.UserTeacherService;
 
 @RestController
 @RequestMapping("/teacher")
 public class TeacherRestController {
 
-	@Autowired
-	private TeacherService teacherService;
+	private final TeacherService teacherService;
+	private final UserTeacherAllMapper userTeacherAllMapper;
+	private final TeacherAllMapper teacherAllMapper;
+	private final TeacherModelMapper teacherModelMapper;
+	private final UserTeacherService userTeacherService;
 	
 	@Autowired
-	private TeacherAllMapper teacherAllMapper;
-	
-	@Autowired
-	private TeacherModelMapper teacherModelMapper;
+	public TeacherRestController(TeacherService teacherService, UserTeacherAllMapper userTeacherAllMapper,
+			TeacherAllMapper teacherAllMapper, TeacherModelMapper teacherModelMapper, 
+			UserTeacherService userTeacherService) {
+		super();
+		this.teacherService = teacherService;
+		this.userTeacherAllMapper = userTeacherAllMapper;
+		this.teacherAllMapper = teacherAllMapper;
+		this.teacherModelMapper = teacherModelMapper;
+		this.userTeacherService = userTeacherService;
+	}
+
 	
 	@GetMapping
 	public Collection<TeacherAllDTO> getAll() {
-		Collection<Teacher> teachersDb = teacherService.findAll();
+		Collection<UserTeacher> teachersDb = userTeacherService.findAll();
 		
 		Collection<TeacherAllDTO> teachersResponse = teachersDb.stream()
-				.map(teacher -> teacherAllMapper.map(teacher))
+				.map(teacher -> userTeacherAllMapper.map(teacher))
 				.collect(Collectors.toList());
 		
 		return teachersResponse;
