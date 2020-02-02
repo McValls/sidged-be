@@ -33,7 +33,7 @@ public class PresentismDataRestController {
 		return courseService.getPresentismByCourseGroupedByMonth(courseId);
 	}
 
-	@GetMapping("/student/{studentId}/{year}")
+	@GetMapping("/student/{studentId}/year/{year}")
 	public List<PresentismAnalysisData> getPresentismDataByStudentAndYear(@PathVariable(name = "studentId") Long studentId,
 			@PathVariable(name = "year") int year) {
 		return classStudentPresentService.getPresentismDataByStudentIdAndYear(studentId, year);
