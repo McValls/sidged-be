@@ -38,7 +38,7 @@ public class ClassStudentPresentService extends GenericService<ClassStudentPrese
 		List<ClassStudentPresent> classStudentPresents = classStudentPresentRepository.findByStudentId(studentId).stream()
 				.filter(classStudentPresent -> classStudentPresent.getCourseClass().getDate().getYear() == year)
 				.collect(Collectors.toList());
-		return presentAnalysisCalculator.getPresentismByStudentGroupedByCourse(classStudentPresents);
+		return presentAnalysisCalculator.getPresentismByStudentGroupedByCourse(classStudentPresents, year);
 	}
 	
 	@Override

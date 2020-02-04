@@ -158,7 +158,7 @@ public class PresentAnalysisCalculator {
 		return percentage;
 	}
 	
-	public List<PresentismAnalysisData> getPresentismByStudentGroupedByCourse(Collection<ClassStudentPresent> classStudentPresents) {
+	public List<PresentismAnalysisData> getPresentismByStudentGroupedByCourse(Collection<ClassStudentPresent> classStudentPresents, int year) {
 		List<PresentismAnalysisData> analysisData = new ArrayList<>();
 		Map<Course, List<ClassStudentPresent>> presentismGroupedByCourse =	classStudentPresents.stream()
 				.collect(Collectors.groupingBy(classStudentPresent -> classStudentPresent.getCourseClass().getCourse()));
@@ -183,6 +183,8 @@ public class PresentAnalysisCalculator {
 			PresentismAnalysisData presentismAnalysisData = new PresentismAnalysisData();
 			presentismAnalysisData.setCourseId(listPresentsByCourse.getKey().getId());
 			presentismAnalysisData.setCourseName(listPresentsByCourse.getKey().getName());
+			presentismAnalysisData.setNumberOfClasses(total);
+			presentismAnalysisData.setCourseYear(year);
 			
 			PercentageByStudentPresent presentsPercentage = new PercentageByStudentPresent(StudentPresent.PRESENT, getPercentage(total, presents).intValue());
 			PercentageByStudentPresent latesPercentage = new PercentageByStudentPresent(StudentPresent.LATE, getPercentage(total, lates).intValue());

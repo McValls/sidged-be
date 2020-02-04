@@ -23,7 +23,7 @@ public class TeacherAspect {
 	@Autowired
 	private UserTeacherService userTeacherService;
 	
-	@Pointcut("@annotation(com.mvalls.sidged.annotations.JwtTeacher) && args(.., request, userTeacher)")
+	@Pointcut("@annotation(com.mvalls.sidged.annotations.JwtTeacher) && args(request, userTeacher,..)")
 	private void getCoursesByTeacherExecution(HttpServletRequest request, UserTeacher userTeacher) {
 		
 	}

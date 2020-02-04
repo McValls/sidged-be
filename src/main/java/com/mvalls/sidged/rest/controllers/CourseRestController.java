@@ -31,6 +31,7 @@ import com.mvalls.sidged.model.Student;
 import com.mvalls.sidged.model.Teacher;
 import com.mvalls.sidged.rest.dtos.CourseDTO;
 import com.mvalls.sidged.rest.dtos.CourseListDTO;
+import com.mvalls.sidged.rest.dtos.NotifyStudentsDTO;
 import com.mvalls.sidged.rest.dtos.StudentAllDTO;
 import com.mvalls.sidged.rest.dtos.StudentDTO;
 import com.mvalls.sidged.rest.dtos.TeacherAllDTO;
@@ -134,6 +135,18 @@ public class CourseRestController {
 		return coursesByStudent.stream()
 				.map(course -> courseListMapper.map(course))
 				.collect(Collectors.toList());
+	}
+	
+	
+	@JwtTeacher
+	@PostMapping("/notify-students")
+	public void notifyCourseStudents(HttpServletRequest request, 
+			UserTeacher userTeacher,
+			@RequestBody NotifyStudentsDTO notifyStudentsDTO) {
+		courseService.sendEmailToStudents(notifyStudentsDTO.getCourseId(), 
+				userTeacher.getTeacher().getId(), 
+				notifyStudentsDTO.getSubject(), 
+				notifyStudentsDTO.getMessage());
 	}
 	
 }

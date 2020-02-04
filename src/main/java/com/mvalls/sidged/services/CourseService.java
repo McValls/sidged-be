@@ -19,6 +19,7 @@ import com.mvalls.sidged.model.Time;
 import com.mvalls.sidged.model.analytics.CoursePresentismData;
 import com.mvalls.sidged.model.analytics.PresentPercentages;
 import com.mvalls.sidged.model.analytics.PresentismAnalysisData;
+import com.mvalls.sidged.model.emails.Email;
 import com.mvalls.sidged.repositories.CourseRepository;
 import com.mvalls.sidged.strategies.actions.UpdateActionStrategy;
 import com.mvalls.sidged.strategies.actions.students.StudentUpdateActionStrategyFactory;
@@ -36,6 +37,7 @@ public class CourseService extends GenericService<Course, CourseRepository> {
 	@Autowired private CareerService careerService;
 	@Autowired private CourseVOtoModelMapper courseVOtoModelMapper;
 	@Autowired private PresentAnalysisCalculator presentAnalysisCalculator;
+	@Autowired private EmailsService emailsService;
 	
 	public Collection<Student> findStudentsByCourse(Long courseId) {
 		return courseRepository.getOne(courseId).getStudents();
@@ -112,6 +114,25 @@ public class CourseService extends GenericService<Course, CourseRepository> {
 
 	public Collection<Course> findByStudent(Long studentId) {
 		return courseRepository.findByStudentsId(studentId);
+	}
+	
+	public void sendEmailToStudents(Long courseId, Long teacherId, String subject, String message) {
+		Course course = this.findById(courseId);
+		if(course.getTeachers().stream().noneMatch(teacher -> teacher.getId().equals(teacherId))) {
+			throw new IllegalArgumentException("This teacher has no control over this course!");
+		}
+		
+		course.getStudents().parallelStream()
+			.forEach(student -> this.sendEmail(student, subject, message));
+	}
+	
+	private void sendEmail(Student student, String subject, String message) {
+		Email email = Email.builder()
+				.to(student.getContactData().getDefaultEmail())
+				.subject(subject)
+				.message(message)
+				.build();
+		this.emailsService.sendEmail(email);
 	}
 
 }
