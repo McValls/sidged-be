@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mvalls.sidged</groupId>
 	<artifactId>sidged</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<packaging>jar</packaging>
 	<name>SIDGED</name>
 	<description>Sistema Integral Digital de Gestión Estudiantil-Docente</description>
@@ -182,8 +182,10 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<release>1.8</release>  <!--or <release>10</release> -->
-				</configuration>
+			        <source>1.8</source>
+			        <target>1.8</target>
+			        <verbose>true</verbose>
+			    </configuration>
 			</plugin>
 		</plugins>
 	</build>

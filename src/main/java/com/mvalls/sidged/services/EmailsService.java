@@ -14,34 +14,40 @@ import javax.mail.internet.MimeMessage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import com.mvalls.sidged.model.emails.Email;
 
 @Service
+@PropertySource("classpath:email.properties")
 public class EmailsService {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(EmailsService.class);
 	
+	@Autowired private Environment env;
+	
 	public void sendEmail(Email email) {
 		Properties props = new Properties();
-		props.put("mail.smtp.host", "smtp.gmail.com");
-		props.put("mail.smtp.port", "465");
-		props.put("mail.smtp.auth", true);
-		props.put("mail.smtp.socketFactory.port", "465");
-        props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+		props.put("mail.smtp.host", env.getProperty("mail.smtp.host"));
+		props.put("mail.smtp.port", env.getProperty("mail.smtp.port"));
+		props.put("mail.smtp.auth", env.getProperty("mail.smtp.auth", "true"));
+		props.put("mail.smtp.socketFactory.port", env.getProperty("mail.smtp.socketFactory.port", "465"));
+        props.put("mail.smtp.socketFactory.class", env.getProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory"));
 		
 		
 		Session session = Session.getInstance(props, new Authenticator() {
 			@Override
 			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication("cmarcelovalls@gmail.com", "zajfzolxxugcagyp");
+				return new PasswordAuthentication(env.getProperty("email.account"), env.getProperty("email.secured.password"));
 			}
 		});
 		
 		try {
 			Message message = new MimeMessage(session);
-			message.setFrom(new InternetAddress("INSPT"));
+			message.setFrom(new InternetAddress(env.getProperty("email.from")));
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email.getTo()));
 			message.setSubject(email.getSubject());
 			message.setText(email.getMessage());
@@ -52,5 +58,5 @@ public class EmailsService {
 			e.printStackTrace();
 		}
 	}
-
+	
 }

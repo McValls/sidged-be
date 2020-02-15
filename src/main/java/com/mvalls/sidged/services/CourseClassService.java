@@ -58,14 +58,19 @@ public class CourseClassService extends GenericService<CourseClass, CourseClassR
 		return courseClass.getStudentPresents();
 	}
 	
-	public void finishClass(Long courseId, Long classId) {
+	public void updateClassState(Long courseId, Long classId, ClassState classState) {
 		CourseClass courseClass = courseClassRepository.findByCourseIdAndId(courseId, classId);
-		courseClass.setClassState(ClassState.FINALIZADA);
+		courseClass.setClassState(classState);
 		
 		update(courseClass);
 	}
 	
 	@Transactional
+	/**
+	 * Busca las ultimas 3 clases de cada curso y recorre la lista de presentes.
+	 * Si hay alumnos que tienen {DESERTOR_AMOUNT_OF_CLASSES} ausentes corridos, los toma como desertores y notifica.
+	 * @return
+	 */
 	public List<Desertor> getDesertors() {
 		List<Desertor> desertors = new ArrayList<>();
 		Collection<CourseClass> lastClassesOfEachCourse = courseClassRepository.findByCourseYearOrderByCourseIdAscClassNumberDesc(LocalDate.now().getYear());

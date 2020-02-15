@@ -1,26 +1,35 @@
 package com.mvalls.sidged.services;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
+import com.mvalls.sidged.model.Course;
+import com.mvalls.sidged.model.Student;
 import com.mvalls.sidged.model.analytics.Desertor;
 import com.mvalls.sidged.model.emails.Email;
 
 @Service
+@PropertySource("classpath:email.properties")
 public class DesertorService {
+	
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(DesertorService.class);
 	private final CourseClassService courseClassService;
 	private final EmailsService emailsService;
+	private final Environment env;
 
 	@Autowired
-	public DesertorService(CourseClassService courseClassService, EmailsService emailsService) {
+	public DesertorService(CourseClassService courseClassService, EmailsService emailsService, Environment env) {
 		this.courseClassService = courseClassService;
 		this.emailsService = emailsService;
+		this.env = env;
 	}
 
 	public void getDesertorsAndSendEmail() {
@@ -34,6 +43,7 @@ public class DesertorService {
 					.build();
 			emailsService.sendEmail(desertorEmail);
 		});
+		notifyInstution(desertors);
 		LOGGER.info("Mails sended");
 	}
 	
@@ -51,6 +61,29 @@ public class DesertorService {
 			.append("que no dejes la cursada!");
 		
 		return sb.toString();
+	}
+	
+	private void notifyInstution(List<Desertor> desertors) {
+		desertors.sort((d1, d2) -> d1.getCourse().getName().compareTo(d2.getCourse().getName()));
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("Reporte de desertores ").append(LocalDate.now().toString()).append(":").append("\n\n");
+		desertors.forEach(desertor -> sb.append(getDesertorCourseAndNames(desertor)).append("\n") );
+		sb.append("\n").append("Todos los alumnos han sido notificados.");
+		
+		Email email = Email.builder()
+			.to(env.getProperty("email.institution.account"))
+			.subject(env.getProperty("email.desertors.subject"))
+			.message(sb.toString())
+			.build();
+		
+		emailsService.sendEmail(email);
+	}
+	
+	private String getDesertorCourseAndNames(Desertor desertor) {
+		Course course = desertor.getCourse();
+		Student student = desertor.getStudent();
+		return course.getName() + " " + course.getYear() + " - " + student.getNames() + " " + student.getLastname(); 
 	}
 
 }

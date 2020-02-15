@@ -123,10 +123,11 @@ public class CourseService extends GenericService<Course, CourseRepository> {
 		}
 		
 		course.getStudents().parallelStream()
-			.forEach(student -> this.sendEmail(student, subject, message));
+			.forEach(student -> this.sendEmail(course, student, subject, message));
 	}
 	
-	private void sendEmail(Student student, String subject, String message) {
+	private void sendEmail(Course course, Student student, String subject, String message) {
+		subject = course.getName() + " " + course.getYear() + ": " + subject;
 		Email email = Email.builder()
 				.to(student.getContactData().getDefaultEmail())
 				.subject(subject)

@@ -4,17 +4,12 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.mvalls.sidged.mappers.ClassStudentPresentMapper;
 import com.mvalls.sidged.mappers.CourseClassMapper;
 import com.mvalls.sidged.mappers.CourseClassModelMapper;
+import com.mvalls.sidged.model.ClassState;
 import com.mvalls.sidged.model.ClassStudentPresent;
 import com.mvalls.sidged.model.CourseClass;
 import com.mvalls.sidged.rest.dtos.ClassStudentDTO;
@@ -35,6 +30,12 @@ public class CourseClassRestController {
 	public CourseClassDTO createClass(@RequestBody CourseClassDTO classDTO) {
 		CourseClass courseClass = courseClassModelMapper.map(classDTO);
 		courseClass = courseClassService.create(courseClass);
+		return courseClassMapper.map(courseClass);
+	}
+	
+	@GetMapping("/{classId}")
+	public CourseClassDTO getClassById(@PathVariable("classId") Long classId) {
+		CourseClass courseClass = courseClassService.findById(classId);
 		return courseClassMapper.map(courseClass);
 	}
 		
@@ -70,9 +71,14 @@ public class CourseClassRestController {
 	public void finishClass(@PathVariable("classId") Long classId, 
 			@PathVariable("courseId") Long courseId,
 			@RequestBody ClassStudentDTO studentDTO) {
-		courseClassService.finishClass(courseId, classId);
+		courseClassService.updateClassState(courseId, classId, ClassState.FINALIZADA);
 	}
 
-	
+	@PutMapping("/reopen/{classId}/course/{courseId}")
+	public void reopenClass(@PathVariable("classId") Long classId, 
+			@PathVariable("courseId") Long courseId,
+			@RequestBody ClassStudentDTO studentDTO) {
+		courseClassService.updateClassState(courseId, classId, ClassState.PENDIENTE);
+	}
 
 }

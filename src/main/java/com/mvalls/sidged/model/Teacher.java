@@ -16,13 +16,11 @@ import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "teacher")
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
 public class Teacher {
 
@@ -46,6 +44,8 @@ public class Teacher {
 	
 	@ManyToMany(mappedBy = "teachers")
 	private Collection<Course> courses;
+	
+	public Teacher() {}
 	
 	public Teacher(String names, String lastname, ContactData contactData) {
 		super();

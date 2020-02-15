@@ -15,13 +15,11 @@ import com.mvalls.sidged.converters.StringListConverter;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "contact_data")
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
 public class ContactData {
 	
@@ -36,6 +34,8 @@ public class ContactData {
 	@Convert(converter = StringListConverter.class)
 	@Builder.Default
 	private Collection<String> phones = new ArrayList<>();
+	
+	public ContactData() {}
 	
 	public ContactData(String email) {
 		super();
