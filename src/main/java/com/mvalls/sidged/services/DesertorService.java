@@ -68,8 +68,13 @@ public class DesertorService {
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("Reporte de desertores ").append(LocalDate.now().toString()).append(":").append("\n\n");
-		desertors.forEach(desertor -> sb.append(getDesertorCourseAndNames(desertor)).append("\n") );
-		sb.append("\n").append("Todos los alumnos han sido notificados.");
+		
+		if(desertors.isEmpty()) {
+			sb.append("No se registraron desertores esta vuelta.");
+		} else {
+			desertors.forEach(desertor -> sb.append(getDesertorCourseAndNames(desertor)).append("\n") );
+			sb.append("\n").append("Todos los alumnos han sido notificados.");
+		}
 		
 		Email email = Email.builder()
 			.to(env.getProperty("email.institution.account"))
