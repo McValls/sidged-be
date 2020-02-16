@@ -10,8 +10,8 @@ import com.mvalls.sidged.rest.dtos.ClassFileDocumentDTO;
 @Component
 public class ClassFileDocumentModelToDTOMapper extends GenericMapper<ClassFileDocument, ClassFileDocumentDTO>{
 
-	@Value("${server.port}") int serverPort;
-	@Value("${server.host}") int serverHost;
+	@Value("${server.port}") private int serverPort;
+	@Value("${server.host}") private String serverHost;
 	
 	@Override
 	public ClassFileDocumentDTO map(ClassFileDocument model) {
