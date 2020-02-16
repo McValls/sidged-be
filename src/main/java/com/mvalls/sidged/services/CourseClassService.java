@@ -19,8 +19,10 @@ import com.mvalls.sidged.model.Course;
 import com.mvalls.sidged.model.CourseClass;
 import com.mvalls.sidged.model.Student;
 import com.mvalls.sidged.model.StudentPresent;
+import com.mvalls.sidged.model.Teacher;
 import com.mvalls.sidged.model.analytics.Desertor;
 import com.mvalls.sidged.repositories.CourseClassRepository;
+import com.mvalls.sidged.rest.exceptions.UnauthorizedUserException;
 
 @Service
 public class CourseClassService extends GenericService<CourseClass, CourseClassRepository>{
@@ -122,6 +124,18 @@ public class CourseClassService extends GenericService<CourseClass, CourseClassR
 		CourseClass courseClass = findById(classId);
 		courseClass.setComments(comments);
 		update(courseClass);
+	}
+
+	public CourseClass findByTeacherAndId(Teacher teacher, Long classId) throws UnauthorizedUserException {
+		CourseClass courseClass = this.findById(classId);
+		if(courseClass != null) {
+			if(courseClass.getCourse().getTeachers().contains(teacher)) {
+				return courseClass;
+			} else {
+				throw new UnauthorizedUserException();
+			}
+		}
+		return null;
 	}
 	
 }

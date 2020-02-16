@@ -3,9 +3,13 @@ package com.mvalls.sidged.rest.controllers;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import com.mvalls.sidged.annotations.JwtTeacher;
+import com.mvalls.sidged.login.UserTeacher;
 import com.mvalls.sidged.mappers.ClassStudentPresentMapper;
 import com.mvalls.sidged.mappers.CourseClassMapper;
 import com.mvalls.sidged.mappers.CourseClassModelMapper;
@@ -15,6 +19,7 @@ import com.mvalls.sidged.model.CourseClass;
 import com.mvalls.sidged.rest.dtos.ClassStudentDTO;
 import com.mvalls.sidged.rest.dtos.CourseClassCommentDTO;
 import com.mvalls.sidged.rest.dtos.CourseClassDTO;
+import com.mvalls.sidged.rest.exceptions.UnauthorizedUserException;
 import com.mvalls.sidged.services.CourseClassService;
 
 @RestController
@@ -33,9 +38,12 @@ public class CourseClassRestController {
 		return courseClassMapper.map(courseClass);
 	}
 	
+	@JwtTeacher
 	@GetMapping("/{classId}")
-	public CourseClassDTO getClassById(@PathVariable("classId") Long classId) {
-		CourseClass courseClass = courseClassService.findById(classId);
+	public CourseClassDTO getClassById(HttpServletRequest request, 
+			UserTeacher userTeacher, 
+			@PathVariable("classId") Long classId) throws UnauthorizedUserException {
+		CourseClass courseClass = courseClassService.findByTeacherAndId(userTeacher.getTeacher(), classId);
 		return courseClassMapper.map(courseClass);
 	}
 		
