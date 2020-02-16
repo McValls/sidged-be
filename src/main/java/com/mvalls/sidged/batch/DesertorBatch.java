@@ -1,7 +1,7 @@
 package com.mvalls.sidged.batch;
 
 import java.time.LocalDateTime;
-import java.util.concurrent.TimeUnit;
+import java.util.TimeZone;
 
 import javax.annotation.PostConstruct;
 
@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
-import org.springframework.scheduling.support.PeriodicTrigger;
+import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Component;
 
 import com.mvalls.sidged.services.DesertorService;
@@ -30,7 +30,7 @@ public class DesertorBatch {
 	public void postConstruct() {
 		taskScheduler = new ThreadPoolTaskScheduler();
 		taskScheduler.initialize();
-		taskScheduler.schedule(getTask(), new PeriodicTrigger(1L, TimeUnit.DAYS));
+		taskScheduler.schedule(this.getTask(), new CronTrigger("0 5 0 * * ?", TimeZone.getTimeZone("GMT-3:00")));
 	}
 	
 	private Runnable getTask() {
