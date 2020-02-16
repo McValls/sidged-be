@@ -1,7 +1,5 @@
 package com.mvalls.sidged.mappers;
 
-import java.net.InetAddress;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +11,7 @@ import com.mvalls.sidged.rest.dtos.ClassFileDocumentDTO;
 public class ClassFileDocumentModelToDTOMapper extends GenericMapper<ClassFileDocument, ClassFileDocumentDTO>{
 
 	@Value("${server.port}") int serverPort;
+	@Value("${server.host}") int serverHost;
 	
 	@Override
 	public ClassFileDocumentDTO map(ClassFileDocument model) {
@@ -32,8 +31,7 @@ public class ClassFileDocumentModelToDTOMapper extends GenericMapper<ClassFileDo
 		if(fileDocument.getFileDocumentType() == FileDocumentType.LINK) {
 			return new String(fileDocument.getContent());
 		} else {
-			StringBuilder sBuilder = new StringBuilder("http://");
-			sBuilder.append(InetAddress.getLoopbackAddress().getHostName());
+			StringBuilder sBuilder = new StringBuilder(serverHost);
 			if(serverPort > 0) {
 				sBuilder.append(":").append(serverPort);
 			}
