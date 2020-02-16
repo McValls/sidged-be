@@ -1,1 +1,1 @@
- insert into course (id, chair, name, shift, year, career_id, period_id, time_start_id, time_end_id) values (default, null, 'Seminario', 'NIGHT', 2019, 1, 1, 18, 23);
+ insert into course (id, chair, name, shift, year, career_id, period_id, time_start_id, time_end_id) values (default, null, 'Seminario', 'NIGHT', 2020, 1, 1, 18, 23);
