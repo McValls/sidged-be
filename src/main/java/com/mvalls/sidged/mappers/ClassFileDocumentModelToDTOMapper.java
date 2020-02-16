@@ -10,7 +10,6 @@ import com.mvalls.sidged.rest.dtos.ClassFileDocumentDTO;
 @Component
 public class ClassFileDocumentModelToDTOMapper extends GenericMapper<ClassFileDocument, ClassFileDocumentDTO>{
 
-	@Value("${server.port}") private int serverPort;
 	@Value("${server.host}") private String serverHost;
 	
 	@Override
@@ -32,9 +31,6 @@ public class ClassFileDocumentModelToDTOMapper extends GenericMapper<ClassFileDo
 			return new String(fileDocument.getContent());
 		} else {
 			StringBuilder sBuilder = new StringBuilder(serverHost);
-			if(serverPort > 0) {
-				sBuilder.append(":").append(serverPort);
-			}
 			sBuilder.append("/file-documents/file/"+fileDocument.getId());
 			return sBuilder.toString();
 		}
