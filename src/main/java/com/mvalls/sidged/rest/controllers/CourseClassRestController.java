@@ -30,11 +30,14 @@ public class CourseClassRestController {
 	@Autowired private CourseClassModelMapper courseClassModelMapper;
 	@Autowired private CourseClassMapper courseClassMapper;
 	@Autowired private CourseClassService courseClassService;
-	
+
+	@JwtTeacher
 	@PostMapping
-	public CourseClassDTO createClass(@RequestBody CourseClassDTO classDTO) {
+	public CourseClassDTO createClass(HttpServletRequest request, 
+			UserTeacher userTeacher,
+			@RequestBody CourseClassDTO classDTO) throws UnauthorizedUserException {
 		CourseClass courseClass = courseClassModelMapper.map(classDTO);
-		courseClass = courseClassService.create(courseClass);
+		courseClass = courseClassService.create(userTeacher.getTeacher(), courseClass);
 		return courseClassMapper.map(courseClass);
 	}
 	
@@ -49,7 +52,7 @@ public class CourseClassRestController {
 		
 	@GetMapping("/course/{courseId}")
 	public Collection<CourseClassDTO> getClassesByCourse(@PathVariable("courseId") Long courseId){
-		Collection<CourseClass> classes = courseClassService.findClassesByCourseId(courseId)	;
+		Collection<CourseClass> classes = courseClassService.findClassesByCourseId(courseId);
 		Collection<CourseClassDTO> classesDTO = classes.stream()
 				.map(course -> courseClassMapper.map(course))
 				.sorted((CourseClassDTO c1, CourseClassDTO c2) -> c1.getClassNumber() - c2.getClassNumber())
@@ -75,18 +78,24 @@ public class CourseClassRestController {
 		courseClassService.updateComments(classId, courseClassCommentDTO.getComments());
 	}
 	
+	@JwtTeacher
 	@PutMapping("/finish/{classId}/course/{courseId}")
-	public void finishClass(@PathVariable("classId") Long classId, 
+	public void finishClass(HttpServletRequest request, 
+			UserTeacher userTeacher,			
+			@PathVariable("classId") Long classId, 
 			@PathVariable("courseId") Long courseId,
-			@RequestBody ClassStudentDTO studentDTO) {
-		courseClassService.updateClassState(courseId, classId, ClassState.FINALIZADA);
+			@RequestBody ClassStudentDTO studentDTO) throws UnauthorizedUserException {
+		courseClassService.updateClassState(userTeacher.getTeacher(), courseId, classId, ClassState.FINALIZADA);
 	}
 
+	@JwtTeacher
 	@PutMapping("/reopen/{classId}/course/{courseId}")
-	public void reopenClass(@PathVariable("classId") Long classId, 
+	public void reopenClass(HttpServletRequest request, 
+			UserTeacher userTeacher,
+			@PathVariable("classId") Long classId, 
 			@PathVariable("courseId") Long courseId,
-			@RequestBody ClassStudentDTO studentDTO) {
-		courseClassService.updateClassState(courseId, classId, ClassState.PENDIENTE);
+			@RequestBody ClassStudentDTO studentDTO) throws UnauthorizedUserException {
+		courseClassService.updateClassState(userTeacher.getTeacher(), courseId, classId, ClassState.PENDIENTE);
 	}
 
 }

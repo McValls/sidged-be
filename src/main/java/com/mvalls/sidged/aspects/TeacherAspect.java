@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.mvalls.sidged.login.UserTeacher;
 import com.mvalls.sidged.login.UserType;
+import com.mvalls.sidged.rest.exceptions.UnauthorizedUserException;
 import com.mvalls.sidged.security.jwt.JwtTokenUtils;
 import com.mvalls.sidged.services.UserTeacherService;
 
@@ -29,7 +30,7 @@ public class TeacherAspect {
 	}
 	
 	@Before("getCoursesByTeacherExecution(request, userTeacher)")
-	public void setTeacherInfo(HttpServletRequest request, UserTeacher userTeacher) {
+	public void setTeacherInfo(HttpServletRequest request, UserTeacher userTeacher) throws UnauthorizedUserException {
 		String header = request.getHeader("Authorization");
 		String authToken = header.substring(7);
 		

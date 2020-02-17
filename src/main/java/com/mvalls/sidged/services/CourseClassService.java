@@ -32,8 +32,11 @@ public class CourseClassService extends GenericService<CourseClass, CourseClassR
 	@Autowired private CourseClassRepository courseClassRepository;
 	@Autowired private CourseService courseService;
 	
-	public CourseClass create(CourseClass courseClass) {
+	public CourseClass create(Teacher teacher, CourseClass courseClass) throws UnauthorizedUserException {
 		Course course = courseService.findById(courseClass.getCourse().getId());
+		
+		validateTeacherAndCourse(teacher, course);
+		
 		Collection<Student> students = new ArrayList<>(course.getStudents());
 		Collection<ClassStudentPresent> classStudents = students.stream()
 			.map(student -> new ClassStudentPresent(null, courseClass, student, StudentPresent.ABSENT))
@@ -60,11 +63,14 @@ public class CourseClassService extends GenericService<CourseClass, CourseClassR
 		return courseClass.getStudentPresents();
 	}
 	
-	public void updateClassState(Long courseId, Long classId, ClassState classState) {
+	public void updateClassState(Teacher teacher, Long courseId, Long classId, ClassState classState) throws UnauthorizedUserException {
 		CourseClass courseClass = courseClassRepository.findByCourseIdAndId(courseId, classId);
-		courseClass.setClassState(classState);
-		
-		update(courseClass);
+		if(courseClass != null) {
+			validateTeacherAndCourse(teacher, courseClass.getCourse());
+			
+			courseClass.setClassState(classState);
+			update(courseClass);
+		}
 	}
 	
 	@Transactional
@@ -129,13 +135,16 @@ public class CourseClassService extends GenericService<CourseClass, CourseClassR
 	public CourseClass findByTeacherAndId(Teacher teacher, Long classId) throws UnauthorizedUserException {
 		CourseClass courseClass = this.findById(classId);
 		if(courseClass != null) {
-			if(courseClass.getCourse().getTeachers().contains(teacher)) {
-				return courseClass;
-			} else {
-				throw new UnauthorizedUserException();
-			}
+			this.validateTeacherAndCourse(teacher, courseClass.getCourse());
+			return courseClass;
 		}
 		return null;
+	}
+	
+	private void validateTeacherAndCourse(Teacher teacher, Course course) throws UnauthorizedUserException {
+		if (! course.getTeachers().contains(teacher)) {
+			throw new UnauthorizedUserException();
+		}
 	}
 	
 }

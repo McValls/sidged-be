@@ -3,6 +3,8 @@ package com.mvalls.sidged.rest.controllers;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mvalls.sidged.annotations.JwtBackOffice;
 import com.mvalls.sidged.login.UserStudent;
 import com.mvalls.sidged.mappers.StudentAllMapper;
 import com.mvalls.sidged.mappers.StudentModelMapper;
@@ -54,13 +57,15 @@ public class StudentRestController {
 				.collect(Collectors.toList());
 	}
 	
+	@JwtBackOffice
 	@PostMapping
-	public void create(@RequestBody StudentDTO student) {
+	public void create(HttpServletRequest request, @RequestBody StudentDTO student) {
 		studentService.create(studentModelMapper.map(student));
 	}
 	
+	@JwtBackOffice
 	@PutMapping("/{id}")
-	public StudentAllDTO update(@PathVariable("id") Long id, @RequestBody StudentDTO student) {
+	public StudentAllDTO update(HttpServletRequest request, @PathVariable("id") Long id, @RequestBody StudentDTO student) {
 		Student modelStudent = studentModelMapper.map(student);
 		if(id == null) {
 			id = student.getId();
@@ -71,8 +76,9 @@ public class StudentRestController {
 		return studentAllMapper.map(modelStudent);
 	}
 	
+	@JwtBackOffice
 	@DeleteMapping("/{id}")
-	public void delete(@PathVariable("id") Long id) {
+	public void delete(HttpServletRequest request, @PathVariable("id") Long id) {
 		Student student = Student.builder()
 				.id(id)
 				.build();

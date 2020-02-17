@@ -10,8 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.mvalls.sidged.analysis.PresentAnalysisCalculator;
 import com.mvalls.sidged.model.ClassStudentPresent;
 import com.mvalls.sidged.model.StudentPresent;
+import com.mvalls.sidged.model.Teacher;
 import com.mvalls.sidged.model.analytics.PresentismAnalysisData;
 import com.mvalls.sidged.repositories.ClassStudentPresentRepository;
+import com.mvalls.sidged.rest.exceptions.UnauthorizedUserException;
 
 @Service
 public class ClassStudentPresentService extends GenericService<ClassStudentPresent, ClassStudentPresentRepository>{
@@ -28,10 +30,14 @@ public class ClassStudentPresentService extends GenericService<ClassStudentPrese
 	}
 
 	@Transactional
-	public void updatePresent(Long courseClassId, Long studentId, StudentPresent present) {
+	public void updatePresent(Teacher teacher, Long courseClassId, Long studentId, StudentPresent present) throws UnauthorizedUserException {
 		ClassStudentPresent classStudentPresent = classStudentPresentRepository.findByCourseClassIdAndStudentId(courseClassId, studentId);
-		classStudentPresent.setPresent(present);
-		classStudentPresentRepository.save(classStudentPresent);
+		if(classStudentPresent != null) {
+			if(!classStudentPresent.getCourseClass().getCourse().getTeachers().contains(teacher)) throw new UnauthorizedUserException();
+			
+			classStudentPresent.setPresent(present);
+			classStudentPresentRepository.save(classStudentPresent);
+		}
 	}
 	
 	public List<PresentismAnalysisData> getPresentismDataByStudentIdAndYear(Long studentId, int year) {

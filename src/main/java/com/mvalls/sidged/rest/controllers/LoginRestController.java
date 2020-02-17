@@ -1,5 +1,6 @@
 package com.mvalls.sidged.rest.controllers;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mvalls.sidged.annotations.JwtBackOffice;
 import com.mvalls.sidged.login.User;
 import com.mvalls.sidged.mappers.LoginResponseMapper;
 import com.mvalls.sidged.mappers.SignUpModelMapper;
@@ -49,8 +51,9 @@ public class LoginRestController {
 		return loginResponseMapper.map(loggedUser);	
 	}
 	
+	@JwtBackOffice
 	@PostMapping("/signup")
-	public void signUp(@RequestBody SignUpRequestDTO signup) {
+	public void signUp(HttpServletRequest request, @RequestBody SignUpRequestDTO signup) {
 		User user = signUpModelMapper.map(signup);
 		SignUpVO signUpVO = signUpVOMapper.map(signup); 
 		

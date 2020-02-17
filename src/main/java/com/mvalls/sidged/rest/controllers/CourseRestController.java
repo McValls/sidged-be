@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mvalls.sidged.annotations.JwtBackOffice;
 import com.mvalls.sidged.annotations.JwtStudent;
 import com.mvalls.sidged.annotations.JwtTeacher;
 import com.mvalls.sidged.enums.UpdateAction;
@@ -90,31 +91,35 @@ public class CourseRestController {
 		return studentsList;
 	}
 	
+	@JwtBackOffice
 	@PutMapping("/{id}/teacher")
 	public Collection<TeacherAllDTO> updateTeachers(
-			@PathVariable("id") Long id, 
+			HttpServletRequest request,
+			@PathVariable("id") Long id,
 			@RequestBody TeacherAllDTO dto,
-			@RequestParam(name = "action", required = true) UpdateAction action){
+			@RequestParam(name = "action", required = true) UpdateAction action) {
 		Collection<Teacher> teachers = courseService.updateTeacher(id, teacherModelMapper.map(dto), action);
 		return teachers.stream()
 				.map(teacher -> teacherAllMapper.map(teacher))
 				.collect(Collectors.toList());
 	}
 	
+	@JwtBackOffice
 	@PutMapping("/{id}/student")
 	public Collection<StudentAllDTO> updateStudents(
+			HttpServletRequest request,
 			@PathVariable("id") Long id, 
 			@RequestBody StudentDTO dto,
-			@RequestParam(name = "action", required = true) UpdateAction action
-			){
+			@RequestParam(name = "action", required = true) UpdateAction action) {
 		Collection<Student> students = courseService.updateStudent(id, studentModelMapper.map(dto), action);
 		return students.stream()
 				.map(student -> studentAllMapper.map(student))
 				.collect(Collectors.toList());
 	}
 	
+	@JwtBackOffice
 	@PostMapping
-	public void createCourse(@RequestBody CourseDTO dto) {
+	public void createCourse(HttpServletRequest request, @RequestBody CourseDTO dto) {
 		CourseVO courseValueObject = courseDTOtoVOMapper.map(dto);
 		courseService.createCourse(courseValueObject);
 	}

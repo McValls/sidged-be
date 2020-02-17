@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 import com.mvalls.sidged.login.UserType;
+import com.mvalls.sidged.rest.exceptions.UnauthorizedUserException;
 import com.mvalls.sidged.security.SecurityConstants;
 
 import io.jsonwebtoken.Claims;
@@ -61,12 +62,12 @@ public class JwtTokenUtils {
         }
     }
     
-    public String getUserName(String token, UserType userType) {
+    public String getUserName(String token, UserType userType) throws UnauthorizedUserException {
     	User user = this.parseToken(token);
-    	boolean isTeacher = user.getAuthorities().stream()
+    	boolean isValidUserType = user.getAuthorities().stream()
     		.anyMatch(authority -> authority.getAuthority().equalsIgnoreCase(userType.name()));
-    	if(!isTeacher) {
-    		throw new IllegalStateException("The given token doens't represent a valid " + userType.name().toLowerCase() + "!");
+    	if(!isValidUserType) {
+     		throw new UnauthorizedUserException();
     	}
     	
     	return user.getUsername();
