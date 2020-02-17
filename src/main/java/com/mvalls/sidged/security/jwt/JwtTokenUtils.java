@@ -2,6 +2,7 @@ package com.mvalls.sidged.security.jwt;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -84,7 +85,9 @@ public class JwtTokenUtils {
     
     public String generateToken(User u) {
     		
-        Claims claims = Jwts.claims().setSubject(u.getUsername());
+        Claims claims = Jwts.claims()
+        		.setSubject(u.getUsername())
+        		.setExpiration(new Date(System.currentTimeMillis() + 172_800_000)); // 48hs
         claims.put("userId", u.getUsername());
         claims.put("password", u.getPassword());
         claims.put("roles", u.getAuthorities());
