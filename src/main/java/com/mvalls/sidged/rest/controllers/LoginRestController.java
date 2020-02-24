@@ -4,9 +4,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mvalls.sidged.annotations.JwtBackOffice;
@@ -14,10 +17,12 @@ import com.mvalls.sidged.login.User;
 import com.mvalls.sidged.mappers.LoginResponseMapper;
 import com.mvalls.sidged.mappers.SignUpModelMapper;
 import com.mvalls.sidged.mappers.SignUpVOMapper;
+import com.mvalls.sidged.rest.dtos.ChangePasswordDTO;
 import com.mvalls.sidged.rest.dtos.LoginRequestDTO;
 import com.mvalls.sidged.rest.dtos.LoginResponseDTO;
 import com.mvalls.sidged.rest.dtos.SignUpRequestDTO;
 import com.mvalls.sidged.rest.exceptions.BadCredentialsException;
+import com.mvalls.sidged.rest.exceptions.WrongPasswordException;
 import com.mvalls.sidged.security.jwt.JwtTokenUtils;
 import com.mvalls.sidged.services.LoginService;
 import com.mvalls.sidged.valueObjects.SignUpVO;
@@ -78,6 +83,18 @@ public class LoginRestController {
 		SignUpVO signUpVO = signUpVOMapper.map(signup); 
 		
 		loginService.signUp(user, signUpVO);
+	}
+	
+	@PutMapping("/change-password")
+	public void changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) throws WrongPasswordException {
+		loginService.changePassword(changePasswordDTO.getUsername(), 
+				changePasswordDTO.getOldPassword(), 
+				changePasswordDTO.getNewPassword());
+	}
+	
+	@GetMapping("/recovery-password")
+	public void recoveryPassword(@RequestParam("username") String username, @RequestParam("email") String email) throws BadCredentialsException {
+		loginService.recoveryPassword(username, email);
 	}
 	
 }

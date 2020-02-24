@@ -24,15 +24,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  */
 @SuppressWarnings("serial")
-@ResponseStatus(code = HttpStatus.UNAUTHORIZED, reason = "Invalid User, Password or combination of both")
-public class BadCredentialsException extends Exception{
+@ResponseStatus(code = HttpStatus.BAD_REQUEST, reason = "Wrong password")
+public class WrongPasswordException extends Exception {
 	
-	public BadCredentialsException() {
-		super();
-	}
-
-	public BadCredentialsException(String message) {
-		super(message);
-	}
-
 }

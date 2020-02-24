@@ -8,6 +8,8 @@ import com.mvalls.sidged.login.User;
 import com.mvalls.sidged.login.UserType;
 import com.mvalls.sidged.model.emails.Email;
 import com.mvalls.sidged.repositories.UserRepository;
+import com.mvalls.sidged.rest.exceptions.BadCredentialsException;
+import com.mvalls.sidged.rest.exceptions.WrongPasswordException;
 import com.mvalls.sidged.strategies.userCreation.UserCreationStrategy;
 import com.mvalls.sidged.strategies.userCreation.UserCreationStrategyService;
 import com.mvalls.sidged.utils.EncryptionUtils;
@@ -83,6 +85,32 @@ public class LoginService extends GenericService<User, UserRepository>{
 		emailsService.sendEmail(email);
 	}
 	
+	@Transactional
+	public void changePassword(String username, String oldPassword, String newPassword) throws WrongPasswordException {
+		User user = this.login(username, oldPassword);
+		if(user != null) {
+			String newPasswordEncrypted = EncryptionUtils.encryptSHA256(newPassword);
+			user.setPassword(newPasswordEncrypted);
+			this.update(user);
+		} else {
+			throw new WrongPasswordException();
+		}
+	}
+	
+	@Transactional
+	public void recoveryPassword(String username, String email) throws BadCredentialsException {
+		User user = this.userRepository.getUserByUsername(username);
+		if(user.getEmail().equalsIgnoreCase(email)) {
+			String randomPassword = EncryptionUtils.generateRandomPassword();
+			String randomPasswordEncrypted = EncryptionUtils.encryptSHA256(randomPassword);
+			
+			this.emailsService.sendRecoveryPasswordEmail(email, randomPassword);
+			user.setPassword(randomPasswordEncrypted);
+			this.update(user);
+		} else {
+			throw new BadCredentialsException();
+		}
+	}
 
 	private String getSubject(UserType userType) {
 		return "Nuevo usuario registrado " + (userType == UserType.STUDENT? "[Estudiante]" : "[Docente]");

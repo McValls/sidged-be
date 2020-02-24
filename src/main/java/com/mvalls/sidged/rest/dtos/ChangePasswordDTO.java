@@ -1,7 +1,10 @@
-package com.mvalls.sidged.rest.exceptions;
+package com.mvalls.sidged.rest.dtos;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * 
@@ -24,15 +27,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  */
 @SuppressWarnings("serial")
-@ResponseStatus(code = HttpStatus.UNAUTHORIZED, reason = "Invalid User, Password or combination of both")
-public class BadCredentialsException extends Exception{
+@Data
+@EqualsAndHashCode(callSuper = false)
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class ChangePasswordDTO extends DataTransferObject {
 	
-	public BadCredentialsException() {
-		super();
-	}
-
-	public BadCredentialsException(String message) {
-		super(message);
-	}
+	private String username;
+	private String oldPassword;
+	private String newPassword;
 
 }

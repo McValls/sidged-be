@@ -79,4 +79,14 @@ public class EmailsService {
 		}
 	}
 	
+	public void sendRecoveryPasswordEmail(String toEmail, String newPassword) {
+		Email email = Email.builder()
+				.to(toEmail)
+				.subject("Recuperación de contraseña")
+				.message("Su contraseña ha sido restaurada. Para ingresar, pruebe con \n" + newPassword + "\n\nNo olvide cambiar su contraseña una vez ingresado.")
+				.build();
+		
+		this.sendEmail(email);
+	}
+	
 }
