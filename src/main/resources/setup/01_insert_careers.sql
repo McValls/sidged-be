@@ -1,1 +1,11 @@
 insert into career (name) values ('Informática Aplicada - Plan 60');
+insert into career (name) values ('Control Eléctrico y Accionamientos - Plan 61');
+insert into career (name) values ('Mecánica, Automotores y Máquinas Térmicas - Plan 62');
+insert into career (name) values ('Automatización y Robótica - Plan 63');
+insert into career (name) values ('Electrónica - Plan 64');
+insert into career (name) values ('Química y Química Aplicada - Plan 65');
+insert into career (name) values ('Física y Física Aplicada - Plan 66');
+insert into career (name) values ('Diseño Tecnológico - Plan 67');
+insert into career (name) values ('Profesorado en Disciplinas Industriales - Plan 68');
+insert into career (name) values ('Inglés e Inglés Técnico - Plan 69');
+insert into career (name) values ('Matemática y Matemática Aplicada - Plan 70');
