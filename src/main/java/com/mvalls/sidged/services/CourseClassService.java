@@ -101,7 +101,7 @@ public class CourseClassService extends GenericService<CourseClass, CourseClassR
 	 */
 	public List<Desertor> getDesertors() {
 		List<Desertor> desertors = new ArrayList<>();
-		Collection<CourseClass> lastClassesOfEachCourse = courseClassRepository.findByCourseYearOrderByCourseIdAscClassNumberDesc(LocalDate.now().getYear());
+		Collection<CourseClass> lastClassesOfEachCourse = courseClassRepository.findByCourseYearAndClassStateOrderByCourseIdAscClassNumberDesc(LocalDate.now().getYear(), ClassState.FINALIZADA);
 		Map<Course, List<CourseClass>> lastClassesByCourse = lastClassesOfEachCourse.stream().collect(Collectors.groupingBy(classes -> classes.getCourse()));
 		lastClassesByCourse.forEach((course, listOfClasses) -> {
 			if(listOfClasses.size() >= DESERTOR_AMOUNT_OF_CLASSES) {

@@ -1,11 +1,14 @@
-package com.mvalls.sidged.repositories;
+package com.mvalls.sidged.rest.controllers;
 
-import java.util.Collection;
+import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.mvalls.sidged.model.ClassState;
-import com.mvalls.sidged.model.CourseClass;
+import com.mvalls.sidged.annotations.JwtBackOffice;
+import com.mvalls.sidged.services.DesertorService;
 
 /**
  * 
@@ -27,9 +30,17 @@ import com.mvalls.sidged.model.CourseClass;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-public interface CourseClassRepository extends JpaRepository<CourseClass, Long>{
+
+@RestController
+@RequestMapping("/desertors")
+public class DesertorsRestController {
 	
-	CourseClass findByCourseIdAndId(Long courseId, Long id);
-	Collection<CourseClass> findByCourseYearAndClassStateOrderByCourseIdAscClassNumberDesc(Integer year, ClassState state);
+	@Autowired private DesertorService desertorService;
 	
+	@JwtBackOffice
+	@GetMapping("/refresh")
+	public void forceRefresh(HttpServletRequest request) {
+		this.desertorService.getDesertorsAndSendEmail();
+	}
+
 }
