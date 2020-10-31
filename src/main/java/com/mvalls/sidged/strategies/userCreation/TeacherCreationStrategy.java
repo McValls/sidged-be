@@ -3,12 +3,12 @@ package com.mvalls.sidged.strategies.userCreation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.mvalls.sidged.login.User;
-import com.mvalls.sidged.login.UserTeacher;
-import com.mvalls.sidged.model.ContactData;
-import com.mvalls.sidged.model.Teacher;
-import com.mvalls.sidged.services.TeacherService;
-import com.mvalls.sidged.services.UserTeacherService;
+import com.mvalls.sidged.core.model.ContactData;
+import com.mvalls.sidged.core.model.Teacher;
+import com.mvalls.sidged.core.model.users.User;
+import com.mvalls.sidged.core.model.users.UserTeacher;
+import com.mvalls.sidged.core.services.TeacherService;
+import com.mvalls.sidged.core.services.UserTeacherService;
 import com.mvalls.sidged.valueObjects.SignUpVO;
 
 /**

@@ -3,7 +3,7 @@ package com.mvalls.sidged.mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.mvalls.sidged.model.Teacher;
+import com.mvalls.sidged.core.model.Teacher;
 import com.mvalls.sidged.rest.dtos.TeacherAllDTO;
 
 /**

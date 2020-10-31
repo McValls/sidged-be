@@ -5,7 +5,7 @@ import java.util.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.mvalls.sidged.model.Student;
+import com.mvalls.sidged.core.model.Student;
 import com.mvalls.sidged.rest.dtos.StudentDTO;
 
 /**

@@ -3,13 +3,13 @@ package com.mvalls.sidged.mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.mvalls.sidged.login.User;
-import com.mvalls.sidged.login.UserType;
-import com.mvalls.sidged.model.Student;
-import com.mvalls.sidged.model.Teacher;
+import com.mvalls.sidged.core.model.Student;
+import com.mvalls.sidged.core.model.Teacher;
+import com.mvalls.sidged.core.model.users.User;
+import com.mvalls.sidged.core.model.users.UserType;
+import com.mvalls.sidged.core.services.UserStudentService;
+import com.mvalls.sidged.core.services.UserTeacherService;
 import com.mvalls.sidged.rest.dtos.LoginResponseDTO;
-import com.mvalls.sidged.services.UserStudentService;
-import com.mvalls.sidged.services.UserTeacherService;
 
 /**
  * 

@@ -2,7 +2,7 @@ package com.mvalls.sidged.strategies.actions.students;
 
 import java.util.Collection;
 
-import com.mvalls.sidged.model.Student;
+import com.mvalls.sidged.core.model.Student;
 import com.mvalls.sidged.strategies.actions.UpdateActionStrategy;
 
 /**

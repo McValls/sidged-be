@@ -1,6 +1,6 @@
 package com.mvalls.sidged.valueObjects;
 
-import com.mvalls.sidged.model.StudentPresent;
+import com.mvalls.sidged.core.model.StudentPresent;
 
 import lombok.Builder;
 import lombok.Data;

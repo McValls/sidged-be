@@ -12,7 +12,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Component;
 
-import com.mvalls.sidged.services.DesertorService;
+import com.mvalls.sidged.core.services.DesertorService;
 
 /**
  * 

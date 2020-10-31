@@ -16,15 +16,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mvalls.sidged.annotations.JwtBackOffice;
-import com.mvalls.sidged.login.UserStudent;
+import com.mvalls.sidged.core.model.Student;
+import com.mvalls.sidged.core.model.users.UserStudent;
+import com.mvalls.sidged.core.services.StudentService;
+import com.mvalls.sidged.core.services.UserStudentService;
 import com.mvalls.sidged.mappers.StudentAllMapper;
 import com.mvalls.sidged.mappers.StudentModelMapper;
 import com.mvalls.sidged.mappers.UserStudentAllMapper;
-import com.mvalls.sidged.model.Student;
 import com.mvalls.sidged.rest.dtos.StudentAllDTO;
 import com.mvalls.sidged.rest.dtos.StudentDTO;
-import com.mvalls.sidged.services.StudentService;
-import com.mvalls.sidged.services.UserStudentService;
 
 /**
  * 
@@ -99,9 +99,6 @@ public class StudentRestController {
 	@JwtBackOffice
 	@DeleteMapping("/{id}")
 	public void delete(HttpServletRequest request, @PathVariable("id") Long id) {
-		Student student = Student.builder()
-				.id(id)
-				.build();
-		studentService.delete(student);
+		studentService.delete(id);
 	}
 }

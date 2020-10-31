@@ -1,6 +1,6 @@
 package com.mvalls.sidged.utils;
 
-import com.mvalls.sidged.model.ContactData;
+import com.mvalls.sidged.core.model.ContactData;
 
 /**
  * 

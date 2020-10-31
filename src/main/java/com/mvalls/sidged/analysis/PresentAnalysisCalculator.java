@@ -13,15 +13,15 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
-import com.mvalls.sidged.model.ClassStudentPresent;
-import com.mvalls.sidged.model.Course;
-import com.mvalls.sidged.model.CourseClass;
-import com.mvalls.sidged.model.StudentPresent;
-import com.mvalls.sidged.model.analytics.CoursePresentismByMonthData;
-import com.mvalls.sidged.model.analytics.CoursePresentismData;
-import com.mvalls.sidged.model.analytics.PercentageByStudentPresent;
-import com.mvalls.sidged.model.analytics.PresentPercentages;
-import com.mvalls.sidged.model.analytics.PresentismAnalysisData;
+import com.mvalls.sidged.core.model.ClassStudentPresent;
+import com.mvalls.sidged.core.model.Course;
+import com.mvalls.sidged.core.model.CourseClass;
+import com.mvalls.sidged.core.model.StudentPresent;
+import com.mvalls.sidged.core.model.analytics.CoursePresentismByMonthData;
+import com.mvalls.sidged.core.model.analytics.CoursePresentismData;
+import com.mvalls.sidged.core.model.analytics.PercentageByStudentPresent;
+import com.mvalls.sidged.core.model.analytics.PresentPercentages;
+import com.mvalls.sidged.core.model.analytics.PresentismAnalysisData;
 
 /**
  * 

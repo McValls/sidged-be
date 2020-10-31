@@ -6,21 +6,27 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.mvalls.sidged.annotations.JwtTeacher;
-import com.mvalls.sidged.login.UserTeacher;
+import com.mvalls.sidged.core.model.ClassState;
+import com.mvalls.sidged.core.model.ClassStudentPresent;
+import com.mvalls.sidged.core.model.CourseClass;
+import com.mvalls.sidged.core.model.users.UserTeacher;
+import com.mvalls.sidged.core.services.CourseClassService;
 import com.mvalls.sidged.mappers.ClassStudentPresentMapper;
 import com.mvalls.sidged.mappers.CourseClassMapper;
 import com.mvalls.sidged.mappers.CourseClassModelMapper;
-import com.mvalls.sidged.model.ClassState;
-import com.mvalls.sidged.model.ClassStudentPresent;
-import com.mvalls.sidged.model.CourseClass;
 import com.mvalls.sidged.rest.dtos.ClassStudentDTO;
 import com.mvalls.sidged.rest.dtos.CourseClassCommentDTO;
 import com.mvalls.sidged.rest.dtos.CourseClassDTO;
 import com.mvalls.sidged.rest.exceptions.UnauthorizedUserException;
-import com.mvalls.sidged.services.CourseClassService;
 
 /**
  * 

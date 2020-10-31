@@ -1,7 +1,7 @@
 package com.mvalls.sidged.rest.dtos;
 
-import com.mvalls.sidged.model.PeriodType;
-import com.mvalls.sidged.model.Shift;
+import com.mvalls.sidged.core.model.PeriodType;
+import com.mvalls.sidged.core.model.Shift;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,7 +33,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-public class CourseDTO extends DataTransferObject{
+public class CourseDTO extends DataTransferObject {
 	
 	private String name;
 	private Shift shift;

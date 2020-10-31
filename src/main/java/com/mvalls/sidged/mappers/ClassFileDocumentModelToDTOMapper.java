@@ -3,8 +3,8 @@ package com.mvalls.sidged.mappers;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.mvalls.sidged.model.ClassFileDocument;
-import com.mvalls.sidged.model.FileDocumentType;
+import com.mvalls.sidged.core.model.ClassFileDocument;
+import com.mvalls.sidged.core.model.FileDocumentType;
 import com.mvalls.sidged.rest.dtos.ClassFileDocumentDTO;
 
 /**

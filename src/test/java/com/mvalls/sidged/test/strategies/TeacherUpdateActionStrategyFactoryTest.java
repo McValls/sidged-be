@@ -3,7 +3,7 @@ package com.mvalls.sidged.test.strategies;
 import org.springframework.test.annotation.DirtiesContext;
 
 import com.mvalls.sidged.enums.UpdateAction;
-import com.mvalls.sidged.model.Teacher;
+import com.mvalls.sidged.core.model.Teacher;
 import com.mvalls.sidged.strategies.actions.UpdateActionStrategy;
 import com.mvalls.sidged.strategies.actions.teachers.AddTeacherUpdateActionStrategy;
 import com.mvalls.sidged.strategies.actions.teachers.RemoveTeacherUpdateActionStrategy;

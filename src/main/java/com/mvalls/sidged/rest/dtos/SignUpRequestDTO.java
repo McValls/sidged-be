@@ -1,6 +1,7 @@
 package com.mvalls.sidged.rest.dtos;
 
-import com.mvalls.sidged.login.UserType;
+
+import com.mvalls.sidged.core.model.users.UserType;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

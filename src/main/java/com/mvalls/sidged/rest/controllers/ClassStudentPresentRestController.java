@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mvalls.sidged.annotations.JwtTeacher;
-import com.mvalls.sidged.login.UserTeacher;
+import com.mvalls.sidged.core.model.users.UserTeacher;
+import com.mvalls.sidged.core.services.ClassStudentPresentService;
 import com.mvalls.sidged.rest.dtos.StudentPresentDTO;
 import com.mvalls.sidged.rest.exceptions.UnauthorizedUserException;
-import com.mvalls.sidged.services.ClassStudentPresentService;
 
 /**
  * 

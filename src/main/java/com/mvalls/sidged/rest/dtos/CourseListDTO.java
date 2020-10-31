@@ -1,6 +1,6 @@
 package com.mvalls.sidged.rest.dtos;
 
-import com.mvalls.sidged.model.Shift;
+import com.mvalls.sidged.core.model.Shift;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

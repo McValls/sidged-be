@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mvalls.sidged.annotations.JwtBackOffice;
-import com.mvalls.sidged.login.User;
+import com.mvalls.sidged.core.model.users.User;
+import com.mvalls.sidged.core.services.LoginService;
 import com.mvalls.sidged.mappers.LoginResponseMapper;
 import com.mvalls.sidged.mappers.SignUpModelMapper;
 import com.mvalls.sidged.mappers.SignUpVOMapper;
@@ -23,8 +24,7 @@ import com.mvalls.sidged.rest.dtos.LoginResponseDTO;
 import com.mvalls.sidged.rest.dtos.SignUpRequestDTO;
 import com.mvalls.sidged.rest.exceptions.BadCredentialsException;
 import com.mvalls.sidged.rest.exceptions.WrongPasswordException;
-import com.mvalls.sidged.security.jwt.JwtTokenUtils;
-import com.mvalls.sidged.services.LoginService;
+import com.mvalls.sidged.rest.security.jwt.JwtTokenUtils;
 import com.mvalls.sidged.valueObjects.SignUpVO;
 
 /**

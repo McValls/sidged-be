@@ -1,6 +1,6 @@
 package com.mvalls.sidged.rest.dtos;
 
-import com.mvalls.sidged.model.StudentPresent;
+import com.mvalls.sidged.core.model.StudentPresent;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

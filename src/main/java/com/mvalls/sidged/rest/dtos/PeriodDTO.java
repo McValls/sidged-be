@@ -1,6 +1,6 @@
 package com.mvalls.sidged.rest.dtos;
 
-import com.mvalls.sidged.model.PeriodType;
+import com.mvalls.sidged.core.model.PeriodType;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

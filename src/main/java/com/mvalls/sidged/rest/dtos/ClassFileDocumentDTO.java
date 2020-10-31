@@ -1,6 +1,6 @@
 package com.mvalls.sidged.rest.dtos;
 
-import com.mvalls.sidged.model.FileDocumentType;
+import com.mvalls.sidged.core.model.FileDocumentType;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

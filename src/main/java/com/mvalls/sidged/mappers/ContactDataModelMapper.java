@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.springframework.stereotype.Component;
 
-import com.mvalls.sidged.model.ContactData;
+import com.mvalls.sidged.core.model.ContactData;
 import com.mvalls.sidged.rest.dtos.ContactDataDTO;
 
 /**

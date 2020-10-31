@@ -10,12 +10,12 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.mvalls.sidged.core.services.ClassFileDocumentService;
 import com.mvalls.sidged.mappers.*;
-import com.mvalls.sidged.model.ClassFileDocument;
-import com.mvalls.sidged.model.FileDocumentType;
+import com.mvalls.sidged.core.model.ClassFileDocument;
+import com.mvalls.sidged.core.model.FileDocumentType;
 import com.mvalls.sidged.rest.dtos.ClassFileDocumentDTO;
 import com.mvalls.sidged.rest.dtos.ClassFileDocumentLinkDTO;
-import com.mvalls.sidged.services.ClassFileDocumentService;
 import com.mvalls.sidged.valueObjects.ClassFileDocumentVO;
 
 /**

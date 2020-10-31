@@ -2,7 +2,7 @@ package com.mvalls.sidged.test.strategies;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.mvalls.sidged.login.UserType;
+import com.mvalls.sidged.core.model.users.UserType;
 import com.mvalls.sidged.strategies.userCreation.StudentCreationStrategy;
 import com.mvalls.sidged.strategies.userCreation.TeacherCreationStrategy;
 import com.mvalls.sidged.strategies.userCreation.UserCreationStrategy;

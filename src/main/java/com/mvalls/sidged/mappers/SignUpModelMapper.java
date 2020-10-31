@@ -2,7 +2,7 @@ package com.mvalls.sidged.mappers;
 
 import org.springframework.stereotype.Component;
 
-import com.mvalls.sidged.login.User;
+import com.mvalls.sidged.core.model.users.User;
 import com.mvalls.sidged.rest.dtos.SignUpRequestDTO;
 
 /**

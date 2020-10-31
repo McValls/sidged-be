@@ -8,9 +8,9 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.mvalls.sidged.login.UserType;
+import com.mvalls.sidged.core.model.users.UserType;
 import com.mvalls.sidged.rest.exceptions.UnauthorizedUserException;
-import com.mvalls.sidged.security.jwt.JwtTokenUtils;
+import com.mvalls.sidged.rest.security.jwt.JwtTokenUtils;
 
 /**
  * 

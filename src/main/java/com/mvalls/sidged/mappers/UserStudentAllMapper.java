@@ -3,8 +3,8 @@ package com.mvalls.sidged.mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.mvalls.sidged.login.UserStudent;
-import com.mvalls.sidged.model.Student;
+import com.mvalls.sidged.core.model.Student;
+import com.mvalls.sidged.core.model.users.UserStudent;
 import com.mvalls.sidged.rest.dtos.StudentAllDTO;
 
 /**

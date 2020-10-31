@@ -1,7 +1,7 @@
 package com.mvalls.sidged.test.email;
 
-import com.mvalls.sidged.model.emails.Email;
-import com.mvalls.sidged.services.EmailsService;
+import com.mvalls.sidged.core.model.emails.Email;
+import com.mvalls.sidged.core.services.EmailsService;
 
 /**
  * 

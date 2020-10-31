@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mvalls.sidged.core.services.TimeService;
 import com.mvalls.sidged.mappers.TimeMapper;
-import com.mvalls.sidged.model.Time;
+import com.mvalls.sidged.core.model.Time;
 import com.mvalls.sidged.rest.dtos.TimeDTO;
-import com.mvalls.sidged.services.TimeService;
 
 /**
  * 

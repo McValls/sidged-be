@@ -8,7 +8,7 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.mvalls.sidged.login.UserType;
+import com.mvalls.sidged.core.model.users.UserType;
 
 /**
  * 

@@ -2,7 +2,7 @@ package com.mvalls.sidged.mappers;
 
 import org.springframework.stereotype.Component;
 
-import com.mvalls.sidged.model.CourseClass;
+import com.mvalls.sidged.core.model.CourseClass;
 import com.mvalls.sidged.rest.dtos.CourseClassDTO;
 
 /**

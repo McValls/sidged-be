@@ -2,7 +2,7 @@ package com.mvalls.sidged.rest.dtos;
 
 import java.time.LocalDate;
 
-import com.mvalls.sidged.model.ClassState;
+import com.mvalls.sidged.core.model.ClassState;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

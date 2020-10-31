@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mvalls.sidged.annotations.JwtBackOffice;
-import com.mvalls.sidged.login.UserTeacher;
-import com.mvalls.sidged.mappers.UserTeacherAllMapper;
+import com.mvalls.sidged.core.model.Teacher;
+import com.mvalls.sidged.core.model.users.UserTeacher;
+import com.mvalls.sidged.core.services.TeacherService;
+import com.mvalls.sidged.core.services.UserTeacherService;
 import com.mvalls.sidged.mappers.TeacherAllMapper;
 import com.mvalls.sidged.mappers.TeacherModelMapper;
-import com.mvalls.sidged.model.Teacher;
+import com.mvalls.sidged.mappers.UserTeacherAllMapper;
 import com.mvalls.sidged.rest.dtos.TeacherAllDTO;
-import com.mvalls.sidged.services.TeacherService;
-import com.mvalls.sidged.services.UserTeacherService;
 
 /**
  * 

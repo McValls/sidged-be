@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mvalls.sidged.model.analytics.CoursePresentismData;
-import com.mvalls.sidged.model.analytics.PresentismAnalysisData;
-import com.mvalls.sidged.services.ClassStudentPresentService;
-import com.mvalls.sidged.services.CourseService;
+import com.mvalls.sidged.core.model.analytics.CoursePresentismData;
+import com.mvalls.sidged.core.model.analytics.PresentismAnalysisData;
+import com.mvalls.sidged.core.services.ClassStudentPresentService;
+import com.mvalls.sidged.core.services.CourseService;
 
 /**
  * 

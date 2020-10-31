@@ -1,7 +1,7 @@
 package com.mvalls.sidged.strategies.actions.teachers;
 
+import com.mvalls.sidged.core.model.Teacher;
 import com.mvalls.sidged.enums.UpdateAction;
-import com.mvalls.sidged.model.Teacher;
 import com.mvalls.sidged.strategies.actions.UpdateActionStrategy;
 
 /**

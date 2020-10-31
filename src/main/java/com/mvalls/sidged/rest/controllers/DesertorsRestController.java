@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mvalls.sidged.annotations.JwtBackOffice;
-import com.mvalls.sidged.services.DesertorService;
+import com.mvalls.sidged.core.services.DesertorService;
 
 /**
  * 

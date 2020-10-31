@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mvalls.sidged.core.model.Career;
+import com.mvalls.sidged.core.services.CareerService;
 import com.mvalls.sidged.mappers.CareerMapper;
-import com.mvalls.sidged.model.Career;
 import com.mvalls.sidged.rest.dtos.CareerDTO;
-import com.mvalls.sidged.services.CareerService;
 
 /**
  * 

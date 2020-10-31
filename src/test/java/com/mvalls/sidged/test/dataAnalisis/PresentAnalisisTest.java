@@ -12,9 +12,9 @@ import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.mvalls.sidged.analysis.PresentAnalysisCalculator;
-import com.mvalls.sidged.model.ClassStudentPresent;
-import com.mvalls.sidged.model.CourseClass;
-import com.mvalls.sidged.model.StudentPresent;
+import com.mvalls.sidged.core.model.ClassStudentPresent;
+import com.mvalls.sidged.core.model.CourseClass;
+import com.mvalls.sidged.core.model.StudentPresent;
 
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;

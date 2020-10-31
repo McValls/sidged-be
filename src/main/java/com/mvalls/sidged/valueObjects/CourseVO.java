@@ -1,7 +1,7 @@
 package com.mvalls.sidged.valueObjects;
 
-import com.mvalls.sidged.model.PeriodType;
-import com.mvalls.sidged.model.Shift;
+import com.mvalls.sidged.core.model.PeriodType;
+import com.mvalls.sidged.core.model.Shift;
 
 import lombok.Builder;
 import lombok.Data;

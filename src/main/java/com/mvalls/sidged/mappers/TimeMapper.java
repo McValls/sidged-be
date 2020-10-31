@@ -5,7 +5,7 @@ import java.time.format.DateTimeFormatter;
 
 import org.springframework.stereotype.Component;
 
-import com.mvalls.sidged.model.Time;
+import com.mvalls.sidged.core.model.Time;
 import com.mvalls.sidged.rest.dtos.TimeDTO;
 
 /**
