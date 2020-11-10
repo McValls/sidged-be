@@ -9,9 +9,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.mvalls.sidged.core.model.PeriodType;
 import com.mvalls.sidged.core.repositories.RepositoryDTO;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 
@@ -36,6 +40,9 @@ import lombok.Data;
 @Entity
 @Table(name = "period")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class PeriodDTO implements RepositoryDTO {
 	
 	@Id
@@ -45,7 +52,7 @@ public class PeriodDTO implements RepositoryDTO {
 	
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
-	private PeriodTypeDTO periodType;
+	private PeriodType periodType;
 	
 	@Column
 	private Integer number;

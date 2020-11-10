@@ -1,7 +1,6 @@
 package com.mvalls.sidged.mappers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.mvalls.sidged.core.model.Student;
 import com.mvalls.sidged.core.model.Teacher;
@@ -31,7 +30,6 @@ import com.mvalls.sidged.rest.dtos.LoginResponseDTO;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-@Component
 public class LoginResponseMapper extends GenericMapper<User, LoginResponseDTO>{
 
 	private final UserStudentService userStudentService;

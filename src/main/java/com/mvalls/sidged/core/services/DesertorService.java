@@ -5,10 +5,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Service;
 
 import com.mvalls.sidged.core.model.Course;
 import com.mvalls.sidged.core.model.Student;
@@ -35,8 +32,6 @@ import com.mvalls.sidged.core.model.emails.Email;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-@Service
-@PropertySource("classpath:email.properties")
 public class DesertorService {
 	
 	
@@ -45,7 +40,6 @@ public class DesertorService {
 	private final EmailsService emailsService;
 	private final Environment env;
 
-	@Autowired
 	public DesertorService(CourseClassService courseClassService, EmailsService emailsService, Environment env) {
 		this.courseClassService = courseClassService;
 		this.emailsService = emailsService;

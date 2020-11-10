@@ -3,8 +3,6 @@ package com.mvalls.sidged.mappers;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-import org.springframework.stereotype.Component;
-
 import com.mvalls.sidged.core.model.Time;
 import com.mvalls.sidged.rest.dtos.TimeDTO;
 
@@ -28,7 +26,6 @@ import com.mvalls.sidged.rest.dtos.TimeDTO;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-@Component
 public class TimeMapper extends GenericMapper<Time, TimeDTO>{
 
 	@Override

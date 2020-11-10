@@ -2,17 +2,30 @@ package com.mvalls.sidged.database.mappers;
 
 import com.mvalls.sidged.core.model.ClassFileDocument;
 import com.mvalls.sidged.core.repositories.RepositoryDTOMapper;
+import com.mvalls.sidged.database.dtos.ClassFileDocumentDTO;
 
-public class ClassFileDocumentRepositoryDTOMapper implements RepositoryDTOMapper<ClassFileDocument, com.mvalls.sidged.database.dtos.ClassFileDocumentDTO> {
+public class ClassFileDocumentRepositoryDTOMapper implements RepositoryDTOMapper<ClassFileDocument, ClassFileDocumentDTO> {
 
 	@Override
-	public ClassFileDocument dtoToModel(com.mvalls.sidged.database.dtos.ClassFileDocumentDTO dto) {
-		return null;
+	public ClassFileDocument dtoToModel(ClassFileDocumentDTO dto) {
+		return ClassFileDocument.builder()
+				.id(dto.getId())
+				.name(dto.getName())
+				.fileDocumentType(dto.getFileDocumentType())
+				.content(dto.getContent())
+				.contentType(dto.getContentType())
+				.build();
 	}
 
 	@Override
-	public com.mvalls.sidged.database.dtos.ClassFileDocumentDTO modelToDto(ClassFileDocument fileDocument) {
-		return null;
+	public ClassFileDocumentDTO modelToDto(ClassFileDocument model) {
+		return ClassFileDocumentDTO.builder()
+				.id(model.getId())
+				.name(model.getName())
+				.fileDocumentType(model.getFileDocumentType())
+				.content(model.getContent())
+				.contentType(model.getContentType())
+				.build();
 	}
 
 }

@@ -1,7 +1,5 @@
 package com.mvalls.sidged.mappers;
 
-import org.springframework.stereotype.Component;
-
 import com.mvalls.sidged.core.model.ClassStudentPresent;
 import com.mvalls.sidged.rest.dtos.ClassStudentDTO;
 
@@ -25,7 +23,6 @@ import com.mvalls.sidged.rest.dtos.ClassStudentDTO;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-@Component
 public class ClassStudentPresentMapper extends GenericMapper<ClassStudentPresent, ClassStudentDTO> {
 
 	@Override

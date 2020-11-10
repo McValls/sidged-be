@@ -12,12 +12,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mvalls.sidged.annotations.JwtBackOffice;
 import com.mvalls.sidged.core.model.users.User;
 import com.mvalls.sidged.core.services.LoginService;
+import com.mvalls.sidged.core.services.UserStudentService;
+import com.mvalls.sidged.core.services.UserTeacherService;
 import com.mvalls.sidged.mappers.LoginResponseMapper;
 import com.mvalls.sidged.mappers.SignUpModelMapper;
 import com.mvalls.sidged.mappers.SignUpVOMapper;
+import com.mvalls.sidged.rest.annotations.JwtBackOffice;
 import com.mvalls.sidged.rest.dtos.ChangePasswordDTO;
 import com.mvalls.sidged.rest.dtos.LoginRequestDTO;
 import com.mvalls.sidged.rest.dtos.LoginResponseDTO;
@@ -51,20 +53,27 @@ import com.mvalls.sidged.valueObjects.SignUpVO;
 @RequestMapping("/login")
 public class LoginRestController {
 	
-	@Autowired
-	private LoginService loginService;
+	private final LoginService loginService;
+	private final SignUpModelMapper signUpModelMapper;
+	private final SignUpVOMapper signUpVOMapper;
+	private final JwtTokenUtils jwtTokenUtils;
 	
+	//TODO: LoginResponseMapper agnostico de servicios
+	private final UserStudentService userStudentService;
+	private final UserTeacherService userTeacherService;
+
 	@Autowired
-	private SignUpModelMapper signUpModelMapper;
-	
-	@Autowired
-	private LoginResponseMapper loginResponseMapper;
-	
-	@Autowired
-	private SignUpVOMapper signUpVOMapper;
-	
-	@Autowired
-	private JwtTokenUtils jwtTokenUtils;
+	public LoginRestController(LoginService loginService, JwtTokenUtils jwtTokenUtils,
+			UserStudentService userStudentService,
+			UserTeacherService userTeacherService) {
+		super();
+		this.loginService = loginService;
+		this.jwtTokenUtils = jwtTokenUtils;
+		this.signUpVOMapper = new SignUpVOMapper();
+		this.signUpModelMapper = new SignUpModelMapper();
+		this.userStudentService = userStudentService;
+		this.userTeacherService = userTeacherService;
+	}
 
 	@PostMapping
 	public LoginResponseDTO login(@RequestBody LoginRequestDTO login, HttpServletResponse response) throws BadCredentialsException {
@@ -73,6 +82,8 @@ public class LoginRestController {
 			throw new BadCredentialsException();
 		}
 		jwtTokenUtils.setTokenToResponse(loggedUser, response);
+		
+		LoginResponseMapper loginResponseMapper = new LoginResponseMapper(this.userStudentService, this.userTeacherService);
 		return loginResponseMapper.map(loggedUser);	
 	}
 	

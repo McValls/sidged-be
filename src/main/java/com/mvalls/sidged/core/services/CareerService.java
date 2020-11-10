@@ -1,7 +1,5 @@
 package com.mvalls.sidged.core.services;
 
-import org.springframework.stereotype.Service;
-
 import com.mvalls.sidged.core.model.Career;
 import com.mvalls.sidged.core.repositories.CareerRepository;
 
@@ -25,7 +23,6 @@ import com.mvalls.sidged.core.repositories.CareerRepository;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-@Service
 public class CareerService extends GenericService<Career, CareerRepository>{
 
 	public CareerService(CareerRepository repository) {

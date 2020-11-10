@@ -1,7 +1,5 @@
 package com.mvalls.sidged.core.model;
 
-import java.util.Collection;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,14 +27,13 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class Teacher {
+public class Teacher implements Identifiable {
 
 	private Long id;
 	private String legacyNumber;
 	private String names;
 	private String lastname;
 	private ContactData contactData;
-	private Collection<Course> courses;
 	
 	public Teacher() {}
 	

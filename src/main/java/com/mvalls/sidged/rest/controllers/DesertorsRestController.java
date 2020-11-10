@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mvalls.sidged.annotations.JwtBackOffice;
 import com.mvalls.sidged.core.services.DesertorService;
+import com.mvalls.sidged.rest.annotations.JwtBackOffice;
 
 /**
  * 
@@ -35,8 +35,14 @@ import com.mvalls.sidged.core.services.DesertorService;
 @RequestMapping("/desertors")
 public class DesertorsRestController {
 	
-	@Autowired private DesertorService desertorService;
+	private final DesertorService desertorService;
 	
+	@Autowired
+	public DesertorsRestController(DesertorService desertorService) {
+		super();
+		this.desertorService = desertorService;
+	}
+
 	@JwtBackOffice
 	@GetMapping("/refresh")
 	public void forceRefresh(HttpServletRequest request) {

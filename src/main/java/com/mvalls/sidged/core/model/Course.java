@@ -32,7 +32,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Course {
+public class Course implements Identifiable {
 	
 	private Long id;
 	private String name;
@@ -41,7 +41,6 @@ public class Course {
 	private Period period;
 	private Time timeStart;
 	private Time timeEnd;
-	private Career career;
 	private String chair;
 	@Builder.Default
 	private Set<Teacher> teachers = new HashSet<>();
@@ -50,6 +49,6 @@ public class Course {
 	@Builder.Default
 	private Set<CourseClass> classes = new HashSet<>();
 	@Builder.Default
-	private Set<Note> note = new HashSet<>();
+	private Set<Note> notes = new HashSet<>();
 
 }

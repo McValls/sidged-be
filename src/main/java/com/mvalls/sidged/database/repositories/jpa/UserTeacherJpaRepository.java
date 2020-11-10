@@ -2,7 +2,7 @@ package com.mvalls.sidged.database.repositories.jpa;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.mvalls.sidged.database.dtos.login.UserTeacher;
+import com.mvalls.sidged.database.dtos.login.UserTeacherDTO;
 
 /**
  * 
@@ -24,10 +24,10 @@ import com.mvalls.sidged.database.dtos.login.UserTeacher;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-public interface UserTeacherJpaRepository extends JpaRepository<UserTeacher, Long>{
+public interface UserTeacherJpaRepository extends JpaRepository<UserTeacherDTO, Long>{
 
-	UserTeacher findByTeacherId(Long teacherId);
+	UserTeacherDTO findByTeacherId(Long teacherId);
 	
-	UserTeacher findByUserUsername(String username);
+	UserTeacherDTO findByUserUsername(String username);
 	
 }

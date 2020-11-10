@@ -9,7 +9,10 @@ import javax.persistence.Table;
 
 import com.mvalls.sidged.core.repositories.RepositoryDTO;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 
@@ -34,6 +37,9 @@ import lombok.Data;
 @Entity
 @Table(name = "student_link")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class StudentLinkDTO implements RepositoryDTO {
 	
 	@Id

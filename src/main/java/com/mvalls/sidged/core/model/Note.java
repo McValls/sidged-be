@@ -1,5 +1,6 @@
 package com.mvalls.sidged.core.model;
 
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -23,10 +24,10 @@ import lombok.Data;
  *
  */
 @Data
-public class Note {
+@Builder
+public class Note implements Identifiable {
 
 	private Long id;
-	private Course course;
 	private Student student;
 	private Teacher evaluatorTeacher;
 	private String value;

@@ -29,10 +29,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ClassStudentPresent {
+public class ClassStudentPresent implements Identifiable {
 	
 	private Long id;
-	private CourseClass courseClass;
 	private Student student;
 	private StudentPresent present;
 

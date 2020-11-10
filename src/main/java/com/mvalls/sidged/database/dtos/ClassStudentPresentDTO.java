@@ -51,10 +51,6 @@ public class ClassStudentPresentDTO implements RepositoryDTO {
 	private Long id;
 	
 	@ManyToOne
-	@JoinColumn(name = "class_id")
-	private CourseClass courseClass;
-	
-	@ManyToOne
 	@JoinColumn(name = "student_id")
 	private StudentDTO student;
 	

@@ -2,8 +2,6 @@ package com.mvalls.sidged.mappers;
 
 import java.util.Base64;
 
-import org.springframework.stereotype.Component;
-
 import com.mvalls.sidged.core.model.Student;
 import com.mvalls.sidged.rest.dtos.StudentListDTO;
 
@@ -27,7 +25,6 @@ import com.mvalls.sidged.rest.dtos.StudentListDTO;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-@Component
 public class StudentListMapper extends GenericMapper<Student, StudentListDTO>{
 
 	@Override

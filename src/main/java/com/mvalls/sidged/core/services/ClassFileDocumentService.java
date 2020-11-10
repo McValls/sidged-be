@@ -1,15 +1,16 @@
 package com.mvalls.sidged.core.services;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
-
-import org.springframework.stereotype.Service;
 
 import com.mvalls.sidged.core.model.ClassFileDocument;
 import com.mvalls.sidged.core.model.CourseClass;
 import com.mvalls.sidged.core.model.FileDocumentType;
 import com.mvalls.sidged.core.repositories.ClassFileDocumentRepository;
+import com.mvalls.sidged.core.repositories.CourseClassRepository;
+import com.mvalls.sidged.core.repositories.CourseRepository;
 import com.mvalls.sidged.valueObjects.ClassFileDocumentVO;
 
 import lombok.extern.slf4j.Slf4j;
@@ -34,54 +35,64 @@ import lombok.extern.slf4j.Slf4j;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-@Service
 @Slf4j
 public class ClassFileDocumentService extends GenericService<ClassFileDocument, ClassFileDocumentRepository>{
 	
-	private final CourseClassService courseClassService;
+	private final CourseClassRepository courseClassRepository;
+	private final CourseRepository courseRepository;
+	
 
 	public ClassFileDocumentService(ClassFileDocumentRepository repository,
-			CourseClassService courseClassService) {
+			CourseClassRepository courseClassRepository,
+			CourseRepository courseRepository) {
 		super(repository);
-		this.courseClassService = courseClassService;
+		this.courseClassRepository = courseClassRepository;
+		this.courseRepository = courseRepository;
 	}
 	
 	
 	public Collection<ClassFileDocument> findByCourseClassId(Long classId) {
-		return this.repository.findByCourseClassId(classId);
+		return this.courseClassRepository.findById(classId).getClassFileDocuments();
 	}
 
 	public Collection<ClassFileDocument> findByCourseId(Long courseId) {
-		return this.repository.findByCourseClassCourseId(courseId);
+		return this.courseRepository.findById(courseId)
+				.getClasses().stream()
+					.map(courseClass -> courseClass.getClassFileDocuments())
+					.flatMap(Collection::stream)
+					.collect(Collectors.toList());
 	}
 	
 	@Transactional
 	public void saveFileDocument(Long classId, ClassFileDocumentVO valueObject) {
-		CourseClass courseClass = courseClassService.findById(classId);
+		CourseClass courseClass = this.courseClassRepository.findById(classId);
 		log.info("Saving file " + valueObject.getName() + " for class with id: " + courseClass.getId());
 		ClassFileDocument fileDocument = ClassFileDocument.builder()
 				.name(valueObject.getName())
-				.courseClass(courseClass)
 				.content(valueObject.getContent())
 				.contentType(valueObject.getContentType())
 				.fileDocumentType(FileDocumentType.BLOB)
 				.build();
 		
-		this.repository.create(fileDocument);
+		courseClass.getClassFileDocuments().add(fileDocument);
+		this.courseClassRepository.update(courseClass);
+		
 		log.info("File " + valueObject.getName() + " saved with id " + fileDocument.getId());
 	}
 	
 	public void saveFileLink(ClassFileDocumentVO valueObject) {
-		CourseClass courseClass = courseClassService.findById(valueObject.getClassId());
+		CourseClass courseClass = this.courseClassRepository.findById(valueObject.getClassId());
 		log.info("Saving link file " + valueObject.getName() + " for class with id: " + courseClass.getId());
 		ClassFileDocument fileDocument = ClassFileDocument.builder()
 				.name(valueObject.getName())
-				.courseClass(courseClass)
 				.content(valueObject.getLink().getBytes())
 				.contentType("Link")
 				.fileDocumentType(FileDocumentType.LINK)
 				.build();
-		this.repository.create(fileDocument);
+		
+		courseClass.getClassFileDocuments().add(fileDocument);
+		this.courseClassRepository.update(courseClass);
+
 		log.info("File " + valueObject.getName() + " saved with id " + fileDocument.getId());
 	}
 

@@ -1,5 +1,6 @@
 package com.mvalls.sidged.database.dtos.login;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,7 +15,10 @@ import javax.persistence.UniqueConstraint;
 import com.mvalls.sidged.core.repositories.RepositoryDTO;
 import com.mvalls.sidged.database.dtos.StudentDTO;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 /**
  * 
  * @author Marcelo Valls
@@ -40,6 +44,9 @@ import lombok.Data;
 		@UniqueConstraint(columnNames = {"user_id", "student_id"})
 })
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserStudentDTO implements RepositoryDTO {
 	
 	@Id
@@ -47,17 +54,15 @@ public class UserStudentDTO implements RepositoryDTO {
 	@Column
 	private Long id;
 	
-	@OneToOne
+	@OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinColumn(name = "user_id", nullable = false, unique = true)
-	private User user;
+	private UserDTO user;
 	
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinColumn(name = "student_id", nullable = false, unique = true)
 	private StudentDTO student;
 	
-	public UserStudentDTO() {}
-
-	public UserStudentDTO(User user, StudentDTO student) {
+	public UserStudentDTO(UserDTO user, StudentDTO student) {
 		super();
 		this.user = user;
 		this.student = student;

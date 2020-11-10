@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mvalls.sidged.annotations.JwtBackOffice;
 import com.mvalls.sidged.core.model.Teacher;
 import com.mvalls.sidged.core.model.users.UserTeacher;
 import com.mvalls.sidged.core.services.TeacherService;
@@ -21,6 +20,7 @@ import com.mvalls.sidged.core.services.UserTeacherService;
 import com.mvalls.sidged.mappers.TeacherAllMapper;
 import com.mvalls.sidged.mappers.TeacherModelMapper;
 import com.mvalls.sidged.mappers.UserTeacherAllMapper;
+import com.mvalls.sidged.rest.annotations.JwtBackOffice;
 import com.mvalls.sidged.rest.dtos.TeacherAllDTO;
 
 /**
@@ -54,15 +54,13 @@ public class TeacherRestController {
 	private final UserTeacherService userTeacherService;
 	
 	@Autowired
-	public TeacherRestController(TeacherService teacherService, UserTeacherAllMapper userTeacherAllMapper,
-			TeacherAllMapper teacherAllMapper, TeacherModelMapper teacherModelMapper, 
-			UserTeacherService userTeacherService) {
+	public TeacherRestController(TeacherService teacherService, UserTeacherService userTeacherService) {
 		super();
 		this.teacherService = teacherService;
-		this.userTeacherAllMapper = userTeacherAllMapper;
-		this.teacherAllMapper = teacherAllMapper;
-		this.teacherModelMapper = teacherModelMapper;
 		this.userTeacherService = userTeacherService;
+		this.userTeacherAllMapper = new UserTeacherAllMapper();
+		this.teacherAllMapper = new TeacherAllMapper();
+		this.teacherModelMapper = new TeacherModelMapper();
 	}
 
 	

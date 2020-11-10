@@ -38,11 +38,15 @@ import com.mvalls.sidged.rest.dtos.TimeDTO;
 @RequestMapping("/time")
 public class TimeRestController {
 	
+	private final TimeService timeService;
+	private final TimeMapper timeMapper;
+
 	@Autowired
-	private TimeService timeService;
-	
-	@Autowired
-	private TimeMapper timeMapper;
+	public TimeRestController(TimeService timeService) {
+		super();
+		this.timeService = timeService;
+		this.timeMapper = new TimeMapper();
+	}
 
 	@GetMapping
 	public Collection<TimeDTO> getAll() {

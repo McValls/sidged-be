@@ -1,7 +1,5 @@
 package com.mvalls.sidged.core.services;
 
-import org.springframework.stereotype.Service;
-
 import com.mvalls.sidged.core.model.Time;
 import com.mvalls.sidged.core.repositories.TimeRepository;
 
@@ -26,7 +24,6 @@ import com.mvalls.sidged.core.repositories.TimeRepository;
  *
  */
 
-@Service
 public class TimeService extends GenericService<Time, TimeRepository>{
 
 	public TimeService(TimeRepository repository) {

@@ -2,19 +2,26 @@ package com.mvalls.sidged.database.mappers;
 
 import com.mvalls.sidged.core.model.Time;
 import com.mvalls.sidged.core.repositories.RepositoryDTOMapper;
+import com.mvalls.sidged.database.dtos.TimeDTO;
 
-public class TimeRepositoryDTOMapper implements RepositoryDTOMapper<Time, com.mvalls.sidged.database.dtos.TimeDTO> {
+public class TimeRepositoryDTOMapper implements RepositoryDTOMapper<Time, TimeDTO> {
 
 	@Override
-	public Time dtoToModel(com.mvalls.sidged.database.dtos.TimeDTO dto) {
-		// TODO Auto-generated method stub
-		return null;
+	public Time dtoToModel(TimeDTO dto) {
+		return Time.builder()
+				.id(dto.getId())
+				.since(dto.getSince())
+				.until(dto.getUntil())
+				.build();
 	}
 
 	@Override
-	public com.mvalls.sidged.database.dtos.TimeDTO modelToDto(Time model) {
-		// TODO Auto-generated method stub
-		return null;
+	public TimeDTO modelToDto(Time model) {
+		return TimeDTO.builder()
+				.id(model.getId())
+				.since(model.getSince())
+				.until(model.getUntil())
+				.build();
 	}
 
 }

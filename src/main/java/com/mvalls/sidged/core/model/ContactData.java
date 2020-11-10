@@ -30,7 +30,7 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class ContactData {
+public class ContactData implements Identifiable {
 	
 	private Long id;
 	@Builder.Default
@@ -44,6 +44,7 @@ public class ContactData {
 		super();
 		this.emails = new ArrayList<>();
 		this.emails.add(email);
+		this.phones = new ArrayList<>();
 	}
 	
 	public String getDefaultEmail() {

@@ -8,10 +8,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.mvalls.sidged.core.model.Calification;
+import com.mvalls.sidged.core.model.NoteType;
+import com.mvalls.sidged.core.repositories.RepositoryDTO;
+
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -37,16 +41,13 @@ import lombok.Data;
 @Entity
 @Table(name = "note")
 @Data
-public class NoteDTO {
+@Builder
+public class NoteDTO implements RepositoryDTO {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column
 	private Long id;
-	
-	@ManyToOne
-	@JoinColumn(name = "course_id", nullable = false)
-	private CourseDTO course;
 	
 	@OneToOne
 	@JoinColumn(name = "student_id", nullable = false)
@@ -61,11 +62,11 @@ public class NoteDTO {
 	
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
-	private CalificationDTO calification;
+	private Calification calification;
 	
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
-	private NoteTypeDTO noteType;
+	private NoteType noteType;
 	
 	@Column(columnDefinition = "VARCHAR(500) NULL DEFAULT NULL")
 	private String observations;

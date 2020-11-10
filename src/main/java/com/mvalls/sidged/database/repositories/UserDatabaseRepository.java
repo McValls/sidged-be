@@ -5,7 +5,7 @@ import com.mvalls.sidged.core.repositories.UserRepository;
 import com.mvalls.sidged.database.mappers.UserRepositoryDTOMapper;
 import com.mvalls.sidged.database.repositories.jpa.UserJpaRepository;
 
-public class UserDatabaseRepository extends CommonDatabaseRepository<User, com.mvalls.sidged.database.dtos.login.User, UserJpaRepository> 
+public class UserDatabaseRepository extends CommonDatabaseRepository<User, com.mvalls.sidged.database.dtos.login.UserDTO, UserJpaRepository> 
 	implements UserRepository {
 
 	public UserDatabaseRepository(UserJpaRepository jpaRepository, UserRepositoryDTOMapper dtoMapper) {

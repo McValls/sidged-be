@@ -2,7 +2,6 @@ package com.mvalls.sidged.mappers;
 
 import java.io.IOException;
 
-import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mvalls.sidged.valueObjects.ClassFileDocumentVO;
@@ -27,7 +26,6 @@ import com.mvalls.sidged.valueObjects.ClassFileDocumentVO;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-@Component
 public class MultipartFileToClassFileDocumentVOMapper extends GenericMapper<MultipartFile, ClassFileDocumentVO>{
 	
 	@Override

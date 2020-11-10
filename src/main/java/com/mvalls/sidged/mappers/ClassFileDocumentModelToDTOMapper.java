@@ -1,8 +1,5 @@
 package com.mvalls.sidged.mappers;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
 import com.mvalls.sidged.core.model.ClassFileDocument;
 import com.mvalls.sidged.core.model.FileDocumentType;
 import com.mvalls.sidged.rest.dtos.ClassFileDocumentDTO;
@@ -27,11 +24,16 @@ import com.mvalls.sidged.rest.dtos.ClassFileDocumentDTO;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-@Component
 public class ClassFileDocumentModelToDTOMapper extends GenericMapper<ClassFileDocument, ClassFileDocumentDTO>{
 
-	@Value("${server.host}") private String serverHost;
+	private final String serverHost;
 	
+	public ClassFileDocumentModelToDTOMapper(String serverHost) {
+		super();
+		this.serverHost = serverHost;
+	}
+
+
 	@Override
 	public ClassFileDocumentDTO map(ClassFileDocument model) {
 		return ClassFileDocumentDTO.builder()

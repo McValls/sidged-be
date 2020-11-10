@@ -14,18 +14,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mvalls.sidged.annotations.JwtTeacher;
 import com.mvalls.sidged.core.model.ClassState;
 import com.mvalls.sidged.core.model.ClassStudentPresent;
 import com.mvalls.sidged.core.model.CourseClass;
 import com.mvalls.sidged.core.model.users.UserTeacher;
 import com.mvalls.sidged.core.services.CourseClassService;
 import com.mvalls.sidged.mappers.ClassStudentPresentMapper;
-import com.mvalls.sidged.mappers.CourseClassMapper;
-import com.mvalls.sidged.mappers.CourseClassModelMapper;
+import com.mvalls.sidged.mappers.CourseClassCreateResponseMapper;
+import com.mvalls.sidged.rest.annotations.JwtTeacher;
 import com.mvalls.sidged.rest.dtos.ClassStudentDTO;
 import com.mvalls.sidged.rest.dtos.CourseClassCommentDTO;
-import com.mvalls.sidged.rest.dtos.CourseClassDTO;
+import com.mvalls.sidged.rest.dtos.courseClass.CourseClassCreateRequestDTO;
+import com.mvalls.sidged.rest.dtos.courseClass.CourseClassCreateResponseDTO;
 import com.mvalls.sidged.rest.exceptions.UnauthorizedUserException;
 
 /**
@@ -52,36 +52,42 @@ import com.mvalls.sidged.rest.exceptions.UnauthorizedUserException;
 @RequestMapping("/class")
 public class CourseClassRestController {
 	
-	@Autowired private ClassStudentPresentMapper classStudentPresentMapper;
-	@Autowired private CourseClassModelMapper courseClassModelMapper;
-	@Autowired private CourseClassMapper courseClassMapper;
-	@Autowired private CourseClassService courseClassService;
+	private final CourseClassService courseClassService;
+	private final ClassStudentPresentMapper classStudentPresentMapper;
+	private final CourseClassCreateResponseMapper courseClassCreateResponseMapper;
+	
+	@Autowired
+	public CourseClassRestController(CourseClassService courseClassService) {
+		super();
+		this.courseClassService = courseClassService;
+		this.classStudentPresentMapper = new ClassStudentPresentMapper();
+		this.courseClassCreateResponseMapper = new CourseClassCreateResponseMapper();
+	}
 
 	@JwtTeacher
 	@PostMapping
-	public CourseClassDTO createClass(HttpServletRequest request, 
+	public CourseClassCreateResponseDTO createClass(HttpServletRequest request, 
 			UserTeacher userTeacher,
-			@RequestBody CourseClassDTO classDTO) throws UnauthorizedUserException {
-		CourseClass courseClass = courseClassModelMapper.map(classDTO);
-		courseClass = courseClassService.create(userTeacher.getTeacher(), courseClass);
-		return courseClassMapper.map(courseClass);
+			@RequestBody CourseClassCreateRequestDTO createDTO) throws UnauthorizedUserException {
+		CourseClass courseClass = courseClassService.create(userTeacher.getTeacher(), createDTO.getCourseId(), createDTO.getDate());
+		return courseClassCreateResponseMapper.map(courseClass);
 	}
 	
 	@JwtTeacher
-	@GetMapping("/{classId}")
-	public CourseClassDTO getClassById(HttpServletRequest request, 
+	@GetMapping("/{classNumber}/course/{courseId}")
+	public CourseClassCreateResponseDTO getClassById(HttpServletRequest request, 
 			UserTeacher userTeacher, 
-			@PathVariable("classId") Long classId) throws UnauthorizedUserException {
-		CourseClass courseClass = courseClassService.findByTeacherAndId(userTeacher.getTeacher(), classId);
-		return courseClassMapper.map(courseClass);
+			@PathVariable("courseId") Long courseId, @PathVariable("classNumber") Integer classNumber) throws UnauthorizedUserException {
+		CourseClass courseClass = courseClassService.findByTeacherAndCourseIdAndClassNumber(userTeacher.getTeacher(), courseId, classNumber);
+		return courseClassCreateResponseMapper.map(courseClass);
 	}
 		
 	@GetMapping("/course/{courseId}")
-	public Collection<CourseClassDTO> getClassesByCourse(@PathVariable("courseId") Long courseId){
+	public Collection<CourseClassCreateResponseDTO> getClassesByCourse(@PathVariable("courseId") Long courseId){
 		Collection<CourseClass> classes = courseClassService.findClassesByCourseId(courseId);
-		Collection<CourseClassDTO> classesDTO = classes.stream()
-				.map(course -> courseClassMapper.map(course))
-				.sorted((CourseClassDTO c1, CourseClassDTO c2) -> c1.getClassNumber() - c2.getClassNumber())
+		Collection<CourseClassCreateResponseDTO> classesDTO = classes.stream()
+				.map(course -> courseClassCreateResponseMapper.map(course))
+				.sorted((CourseClassCreateResponseDTO c1, CourseClassCreateResponseDTO c2) -> c1.getClassNumber() - c2.getClassNumber())
 				.collect(Collectors.toList());
 		
 		return classesDTO;

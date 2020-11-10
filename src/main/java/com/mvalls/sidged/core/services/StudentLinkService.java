@@ -1,7 +1,5 @@
 package com.mvalls.sidged.core.services;
 
-import org.springframework.stereotype.Service;
-
 import com.mvalls.sidged.core.model.StudentLink;
 import com.mvalls.sidged.core.repositories.StudentLinkRepository;
 
@@ -25,7 +23,6 @@ import com.mvalls.sidged.core.repositories.StudentLinkRepository;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-@Service
 public class StudentLinkService extends GenericService<StudentLink, StudentLinkRepository>{
 
 	public StudentLinkService(StudentLinkRepository repository) {

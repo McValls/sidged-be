@@ -15,22 +15,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mvalls.sidged.annotations.JwtBackOffice;
-import com.mvalls.sidged.annotations.JwtStudent;
-import com.mvalls.sidged.annotations.JwtTeacher;
+import com.mvalls.sidged.core.enums.UpdateAction;
 import com.mvalls.sidged.core.model.Course;
 import com.mvalls.sidged.core.model.Student;
 import com.mvalls.sidged.core.model.Teacher;
 import com.mvalls.sidged.core.model.users.UserStudent;
 import com.mvalls.sidged.core.model.users.UserTeacher;
 import com.mvalls.sidged.core.services.CourseService;
-import com.mvalls.sidged.enums.UpdateAction;
 import com.mvalls.sidged.mappers.CourseDTOtoVOMapper;
 import com.mvalls.sidged.mappers.CourseListMapper;
 import com.mvalls.sidged.mappers.StudentAllMapper;
 import com.mvalls.sidged.mappers.StudentModelMapper;
 import com.mvalls.sidged.mappers.TeacherAllMapper;
 import com.mvalls.sidged.mappers.TeacherModelMapper;
+import com.mvalls.sidged.rest.annotations.JwtBackOffice;
+import com.mvalls.sidged.rest.annotations.JwtStudent;
+import com.mvalls.sidged.rest.annotations.JwtTeacher;
 import com.mvalls.sidged.rest.dtos.CourseDTO;
 import com.mvalls.sidged.rest.dtos.CourseListDTO;
 import com.mvalls.sidged.rest.dtos.NotifyStudentsDTO;
@@ -63,26 +63,25 @@ import com.mvalls.sidged.valueObjects.CourseVO;
 @RequestMapping("/course")
 public class CourseRestController {
 	
-	@Autowired
-	private CourseService courseService;
+	private final CourseService courseService;
+	private final StudentAllMapper studentAllMapper;
+	private final StudentModelMapper studentModelMapper;
+	private final TeacherModelMapper teacherModelMapper;
+	private final TeacherAllMapper teacherAllMapper;
+	private final CourseListMapper courseListMapper;
+	private final CourseDTOtoVOMapper courseDTOtoVOMapper;
 	
 	@Autowired
-	private StudentAllMapper studentAllMapper;
-	
-	@Autowired
-	private StudentModelMapper studentModelMapper;
-	
-	@Autowired
-	private TeacherModelMapper teacherModelMapper;
-	
-	@Autowired
-	private TeacherAllMapper teacherAllMapper;
-	
-	@Autowired
-	private CourseListMapper courseListMapper;
-	
-	@Autowired
-	private CourseDTOtoVOMapper courseDTOtoVOMapper;
+	public CourseRestController(CourseService courseService) {
+		super();
+		this.courseService = courseService;
+		this.studentAllMapper = new StudentAllMapper();
+		this.studentModelMapper = new StudentModelMapper();
+		this.teacherModelMapper = new TeacherModelMapper();
+		this.teacherAllMapper = new TeacherAllMapper();
+		this.courseListMapper = new CourseListMapper();
+		this.courseDTOtoVOMapper = new CourseDTOtoVOMapper();
+	}
 
 	@GetMapping
 	public Collection<CourseListDTO> getAllCourses() {

@@ -2,12 +2,12 @@ package com.mvalls.sidged.test.strategies;
 
 import org.springframework.test.annotation.DirtiesContext;
 
-import com.mvalls.sidged.enums.UpdateAction;
+import com.mvalls.sidged.core.enums.UpdateAction;
 import com.mvalls.sidged.core.model.Teacher;
-import com.mvalls.sidged.strategies.actions.UpdateActionStrategy;
-import com.mvalls.sidged.strategies.actions.teachers.AddTeacherUpdateActionStrategy;
-import com.mvalls.sidged.strategies.actions.teachers.RemoveTeacherUpdateActionStrategy;
-import com.mvalls.sidged.strategies.actions.teachers.TeacherUpdateActionStrategyFactory;
+import com.mvalls.sidged.core.strategies.actions.UpdateActionStrategy;
+import com.mvalls.sidged.core.strategies.actions.teachers.AddTeacherUpdateActionStrategy;
+import com.mvalls.sidged.core.strategies.actions.teachers.RemoveTeacherUpdateActionStrategy;
+import com.mvalls.sidged.core.strategies.actions.teachers.TeacherUpdateActionStrategyFactory;
 
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;

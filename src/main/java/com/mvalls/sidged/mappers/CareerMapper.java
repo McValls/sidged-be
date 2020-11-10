@@ -1,7 +1,5 @@
 package com.mvalls.sidged.mappers;
 
-import org.springframework.stereotype.Component;
-
 import com.mvalls.sidged.core.model.Career;
 import com.mvalls.sidged.rest.dtos.CareerDTO;
 
@@ -25,7 +23,6 @@ import com.mvalls.sidged.rest.dtos.CareerDTO;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-@Component
 public class CareerMapper extends GenericMapper<Career, CareerDTO>{
 
 	@Override

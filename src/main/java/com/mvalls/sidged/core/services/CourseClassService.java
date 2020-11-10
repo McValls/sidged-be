@@ -10,8 +10,6 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
-import org.springframework.stereotype.Service;
-
 import com.mvalls.sidged.core.model.ClassState;
 import com.mvalls.sidged.core.model.ClassStudentPresent;
 import com.mvalls.sidged.core.model.Course;
@@ -21,6 +19,7 @@ import com.mvalls.sidged.core.model.StudentPresent;
 import com.mvalls.sidged.core.model.Teacher;
 import com.mvalls.sidged.core.model.analytics.Desertor;
 import com.mvalls.sidged.core.repositories.CourseClassRepository;
+import com.mvalls.sidged.core.repositories.CourseRepository;
 import com.mvalls.sidged.rest.exceptions.UnauthorizedUserException;
 
 /**
@@ -43,61 +42,69 @@ import com.mvalls.sidged.rest.exceptions.UnauthorizedUserException;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-@Service
 public class CourseClassService extends GenericService<CourseClass, CourseClassRepository>{
 	
 
 	private static final int DESERTOR_AMOUNT_OF_CLASSES = 3;
 	
-	private final CourseService courseService;
+	private final CourseRepository courseRepository;
 	
-	public CourseClassService(CourseClassRepository repository, CourseService courseService) {
+	
+	public CourseClassService(CourseClassRepository repository,
+			CourseRepository courseRepository) {
 		super(repository);
-		this.courseService = courseService;
+		this.courseRepository = courseRepository;
 	}
 	
-	public CourseClass create(Teacher teacher, CourseClass courseClass) throws UnauthorizedUserException {
-		Course course = courseService.findById(courseClass.getCourse().getId());
+	public CourseClass create(Teacher teacher, Long courseId, LocalDate date) throws UnauthorizedUserException {
+		Course course = this.courseRepository.findById(courseId);
 		
 		validateTeacherAndCourse(teacher, course);
 		
 		Collection<Student> students = new ArrayList<>(course.getStudents());
 		Collection<ClassStudentPresent> classStudents = students.stream()
-			.map(student -> new ClassStudentPresent(null, courseClass, student, StudentPresent.ABSENT))
+			.map(student -> ClassStudentPresent.builder()
+					.student(student)
+					.present(StudentPresent.ABSENT)
+					.build())
 			.collect(Collectors.toList());
-		courseClass.setCourse(course);
-		courseClass.setClassNumber(course.getClasses().size() + 1);
-		courseClass.setClassState(ClassState.PENDIENTE);
-		courseClass.setStudentPresents(classStudents);
 		
-		this.repository.create(courseClass);
+		CourseClass courseClass = CourseClass.builder()
+				.classNumber(course.getClasses().size() + 1)
+				.classState(ClassState.PENDIENTE)
+				.studentPresents(classStudents)
+				.date(date)
+				.build();
+		
+		course.getClasses().add(courseClass);
+		this.courseRepository.update(course);
 		
 		return courseClass;
 	}
 	
 	@Transactional
 	public Collection<CourseClass> findClassesByCourseId(Long courseId){
-		Course course = courseService.findById(courseId);
+		Course course = this.courseRepository.findById(courseId);
 		return course.getClasses();
 	}
 	
 	public Collection<ClassStudentPresent> getClassStudents(Long courseId, Long classId) {
-		CourseClass courseClass = this.repository.findByCourseIdAndId(courseId, classId);
+		CourseClass courseClass = this.repository.findById(classId);
 		
 		return courseClass.getStudentPresents();
 	}
 	
 	public void updateClassState(Teacher teacher, Long courseId, Long classId, ClassState classState) throws UnauthorizedUserException {
-		CourseClass courseClass = this.repository.findByCourseIdAndId(courseId, classId);
+		CourseClass courseClass = this.repository.findById(classId);
+		Course course = this.courseRepository.findById(courseId);
 		if(courseClass != null) {
-			validateTeacherAndCourse(teacher, courseClass.getCourse());
+			validateTeacherAndCourse(teacher, course);
 			
 			courseClass.setClassState(classState);
 			update(courseClass);
 		}
 	}
 	
-	@Transactional
 	/**
 	 * Busca las ultimas 3 clases de cada curso y recorre la lista de presentes.
 	 * Si hay alumnos que tienen {DESERTOR_AMOUNT_OF_CLASSES} ausentes corridos, los toma como desertores y notifica.
@@ -105,8 +112,18 @@ public class CourseClassService extends GenericService<CourseClass, CourseClassR
 	 */
 	public List<Desertor> getDesertors() {
 		List<Desertor> desertors = new ArrayList<>();
-		Collection<CourseClass> lastClassesOfEachCourse = this.repository.findByCourseYearAndClassState(LocalDate.now().getYear(), ClassState.FINALIZADA);
-		Map<Course, List<CourseClass>> lastClassesByCourse = lastClassesOfEachCourse.stream().collect(Collectors.groupingBy(classes -> classes.getCourse()));
+		List<Course> coursesByYear = this.courseRepository.findByYear(LocalDate.now().getYear());
+		
+		Map<Course, List<CourseClass>> lastClassesByCourse = coursesByYear.stream()
+			.collect(Collectors.toMap(
+					course -> course,
+					course -> course.getClasses()
+						.stream()
+						.filter(cc -> cc.getClassState() == ClassState.FINALIZADA)
+						.sorted((cc1, cc2) -> cc1.getClassNumber().compareTo(cc2.getClassNumber()))
+						.collect(Collectors.toList())
+					));
+		
 		lastClassesByCourse.forEach((course, listOfClasses) -> {
 			if(listOfClasses.size() >= DESERTOR_AMOUNT_OF_CLASSES) {
 				List<CourseClass> lastClasses = listOfClasses.subList(0, DESERTOR_AMOUNT_OF_CLASSES);
@@ -151,17 +168,18 @@ public class CourseClassService extends GenericService<CourseClass, CourseClassR
 		update(courseClass);
 	}
 
-	public CourseClass findByTeacherAndId(Teacher teacher, Long classId) throws UnauthorizedUserException {
-		CourseClass courseClass = this.findById(classId);
-		if(courseClass != null) {
-			this.validateTeacherAndCourse(teacher, courseClass.getCourse());
-			return courseClass;
-		}
-		return null;
+	public CourseClass findByTeacherAndCourseIdAndClassNumber(Teacher teacher, Long courseId, Integer classNumber) throws UnauthorizedUserException {
+		Course course = this.courseRepository.findById(courseId);
+		this.validateTeacherAndCourse(teacher, course);
+		return course.getClasses()
+				.stream()
+				.filter(courseClass -> courseClass.getClassNumber().equals(classNumber))
+				.findFirst()
+				.orElse(null);
 	}
 	
 	private void validateTeacherAndCourse(Teacher teacher, Course course) throws UnauthorizedUserException {
-		if (! course.getTeachers().contains(teacher)) {
+		if (!course.getTeachers().contains(teacher)) {
 			throw new UnauthorizedUserException();
 		}
 	}

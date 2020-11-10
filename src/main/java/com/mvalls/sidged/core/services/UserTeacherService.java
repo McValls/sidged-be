@@ -1,7 +1,5 @@
 package com.mvalls.sidged.core.services;
 
-import org.springframework.stereotype.Service;
-
 import com.mvalls.sidged.core.model.users.UserTeacher;
 import com.mvalls.sidged.core.repositories.UserTeacherRepository;
 
@@ -25,7 +23,7 @@ import com.mvalls.sidged.core.repositories.UserTeacherRepository;
 * You should have received a copy of the GNU General Public License
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
- */@Service
+ */
 public class UserTeacherService extends GenericService<UserTeacher, UserTeacherRepository>{
 
 

@@ -1,7 +1,5 @@
 package com.mvalls.sidged.mappers;
 
-import org.springframework.stereotype.Component;
-
 import com.mvalls.sidged.core.model.Course;
 import com.mvalls.sidged.valueObjects.CourseVO;
 
@@ -25,7 +23,6 @@ import com.mvalls.sidged.valueObjects.CourseVO;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-@Component
 public class CourseVOtoModelMapper extends GenericMapper<CourseVO, Course>{
 
 	@Override

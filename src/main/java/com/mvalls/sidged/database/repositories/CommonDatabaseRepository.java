@@ -5,11 +5,12 @@ import java.util.stream.Collectors;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.mvalls.sidged.core.model.Identifiable;
 import com.mvalls.sidged.core.repositories.GenericRepository;
 import com.mvalls.sidged.core.repositories.RepositoryDTO;
 import com.mvalls.sidged.core.repositories.RepositoryDTOMapper;
 
-public abstract class CommonDatabaseRepository<T, S extends RepositoryDTO, U extends JpaRepository<S, Long>> implements GenericRepository<T, Long> {
+public abstract class CommonDatabaseRepository<T extends Identifiable, S extends RepositoryDTO, U extends JpaRepository<S, Long>> implements GenericRepository<T, Long> {
 
 	protected final U jpaRepository;
 	protected final RepositoryDTOMapper<T, S> dtoMapper;
@@ -22,14 +23,19 @@ public abstract class CommonDatabaseRepository<T, S extends RepositoryDTO, U ext
 
 	@Override
 	public T create(T obj) {
-		this.jpaRepository.save(this.dtoMapper.modelToDto(obj));
+		S repositoryDTO = this.dtoMapper.modelToDto(obj);
+		this.jpaRepository.save(repositoryDTO);
+		
+		obj.setId(repositoryDTO.getId());
 		return obj;
 	}
 
 	@Override
 	public T update(T obj) {
-		this.jpaRepository.save(this.dtoMapper.modelToDto(obj));
-		return obj;
+		S repositoryDTO = this.dtoMapper.modelToDto(obj);
+		this.jpaRepository.save(repositoryDTO);
+		
+		return this.dtoMapper.dtoToModel(repositoryDTO);
 	}
 	
 	@Override

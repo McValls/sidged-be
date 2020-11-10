@@ -1,17 +1,16 @@
 package com.mvalls.sidged.core.services;
 
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mvalls.sidged.core.model.emails.Email;
 import com.mvalls.sidged.core.model.users.User;
 import com.mvalls.sidged.core.model.users.UserType;
 import com.mvalls.sidged.core.repositories.UserRepository;
+import com.mvalls.sidged.core.strategies.userCreation.UserCreationStrategy;
+import com.mvalls.sidged.core.strategies.userCreation.UserCreationStrategyService;
+import com.mvalls.sidged.core.utils.EncryptionUtils;
 import com.mvalls.sidged.rest.exceptions.BadCredentialsException;
 import com.mvalls.sidged.rest.exceptions.WrongPasswordException;
-import com.mvalls.sidged.strategies.userCreation.UserCreationStrategy;
-import com.mvalls.sidged.strategies.userCreation.UserCreationStrategyService;
-import com.mvalls.sidged.utils.EncryptionUtils;
 import com.mvalls.sidged.valueObjects.SignUpVO;
 
 /**
@@ -34,7 +33,6 @@ import com.mvalls.sidged.valueObjects.SignUpVO;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-@Service
 public class LoginService extends GenericService<User, UserRepository>{
 	
 	private final UserCreationStrategyService userCreationStrategyService;
@@ -66,10 +64,9 @@ public class LoginService extends GenericService<User, UserRepository>{
 	@Transactional
 	public void signUp(User user, SignUpVO signUpVO) {
 		user.setPassword(EncryptionUtils.encryptSHA256(user.getPassword()));
-		create(user);
-		
 		UserType userType = user.getUserType();
 		UserCreationStrategy creationStrategy = userCreationStrategyService.getStrategy(userType);
+		
 		creationStrategy.execute(user, signUpVO);
 		
 		Email email = Email.builder()

@@ -2,7 +2,7 @@ package com.mvalls.sidged.database.repositories.jpa;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.mvalls.sidged.database.dtos.login.User;
+import com.mvalls.sidged.database.dtos.login.UserDTO;
 
 /**
  * 
@@ -24,8 +24,8 @@ import com.mvalls.sidged.database.dtos.login.User;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-public interface UserJpaRepository extends JpaRepository<User, Long>{
+public interface UserJpaRepository extends JpaRepository<UserDTO, Long>{
 
-	public User getUserByUsername(String username);
+	public UserDTO getUserByUsername(String username);
 	
 }

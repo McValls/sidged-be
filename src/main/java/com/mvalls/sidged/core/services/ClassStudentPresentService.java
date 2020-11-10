@@ -1,17 +1,20 @@
 package com.mvalls.sidged.core.services;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.mvalls.sidged.analysis.PresentAnalysisCalculator;
+import com.mvalls.sidged.core.analysis.PresentAnalysisCalculator;
 import com.mvalls.sidged.core.model.ClassStudentPresent;
+import com.mvalls.sidged.core.model.Course;
+import com.mvalls.sidged.core.model.CourseClass;
 import com.mvalls.sidged.core.model.StudentPresent;
 import com.mvalls.sidged.core.model.Teacher;
 import com.mvalls.sidged.core.model.analytics.PresentismAnalysisData;
 import com.mvalls.sidged.core.repositories.ClassStudentPresentRepository;
+import com.mvalls.sidged.core.repositories.CourseClassRepository;
+import com.mvalls.sidged.core.repositories.CourseRepository;
 import com.mvalls.sidged.rest.exceptions.UnauthorizedUserException;
 
 /**
@@ -34,22 +37,32 @@ import com.mvalls.sidged.rest.exceptions.UnauthorizedUserException;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-@Service
 public class ClassStudentPresentService extends GenericService<ClassStudentPresent, ClassStudentPresentRepository>{
 
 	private final PresentAnalysisCalculator presentAnalysisCalculator;
+	private final CourseRepository courseRepository;
+	private final CourseClassRepository courseClassRepository;
 	
 	public ClassStudentPresentService(ClassStudentPresentRepository repository,
+			CourseRepository courseRepository,
+			CourseClassRepository courseClassRepository,
 			PresentAnalysisCalculator presentAnalysisCalculator) {
 		super(repository);
 		this.presentAnalysisCalculator = presentAnalysisCalculator;
+		this.courseRepository = courseRepository;
+		this.courseClassRepository = courseClassRepository;
 	}
 
-	@Transactional
 	public void updatePresent(Teacher teacher, Long courseClassId, Long studentId, StudentPresent present) throws UnauthorizedUserException {
-		ClassStudentPresent classStudentPresent = this.repository.findByCourseClassIdAndStudentId(courseClassId, studentId);
+		CourseClass courseClass = this.courseClassRepository.findById(courseClassId);
+		ClassStudentPresent classStudentPresent = courseClass.getStudentPresents()
+				.stream()
+				.filter(studentPresent -> studentPresent.getStudent().getId().equals(studentId))
+				.findFirst()
+				.orElse(null);
+		Course course = this.courseRepository.findByCourseClassId(courseClassId);
 		if(classStudentPresent != null) {
-			if(!classStudentPresent.getCourseClass().getCourse().getTeachers().contains(teacher)) throw new UnauthorizedUserException();
+			if(course.getTeachers().contains(teacher)) throw new UnauthorizedUserException();
 			
 			classStudentPresent.setPresent(present);
 			this.repository.update(classStudentPresent);
@@ -57,10 +70,21 @@ public class ClassStudentPresentService extends GenericService<ClassStudentPrese
 	}
 	
 	public List<PresentismAnalysisData> getPresentismDataByStudentIdAndYear(Long studentId, int year) {
-		List<ClassStudentPresent> classStudentPresents = this.repository.findByStudentId(studentId).stream()
-				.filter(classStudentPresent -> classStudentPresent.getCourseClass().getDate().getYear() == year)
+		List<Course> courses = this.courseRepository.findByStudentsId(studentId)
+				.stream()
+				.filter(course -> course.getYear() == year)
 				.collect(Collectors.toList());
-		return presentAnalysisCalculator.getPresentismByStudentGroupedByCourse(classStudentPresents, year);
+		
+		Map<Course, List<ClassStudentPresent>> presentismGroupedByCourse = courses.stream().collect(
+				Collectors.toMap(
+						course -> course, 
+						course -> course.getClasses()
+							.stream()
+							.map(courseClass -> courseClass.getStudentPresents())
+							.flatMap(Collection::stream)
+							.filter(studentPresent -> studentPresent.getStudent().getId().equals(studentId))
+							.collect(Collectors.toList())));
+		return presentAnalysisCalculator.getPresentismByStudentGroupedByCourse(presentismGroupedByCourse);
 	}
 	
 }

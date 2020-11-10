@@ -13,8 +13,8 @@ import java.util.Set;
 import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.mvalls.sidged.analysis.PresentAnalysisCalculator;
 import com.mvalls.sidged.core.model.analytics.CoursePresentismByMonthData;
+import com.mvalls.sidged.core.analysis.PresentAnalysisCalculator;
 import com.mvalls.sidged.core.model.ClassStudentPresent;
 import com.mvalls.sidged.core.model.Course;
 import com.mvalls.sidged.core.model.CourseClass;

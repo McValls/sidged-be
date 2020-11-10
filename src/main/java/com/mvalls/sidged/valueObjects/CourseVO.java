@@ -37,7 +37,11 @@ public class CourseVO {
 	private Integer periodNumber;
 	private Long timeSinceId;
 	private Long timeUntilId;
-	private Long careerId;
 	private String chair;
+
+	/**
+	 * @deprecated model changed, no career anymore in course. 
+	 */
+	private Long careerId;
 
 }

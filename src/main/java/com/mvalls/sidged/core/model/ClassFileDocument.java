@@ -29,13 +29,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ClassFileDocument {
+public class ClassFileDocument implements Identifiable {
 
 	private Long id;
 	private String name;
 	private FileDocumentType fileDocumentType;
 	private byte[] content;
 	private String contentType;
-	private CourseClass courseClass;
 	
 }

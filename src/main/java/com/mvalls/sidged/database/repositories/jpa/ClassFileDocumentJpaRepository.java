@@ -1,7 +1,5 @@
 package com.mvalls.sidged.database.repositories.jpa;
 
-import java.util.Collection;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.mvalls.sidged.database.dtos.ClassFileDocumentDTO;
@@ -28,8 +26,4 @@ import com.mvalls.sidged.database.dtos.ClassFileDocumentDTO;
  */
 public interface ClassFileDocumentJpaRepository extends JpaRepository<ClassFileDocumentDTO, Long> {
 	
-	Collection<ClassFileDocumentDTO> findByCourseClassId(Long courseClassId);
-
-	Collection<ClassFileDocumentDTO> findByCourseClassCourseId(Long courseId);
-
 }

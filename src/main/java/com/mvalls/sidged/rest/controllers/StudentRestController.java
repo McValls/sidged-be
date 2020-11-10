@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mvalls.sidged.annotations.JwtBackOffice;
 import com.mvalls.sidged.core.model.Student;
 import com.mvalls.sidged.core.model.users.UserStudent;
 import com.mvalls.sidged.core.services.StudentService;
@@ -23,6 +22,7 @@ import com.mvalls.sidged.core.services.UserStudentService;
 import com.mvalls.sidged.mappers.StudentAllMapper;
 import com.mvalls.sidged.mappers.StudentModelMapper;
 import com.mvalls.sidged.mappers.UserStudentAllMapper;
+import com.mvalls.sidged.rest.annotations.JwtBackOffice;
 import com.mvalls.sidged.rest.dtos.StudentAllDTO;
 import com.mvalls.sidged.rest.dtos.StudentDTO;
 
@@ -57,15 +57,13 @@ public class StudentRestController {
 	private final StudentModelMapper studentModelMapper;
 	
 	@Autowired
-	public StudentRestController(StudentService studentService, UserStudentService userStudentService,
-			StudentAllMapper studentAllMapper, UserStudentAllMapper userStudentAllMapper,
-			StudentModelMapper studentModelMapper) {
+	public StudentRestController(StudentService studentService, UserStudentService userStudentService) {
 		super();
 		this.studentService = studentService;
 		this.userStudentService = userStudentService;
-		this.studentAllMapper = studentAllMapper;
-		this.userStudentAllMapper = userStudentAllMapper;
-		this.studentModelMapper = studentModelMapper;
+		this.studentAllMapper = new StudentAllMapper();
+		this.userStudentAllMapper = new UserStudentAllMapper();
+		this.studentModelMapper = new StudentModelMapper();
 	}
 	
 	@GetMapping

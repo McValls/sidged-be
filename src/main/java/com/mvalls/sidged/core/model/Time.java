@@ -2,6 +2,7 @@ package com.mvalls.sidged.core.model;
 
 import java.time.LocalTime;
 
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -25,7 +26,8 @@ import lombok.Data;
  *
  */
 @Data
-public class Time {
+@Builder
+public class Time implements Identifiable {
 
 	private Long id;
 	private LocalTime since;

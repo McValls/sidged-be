@@ -2,19 +2,34 @@ package com.mvalls.sidged.database.mappers;
 
 import com.mvalls.sidged.core.model.Student;
 import com.mvalls.sidged.core.repositories.RepositoryDTOMapper;
+import com.mvalls.sidged.database.dtos.StudentDTO;
 
-public class StudentRepositoryDTOMapper implements RepositoryDTOMapper<Student, com.mvalls.sidged.database.dtos.StudentDTO>{
+public class StudentRepositoryDTOMapper implements RepositoryDTOMapper<Student, StudentDTO>{
 
+	private final ContactDataRepositoryDTOMapper contactDataDTOMapper = new ContactDataRepositoryDTOMapper();
+	
 	@Override
-	public Student dtoToModel(com.mvalls.sidged.database.dtos.StudentDTO dto) {
-		// TODO Auto-generated method stub
-		return null;
+	public Student dtoToModel(StudentDTO dto) {
+		return Student.builder()
+				.id(dto.getId())
+				.legacyNumber(dto.getLegacyNumber())
+				.names(dto.getNames())
+				.lastname(dto.getLastname())
+				.identificationNumber(dto.getIdentificationNumber())
+				.contactData(contactDataDTOMapper.dtoToModel(dto.getContactData()))
+				.build();
 	}
 
 	@Override
-	public com.mvalls.sidged.database.dtos.StudentDTO modelToDto(Student model) {
-		// TODO Auto-generated method stub
-		return null;
+	public StudentDTO modelToDto(Student model) {
+		return StudentDTO.builder()
+				.id(model.getId())
+				.legacyNumber(model.getLegacyNumber())
+				.names(model.getNames())
+				.lastname(model.getLastname())
+				.identificationNumber(model.getIdentificationNumber())
+				.contactData(contactDataDTOMapper.modelToDto(model.getContactData()))
+				.build();
 	}
 
 }

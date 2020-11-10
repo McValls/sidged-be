@@ -1,5 +1,6 @@
 package com.mvalls.sidged.core.model;
 
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -23,7 +24,8 @@ import lombok.Data;
  *
  */
 @Data
-public class StudentLink {
+@Builder
+public class StudentLink implements Identifiable {
 	
 	private Long id;
 	private String link;

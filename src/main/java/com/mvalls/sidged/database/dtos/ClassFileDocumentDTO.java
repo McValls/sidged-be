@@ -7,11 +7,10 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.mvalls.sidged.core.model.FileDocumentType;
 import com.mvalls.sidged.core.repositories.RepositoryDTO;
 
 import lombok.AllArgsConstructor;
@@ -56,7 +55,7 @@ public class ClassFileDocumentDTO implements RepositoryDTO {
 	
 	@Column(name = "file_document_type", nullable = false)
 	@Enumerated(EnumType.STRING)
-	private FileDocumentTypeDTO fileDocumentType;
+	private FileDocumentType fileDocumentType;
 	
 	@Lob
 	@Column(name = "content", nullable = false)
@@ -64,9 +63,5 @@ public class ClassFileDocumentDTO implements RepositoryDTO {
 	
 	@Column(name = "contentType", nullable = true)
 	private String contentType;
-	
-	@ManyToOne
-	@JoinColumn(name = "class_id")
-	private CourseClass courseClass;
 	
 }

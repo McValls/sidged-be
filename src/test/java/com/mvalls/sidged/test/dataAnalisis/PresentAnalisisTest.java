@@ -11,7 +11,7 @@ import java.util.stream.IntStream;
 import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.mvalls.sidged.analysis.PresentAnalysisCalculator;
+import com.mvalls.sidged.core.analysis.PresentAnalysisCalculator;
 import com.mvalls.sidged.core.model.ClassStudentPresent;
 import com.mvalls.sidged.core.model.CourseClass;
 import com.mvalls.sidged.core.model.StudentPresent;

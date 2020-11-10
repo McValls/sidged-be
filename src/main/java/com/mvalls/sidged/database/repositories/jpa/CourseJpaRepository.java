@@ -30,5 +30,7 @@ public interface CourseJpaRepository extends JpaRepository<CourseDTO, Long>{
 	
 	Collection<CourseDTO> findByTeachersId(Long id);
 	Collection<CourseDTO> findByStudentsId(Long id);
+	Collection<CourseDTO> findByYear(Integer year);
 
+	CourseDTO findByClassesId(Long courseClassId);
 }

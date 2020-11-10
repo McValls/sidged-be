@@ -48,7 +48,7 @@ public class CareerDTO implements RepositoryDTO {
 	@Column(nullable = false, unique = true)
 	private String name;
 	
-	@OneToMany(mappedBy = "career")
+	@OneToMany
 	private Collection<CourseDTO> course = new ArrayList<>();
 	
 }

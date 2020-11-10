@@ -1,7 +1,5 @@
 package com.mvalls.sidged.core.services;
 
-import org.springframework.stereotype.Service;
-
 import com.mvalls.sidged.core.model.Period;
 import com.mvalls.sidged.core.model.PeriodType;
 import com.mvalls.sidged.core.repositories.PeriodRepository;
@@ -26,7 +24,6 @@ import com.mvalls.sidged.core.repositories.PeriodRepository;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-@Service
 public class PeriodService extends GenericService<Period, PeriodRepository>{
 
 	

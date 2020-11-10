@@ -1,6 +1,5 @@
 package com.mvalls.sidged.core.services;
 
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mvalls.sidged.core.model.Teacher;
@@ -9,7 +8,7 @@ import com.mvalls.sidged.core.model.users.UserTeacher;
 import com.mvalls.sidged.core.repositories.TeacherRepository;
 import com.mvalls.sidged.core.repositories.UserRepository;
 import com.mvalls.sidged.core.repositories.UserTeacherRepository;
-import com.mvalls.sidged.utils.ContactDataUtils;
+import com.mvalls.sidged.core.utils.ContactDataUtils;
 
 /**
  * 
@@ -31,13 +30,12 @@ import com.mvalls.sidged.utils.ContactDataUtils;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-@Service
 public class TeacherService extends GenericService<Teacher, TeacherRepository>{
 	
 	private final UserTeacherRepository userTeacherRepository;
 	private final UserRepository userRepository;
 
-	public TeacherService(TeacherRepository repository, TeacherRepository teacherRepository,
+	public TeacherService(TeacherRepository repository,
 			UserTeacherRepository userTeacherRepository, UserRepository userRepository) {
 		super(repository);
 		this.userTeacherRepository = userTeacherRepository;

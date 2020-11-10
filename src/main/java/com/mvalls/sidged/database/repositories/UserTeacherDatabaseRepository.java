@@ -5,7 +5,7 @@ import com.mvalls.sidged.core.repositories.UserTeacherRepository;
 import com.mvalls.sidged.database.mappers.UserTeacherRepositoryDTOMapper;
 import com.mvalls.sidged.database.repositories.jpa.UserTeacherJpaRepository;
 
-public class UserTeacherDatabaseRepository extends CommonDatabaseRepository<UserTeacher, com.mvalls.sidged.database.dtos.login.UserTeacher, UserTeacherJpaRepository>
+public class UserTeacherDatabaseRepository extends CommonDatabaseRepository<UserTeacher, com.mvalls.sidged.database.dtos.login.UserTeacherDTO, UserTeacherJpaRepository>
 	implements UserTeacherRepository {
 	
 	public UserTeacherDatabaseRepository(UserTeacherJpaRepository jpaRepository, UserTeacherRepositoryDTOMapper dtoMapper) {

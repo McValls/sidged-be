@@ -3,10 +3,10 @@ package com.mvalls.sidged.test.strategies;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.mvalls.sidged.core.model.users.UserType;
-import com.mvalls.sidged.strategies.userCreation.StudentCreationStrategy;
-import com.mvalls.sidged.strategies.userCreation.TeacherCreationStrategy;
-import com.mvalls.sidged.strategies.userCreation.UserCreationStrategy;
-import com.mvalls.sidged.strategies.userCreation.UserCreationStrategyService;
+import com.mvalls.sidged.core.strategies.userCreation.StudentCreationStrategy;
+import com.mvalls.sidged.core.strategies.userCreation.TeacherCreationStrategy;
+import com.mvalls.sidged.core.strategies.userCreation.UserCreationStrategy;
+import com.mvalls.sidged.core.strategies.userCreation.UserCreationStrategyService;
 
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;

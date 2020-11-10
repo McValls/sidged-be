@@ -1,10 +1,7 @@
 package com.mvalls.sidged.mappers;
 
-import org.springframework.stereotype.Component;
-
-import com.mvalls.sidged.core.model.Course;
 import com.mvalls.sidged.core.model.CourseClass;
-import com.mvalls.sidged.rest.dtos.CourseClassDTO;
+import com.mvalls.sidged.rest.dtos.courseClass.CourseClassCreateResponseDTO;
 
 /**
  * 
@@ -26,22 +23,14 @@ import com.mvalls.sidged.rest.dtos.CourseClassDTO;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-@Component
-public class CourseClassModelMapper extends GenericMapper<CourseClassDTO, CourseClass>{
+public class CourseClassModelMapper extends GenericMapper<CourseClassCreateResponseDTO, CourseClass>{
 
 	@Override
-	public CourseClass map(CourseClassDTO dto) {
+	public CourseClass map(CourseClassCreateResponseDTO dto) {
 		CourseClass courseClass = CourseClass.builder()
 				.date(dto.getDate())
-				.course(buildCourse(dto))
 				.build();
 		return courseClass;
-	}
-	
-	private Course buildCourse(CourseClassDTO dto) {
-		return Course.builder()
-				.id(dto.getCourseId())
-				.build();
 	}
 
 }

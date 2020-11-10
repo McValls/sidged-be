@@ -3,6 +3,7 @@ package com.mvalls.sidged.core.model;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -26,10 +27,12 @@ import lombok.Data;
  *
  */
 @Data
-public class Career {
+@Builder
+public class Career implements Identifiable {
 
 	private Long id;
 	private String name;
-	private Collection<Course> course = new ArrayList<>();
+	@Builder.Default
+	private Collection<Course> courses = new ArrayList<>();
 	
 }

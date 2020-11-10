@@ -1,8 +1,12 @@
 package com.mvalls.sidged.core.model.users;
 
+import com.mvalls.sidged.core.model.Identifiable;
 import com.mvalls.sidged.core.model.Teacher;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 
@@ -25,14 +29,15 @@ import lombok.Data;
  *
  */
 @Data
-public class UserTeacher {
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class UserTeacher implements Identifiable {
 	
 	private Long id;
 	private User user;
 	private Teacher teacher;
 
-	public UserTeacher() {}
-	
 	public UserTeacher(User user, Teacher teacher) {
 		super();
 		this.user = user;

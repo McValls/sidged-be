@@ -1,5 +1,6 @@
 package com.mvalls.sidged.core.model;
 
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -23,7 +24,8 @@ import lombok.Data;
  *
  */
 @Data
-public class Period {
+@Builder
+public class Period implements Identifiable {
 	
 	private Long id;
 	private PeriodType periodType;

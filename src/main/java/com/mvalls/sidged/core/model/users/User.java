@@ -2,6 +2,8 @@ package com.mvalls.sidged.core.model.users;
 
 import java.time.LocalDateTime;
 
+import com.mvalls.sidged.core.model.Identifiable;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,7 +33,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class User implements Identifiable {
 
 	private Long id;
 	private String username;

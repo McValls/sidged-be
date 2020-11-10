@@ -1,7 +1,5 @@
 package com.mvalls.sidged.database.dtos;
 
-import java.util.Collection;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,7 +7,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -63,9 +60,6 @@ public class TeacherDTO implements RepositoryDTO {
 	@OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinColumn(name = "contact_data_id", nullable = false)
 	private ContactDataDTO contactData;
-	
-	@ManyToMany(mappedBy = "teachers")
-	private Collection<CourseDTO> courses;
 	
 	public TeacherDTO() {}
 	

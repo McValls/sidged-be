@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.mvalls.sidged.converters.StringListConverter;
+import com.mvalls.sidged.core.repositories.RepositoryDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,7 +42,7 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class ContactDataDTO {
+public class ContactDataDTO implements RepositoryDTO {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

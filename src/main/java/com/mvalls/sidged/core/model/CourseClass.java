@@ -4,12 +4,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.persistence.Column;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
@@ -34,16 +31,14 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @Builder
-@EqualsAndHashCode(exclude = {"course"})
 @NoArgsConstructor
 @AllArgsConstructor
-public class CourseClass {
+public class CourseClass implements Identifiable {
 
 	private Long id;
 	private Integer classNumber;
 	private LocalDate date;
 	private ClassState classState;
-	private Course course;
 	@Builder.Default
 	private Collection<Student> inscribedStudents = new ArrayList<>();
 	@Builder.Default
@@ -51,7 +46,6 @@ public class CourseClass {
 	@Builder.Default
 	private Collection<ClassFileDocument> classFileDocuments = new ArrayList<>();
 	
-	@Column(name = "comments", nullable = true)
 	private String comments;
 
 }

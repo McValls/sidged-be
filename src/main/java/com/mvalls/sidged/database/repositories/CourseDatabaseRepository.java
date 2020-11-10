@@ -5,13 +5,15 @@ import java.util.stream.Collectors;
 
 import com.mvalls.sidged.core.model.Course;
 import com.mvalls.sidged.core.repositories.CourseRepository;
+import com.mvalls.sidged.database.dtos.CourseDTO;
 import com.mvalls.sidged.database.mappers.CourseRepositoryDTOMapper;
 import com.mvalls.sidged.database.repositories.jpa.CourseJpaRepository;
 
 public class CourseDatabaseRepository extends CommonDatabaseRepository<Course, com.mvalls.sidged.database.dtos.CourseDTO, CourseJpaRepository>
 	implements CourseRepository {
 
-	public CourseDatabaseRepository(CourseJpaRepository jpaRepository, CourseRepositoryDTOMapper dtoMapper) {
+	public CourseDatabaseRepository(CourseJpaRepository jpaRepository, 
+			CourseRepositoryDTOMapper dtoMapper) {
 		super(jpaRepository, dtoMapper);
 	}
 	
@@ -30,5 +32,22 @@ public class CourseDatabaseRepository extends CommonDatabaseRepository<Course, c
 				.map(this.dtoMapper::dtoToModel)
 				.collect(Collectors.toList());
 	}
+
+	@Override
+	public Course findByCourseClassId(Long courseClassId) {
+		CourseDTO courseDTO = this.jpaRepository.findByClassesId(courseClassId);
+		if (courseDTO == null) {
+			throw new IllegalStateException();
+		}
+		return dtoMapper.dtoToModel(courseDTO);
+	}
 	
+	@Override
+	public List<Course> findByYear(Integer year) {
+		return this.jpaRepository.findByYear(year)
+				.stream()
+				.map(dtoMapper::dtoToModel)
+				.collect(Collectors.toList());
+	}
+
 }

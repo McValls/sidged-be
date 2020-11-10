@@ -11,7 +11,10 @@ import javax.persistence.Table;
 
 import com.mvalls.sidged.core.repositories.RepositoryDTO;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 
@@ -36,6 +39,9 @@ import lombok.Data;
 @Entity
 @Table(name = "time")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class TimeDTO implements RepositoryDTO {
 
 	@Id

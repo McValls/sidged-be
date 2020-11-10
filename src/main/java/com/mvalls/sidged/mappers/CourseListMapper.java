@@ -1,7 +1,5 @@
 package com.mvalls.sidged.mappers;
 
-import org.springframework.stereotype.Component;
-
 import com.mvalls.sidged.core.model.Course;
 import com.mvalls.sidged.rest.dtos.CourseListDTO;
 import com.mvalls.sidged.rest.dtos.PeriodDTO;
@@ -26,13 +24,11 @@ import com.mvalls.sidged.rest.dtos.PeriodDTO;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-@Component
 public class CourseListMapper extends GenericMapper<Course, CourseListDTO>{
 	
 	@Override
 	public CourseListDTO map(Course course) {
 		return CourseListDTO.builder()
-				.career(course.getCareer().getName())
 				.id(course.getId())
 				.name(course.getName())
 				.period(PeriodDTO

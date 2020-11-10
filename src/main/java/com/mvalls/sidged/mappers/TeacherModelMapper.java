@@ -1,8 +1,5 @@
 package com.mvalls.sidged.mappers;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.mvalls.sidged.core.model.Teacher;
 import com.mvalls.sidged.rest.dtos.TeacherAllDTO;
 
@@ -26,11 +23,9 @@ import com.mvalls.sidged.rest.dtos.TeacherAllDTO;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-@Component
 public class TeacherModelMapper extends GenericMapper<TeacherAllDTO, Teacher>{
 
-	@Autowired
-	private ContactDataModelMapper contactDataModelMapper;
+	private final ContactDataModelMapper contactDataModelMapper = new ContactDataModelMapper();
 	
 	@Override
 	public Teacher map(TeacherAllDTO dto) {

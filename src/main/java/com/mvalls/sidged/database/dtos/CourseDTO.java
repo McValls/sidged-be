@@ -3,6 +3,7 @@ package com.mvalls.sidged.database.dtos;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -18,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.mvalls.sidged.core.model.Shift;
 import com.mvalls.sidged.core.repositories.RepositoryDTO;
 
 import lombok.AllArgsConstructor;
@@ -63,7 +65,7 @@ public class CourseDTO implements RepositoryDTO {
 	
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
-	private ShiftDTO shift;
+	private Shift shift;
 	
 	@Column(nullable = false)
 	private Integer year;
@@ -79,10 +81,6 @@ public class CourseDTO implements RepositoryDTO {
 	@ManyToOne
 	@JoinColumn(name = "time_end_id", nullable = false)
 	private TimeDTO timeEnd;
-	
-	@ManyToOne
-	@JoinColumn(name = "career_id", nullable = false)
-	private CareerDTO career;
 	
 	@Column(nullable = true)
 	private String chair;
@@ -104,11 +102,11 @@ public class CourseDTO implements RepositoryDTO {
 	private Set<StudentDTO> students = new HashSet<>();
 	
 	@Builder.Default
-	@OneToMany(mappedBy = "course")
-	private Set<CourseClass> classes = new HashSet<>();
+	@OneToMany(cascade = CascadeType.ALL)
+	private Set<CourseClassDTO> classes = new HashSet<>();
 	
 	@Builder.Default
-	@OneToMany(mappedBy = "course")
+	@OneToMany
 	private Set<NoteDTO> note = new HashSet<>();
 
 }

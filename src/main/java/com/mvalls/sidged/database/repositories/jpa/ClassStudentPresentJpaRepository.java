@@ -28,8 +28,6 @@ import com.mvalls.sidged.database.dtos.ClassStudentPresentDTO;
  */
 public interface ClassStudentPresentJpaRepository extends JpaRepository<ClassStudentPresentDTO, Long>{
 
-	ClassStudentPresentDTO findByCourseClassIdAndStudentId(Long classId, Long studentId);
-	
 	Collection<ClassStudentPresentDTO> findByStudentId(Long studentId);
 	
 }

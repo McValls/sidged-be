@@ -1,7 +1,5 @@
 package com.mvalls.sidged.mappers;
 
-import org.springframework.stereotype.Component;
-
 import com.mvalls.sidged.rest.dtos.ClassFileDocumentLinkDTO;
 import com.mvalls.sidged.valueObjects.ClassFileDocumentVO;
 
@@ -25,7 +23,6 @@ import com.mvalls.sidged.valueObjects.ClassFileDocumentVO;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-@Component
 public class ClassFileDocumentDTOToVOMapper extends GenericMapper<ClassFileDocumentLinkDTO, ClassFileDocumentVO> {
 
 	@Override

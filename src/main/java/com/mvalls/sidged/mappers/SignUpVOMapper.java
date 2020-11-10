@@ -1,7 +1,5 @@
 package com.mvalls.sidged.mappers;
 
-import org.springframework.stereotype.Component;
-
 import com.mvalls.sidged.rest.dtos.SignUpRequestDTO;
 import com.mvalls.sidged.valueObjects.SignUpVO;
 
@@ -25,7 +23,6 @@ import com.mvalls.sidged.valueObjects.SignUpVO;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-@Component
 public class SignUpVOMapper extends GenericMapper<SignUpRequestDTO, SignUpVO>{
 
 	@Override
