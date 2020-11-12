@@ -29,7 +29,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Student implements Identifiable {
+public class Student implements Model {
 
 	private Long id;
 	private String legacyNumber;

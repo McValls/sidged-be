@@ -37,7 +37,7 @@ public class CourseListDTO extends DataTransferObject {
 
 	private static final long serialVersionUID = 4270342625717971366L;
 
-	private Long id;
+	private String code;
 	private String name;
 	private Shift shift;
 	private Integer year;

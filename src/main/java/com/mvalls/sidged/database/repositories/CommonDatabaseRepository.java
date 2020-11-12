@@ -5,12 +5,12 @@ import java.util.stream.Collectors;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.mvalls.sidged.core.model.Identifiable;
+import com.mvalls.sidged.core.model.Model;
 import com.mvalls.sidged.core.repositories.GenericRepository;
 import com.mvalls.sidged.core.repositories.RepositoryDTO;
 import com.mvalls.sidged.core.repositories.RepositoryDTOMapper;
 
-public abstract class CommonDatabaseRepository<T extends Identifiable, S extends RepositoryDTO, U extends JpaRepository<S, Long>> implements GenericRepository<T, Long> {
+public abstract class CommonDatabaseRepository<T extends Model, S extends RepositoryDTO, U extends JpaRepository<S, Long>> implements GenericRepository<T, Long> {
 
 	protected final U jpaRepository;
 	protected final RepositoryDTOMapper<T, S> dtoMapper;

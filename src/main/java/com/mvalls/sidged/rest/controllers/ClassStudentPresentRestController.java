@@ -49,11 +49,14 @@ public class ClassStudentPresentRestController {
 	}
 
 	@JwtTeacher
-	@PutMapping("/class/{classId}/student/{studentId}")
-	public void update(HttpServletRequest request, UserTeacher userTeacher, @PathVariable("classId") Long classId,
+	@PutMapping("/course/{courseCode}/class/{classNumber}/student/{studentId}")
+	public void update(HttpServletRequest request,
+			UserTeacher userTeacher,
+			@PathVariable("courseCode") String courseCode,
+			@PathVariable("classNumber") Integer classNumber,
 			@PathVariable("studentId") Long studentId, @RequestBody StudentPresentDTO present)
 			throws UnauthorizedUserException {
-		classStudentPresentService.updatePresent(userTeacher.getTeacher(), classId, studentId, present.getPresent());
+		classStudentPresentService.updatePresent(userTeacher.getTeacher(), courseCode, classNumber, studentId, present.getPresent());
 	}
 
 }

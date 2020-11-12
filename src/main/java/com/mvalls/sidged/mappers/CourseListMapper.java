@@ -29,7 +29,7 @@ public class CourseListMapper extends GenericMapper<Course, CourseListDTO>{
 	@Override
 	public CourseListDTO map(Course course) {
 		return CourseListDTO.builder()
-				.id(course.getId())
+				.code(course.getCode())
 				.name(course.getName())
 				.period(PeriodDTO
 						.builder()
@@ -39,6 +39,7 @@ public class CourseListMapper extends GenericMapper<Course, CourseListDTO>{
 				.shift(course.getShift())
 				.timeSince(course.getTimeStart().getSince().toString())
 				.timeUntil(course.getTimeEnd().getUntil().toString())
+				.career(course.getCareer().getName())
 				.year(course.getYear())
 				.build();
 	}

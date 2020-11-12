@@ -25,7 +25,7 @@ import lombok.Data;
  */
 @Data
 @Builder
-public class Note implements Identifiable {
+public class Note implements Model {
 
 	private Long id;
 	private Student student;

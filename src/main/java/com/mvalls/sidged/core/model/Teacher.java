@@ -3,6 +3,7 @@ package com.mvalls.sidged.core.model;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 
@@ -27,7 +28,8 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class Teacher implements Identifiable {
+@EqualsAndHashCode(of = {"names", "lastname", "legacyNumber"})
+public class Teacher implements Model {
 
 	private Long id;
 	private String legacyNumber;

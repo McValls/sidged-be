@@ -32,9 +32,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Course implements Identifiable {
+public class Course implements Model {
 	
 	private Long id;
+	private String code;
 	private String name;
 	private Shift shift;
 	private Integer year;
@@ -42,13 +43,10 @@ public class Course implements Identifiable {
 	private Time timeStart;
 	private Time timeEnd;
 	private String chair;
-	@Builder.Default
-	private Set<Teacher> teachers = new HashSet<>();
-	@Builder.Default
-	private Set<Student> students = new HashSet<>();
-	@Builder.Default
-	private Set<CourseClass> classes = new HashSet<>();
-	@Builder.Default
-	private Set<Note> notes = new HashSet<>();
+	private Career career;
+	@Builder.Default private Set<Teacher> teachers = new HashSet<>();
+	@Builder.Default private Set<Student> students = new HashSet<>();
+	@Builder.Default private Set<CourseClass> classes = new HashSet<>();
+	@Builder.Default private Set<Note> notes = new HashSet<>();
 
 }

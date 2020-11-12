@@ -40,7 +40,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CourseClassCreateRequestDTO extends DataTransferObject {
 
-	private Long courseId;
+	private String courseCode;
 	private LocalDate date;
 
 }

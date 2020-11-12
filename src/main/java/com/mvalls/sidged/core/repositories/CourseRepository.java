@@ -13,5 +13,7 @@ public interface CourseRepository extends GenericRepository<Course, Long> {
 	Course findByCourseClassId(Long courseClassId);
 
 	List<Course> findByYear(Integer year);
+	
+	Course findByCode(String code);
 
 }

@@ -31,7 +31,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class NotifyStudentsDTO {
 
-	private Long courseId;
+	private String courseCode;
 	private String subject;
 	private String message;
 	

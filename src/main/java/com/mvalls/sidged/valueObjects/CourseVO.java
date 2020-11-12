@@ -31,6 +31,7 @@ import lombok.Data;
 public class CourseVO {
 	
 	private String name;
+	private String code;
 	private Shift shift;
 	private Integer year;
 	private PeriodType periodType;
@@ -38,10 +39,6 @@ public class CourseVO {
 	private Long timeSinceId;
 	private Long timeUntilId;
 	private String chair;
-
-	/**
-	 * @deprecated model changed, no career anymore in course. 
-	 */
-	private Long careerId;
-
+	private String careerCode;
+	
 }

@@ -69,17 +69,18 @@ public class ClassFileDocumentRestController {
 		this.classFileDocumentModelToDTOMapper = new ClassFileDocumentModelToDTOMapper(serverHost);
 	}
 
-	@GetMapping("/class/{classId}")
-	public Collection<ClassFileDocumentDTO> getFileDocuments(@PathVariable("classId") Long classId) {
-		Collection<ClassFileDocument> fileDocuments = classFileDocumentService.findByCourseClassId(classId);
+	@GetMapping("/class/{classNumber}/course/{courseCode}")
+	public Collection<ClassFileDocumentDTO> getFileDocuments(@PathVariable("classNumber") Integer classNumber,
+			@PathVariable("courseCode") String courseCode) {
+		Collection<ClassFileDocument> fileDocuments = classFileDocumentService.findByCourseCodeAndClassNumber(courseCode, classNumber);
 		Collection<ClassFileDocumentDTO> dtos = fileDocuments.stream()
 				.map(fd -> classFileDocumentModelToDTOMapper.map(fd)).collect(Collectors.toList());
 		return dtos;
 	}
 
-	@GetMapping("/course/{courseId}")
-	public Collection<ClassFileDocumentDTO> getFileDocumentsByCourse(@PathVariable("courseId") Long courseId) {
-		Collection<ClassFileDocument> fileDocuments = classFileDocumentService.findByCourseId(courseId);
+	@GetMapping("/course/{courseCode}")
+	public Collection<ClassFileDocumentDTO> getFileDocumentsByCourse(@PathVariable("courseCode") String courseCode) {
+		Collection<ClassFileDocument> fileDocuments = classFileDocumentService.findByCourseCode(courseCode);
 		Collection<ClassFileDocumentDTO> dtos = fileDocuments.stream()
 				.map(fd -> classFileDocumentModelToDTOMapper.map(fd)).collect(Collectors.toList());
 		return dtos;

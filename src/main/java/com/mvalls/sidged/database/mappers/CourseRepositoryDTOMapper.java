@@ -19,6 +19,7 @@ public class CourseRepositoryDTOMapper implements RepositoryDTOMapper<Course, Co
 	public Course dtoToModel(CourseDTO dto) {
 		return Course.builder()
 				.id(dto.getId())
+				.code(dto.getCode())
 				.name(dto.getName())
 				.shift(dto.getShift())
 				.year(dto.getYear())
@@ -50,6 +51,7 @@ public class CourseRepositoryDTOMapper implements RepositoryDTOMapper<Course, Co
 	public CourseDTO modelToDto(Course model) {
 		return CourseDTO.builder()
 				.id(model.getId())
+				.code(model.getCode())
 				.name(model.getName())
 				.shift(model.getShift())
 				.year(model.getYear())
@@ -57,6 +59,7 @@ public class CourseRepositoryDTOMapper implements RepositoryDTOMapper<Course, Co
 				.timeStart(timeDTOMapper.modelToDto(model.getTimeStart()))
 				.timeEnd(timeDTOMapper.modelToDto(model.getTimeEnd()))
 				.chair(model.getChair())
+				.careerCode(model.getCareer().getCode())
 				.classes(model.getClasses()
 						.stream()
 						.map(courseClassDTOMapper::modelToDto)

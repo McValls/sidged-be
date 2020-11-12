@@ -28,10 +28,11 @@ import lombok.Data;
  */
 @Data
 @Builder
-public class Career implements Identifiable {
+public class Career implements Model {
 
 	private Long id;
 	private String name;
+	private String code;
 	@Builder.Default
 	private Collection<Course> courses = new ArrayList<>();
 	

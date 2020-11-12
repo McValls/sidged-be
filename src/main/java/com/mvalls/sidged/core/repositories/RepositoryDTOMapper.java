@@ -1,8 +1,8 @@
 package com.mvalls.sidged.core.repositories;
 
-import com.mvalls.sidged.core.model.Identifiable;
+import com.mvalls.sidged.core.model.Model;
 
-public interface RepositoryDTOMapper <T extends Identifiable, S extends RepositoryDTO>{
+public interface RepositoryDTOMapper <T extends Model, S extends RepositoryDTO>{
 
 	T dtoToModel(S dto);
 	S modelToDto(T model);

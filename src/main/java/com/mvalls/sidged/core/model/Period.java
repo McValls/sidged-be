@@ -25,7 +25,7 @@ import lombok.Data;
  */
 @Data
 @Builder
-public class Period implements Identifiable {
+public class Period implements Model {
 	
 	private Long id;
 	private PeriodType periodType;

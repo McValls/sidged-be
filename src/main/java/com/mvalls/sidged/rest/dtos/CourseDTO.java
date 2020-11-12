@@ -36,13 +36,14 @@ import lombok.NoArgsConstructor;
 public class CourseDTO extends DataTransferObject {
 	
 	private String name;
+	private String courseCode;
 	private Shift shift;
 	private Integer year;
 	private PeriodType periodType;
 	private Integer periodNumber;
 	private Long timeSinceId;
 	private Long timeUntilId;
-	private Long careerId;
+	private String careerCode;
 	private String chair;
 
 }

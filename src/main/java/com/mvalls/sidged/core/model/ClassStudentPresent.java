@@ -29,7 +29,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ClassStudentPresent implements Identifiable {
+public class ClassStudentPresent implements Model {
 	
 	private Long id;
 	private Student student;

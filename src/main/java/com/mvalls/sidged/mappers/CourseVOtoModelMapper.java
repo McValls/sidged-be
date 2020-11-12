@@ -28,6 +28,7 @@ public class CourseVOtoModelMapper extends GenericMapper<CourseVO, Course>{
 	@Override
 	public Course map(CourseVO vo) {
 		Course course = Course.builder()
+				.code(vo.getCode())
 				.name(vo.getName())
 				.shift(vo.getShift())
 				.year(vo.getYear())

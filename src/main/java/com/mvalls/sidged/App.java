@@ -173,7 +173,8 @@ public class App {
 	
 	@Bean
 	public CourseService courseService() {
-		return new CourseService(courseRepository(), 
+		return new CourseService(courseRepository(),
+				careerRepository(),
 				teacherService(),
 				studentService(),
 				timeService(),
@@ -259,7 +260,7 @@ public class App {
 	
 	@Bean
 	public ClassStudentPresentService classStudentPresentService() {
-		return new ClassStudentPresentService(classStudentPresentRepository(), courseRepository(), courseClassRepository(), presentAnalysisCalculator());
+		return new ClassStudentPresentService(classStudentPresentRepository(), courseRepository(), presentAnalysisCalculator());
 	}
 
 	@Bean
@@ -282,7 +283,7 @@ public class App {
 	
 	@Bean
 	public CourseRepository courseRepository() {
-		return new CourseDatabaseRepository(this.courseJpaRepository, new CourseRepositoryDTOMapper());
+		return new CourseDatabaseRepository(this.courseJpaRepository, careerRepository(), new CourseRepositoryDTOMapper());
 	}
 	
 	@Bean

@@ -26,4 +26,6 @@ import com.mvalls.sidged.database.dtos.CareerDTO;
  */
 public interface CareerJpaRepository extends JpaRepository<CareerDTO, Long> {
 
+	CareerDTO findByCode(String careerCode);
+
 }

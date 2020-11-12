@@ -1,6 +1,6 @@
 package com.mvalls.sidged.core.model.users;
 
-import com.mvalls.sidged.core.model.Identifiable;
+import com.mvalls.sidged.core.model.Model;
 import com.mvalls.sidged.core.model.Teacher;
 
 import lombok.AllArgsConstructor;
@@ -32,7 +32,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserTeacher implements Identifiable {
+public class UserTeacher implements Model {
 	
 	private Long id;
 	private User user;

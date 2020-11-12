@@ -196,7 +196,7 @@ public class PresentAnalysisCalculator {
 				}
 			}
 			PresentismAnalysisData presentismAnalysisData = new PresentismAnalysisData();
-			presentismAnalysisData.setCourseId(listPresentsByCourse.getKey().getId());
+			presentismAnalysisData.setCourseCode(listPresentsByCourse.getKey().getCode());
 			presentismAnalysisData.setCourseName(listPresentsByCourse.getKey().getName());
 			presentismAnalysisData.setNumberOfClasses(total);
 			presentismAnalysisData.setCourseYear(listPresentsByCourse.getKey().getYear());

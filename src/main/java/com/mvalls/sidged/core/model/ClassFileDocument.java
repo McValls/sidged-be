@@ -29,7 +29,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ClassFileDocument implements Identifiable {
+public class ClassFileDocument implements Model {
 
 	private Long id;
 	private String name;

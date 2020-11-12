@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
 import com.mvalls.sidged.core.model.ClassFileDocument;
+import com.mvalls.sidged.core.model.Course;
 import com.mvalls.sidged.core.model.CourseClass;
 import com.mvalls.sidged.core.model.FileDocumentType;
 import com.mvalls.sidged.core.repositories.ClassFileDocumentRepository;
@@ -50,13 +51,18 @@ public class ClassFileDocumentService extends GenericService<ClassFileDocument, 
 		this.courseRepository = courseRepository;
 	}
 	
-	
-	public Collection<ClassFileDocument> findByCourseClassId(Long classId) {
-		return this.courseClassRepository.findById(classId).getClassFileDocuments();
+	public Collection<ClassFileDocument> findByCourseCodeAndClassNumber(String courseCode, Integer classNumber) {
+		Course course = this.courseRepository.findByCode(courseCode);
+		CourseClass courseClass = course.getClasses()
+				.stream()
+				.filter(c -> c.getClassNumber().equals(classNumber))
+				.findFirst()
+				.orElseThrow();
+		return courseClass.getClassFileDocuments();
 	}
-
-	public Collection<ClassFileDocument> findByCourseId(Long courseId) {
-		return this.courseRepository.findById(courseId)
+	
+	public Collection<ClassFileDocument> findByCourseCode(String courseCode) {
+		return this.courseRepository.findByCode(courseCode)
 				.getClasses().stream()
 					.map(courseClass -> courseClass.getClassFileDocuments())
 					.flatMap(Collection::stream)

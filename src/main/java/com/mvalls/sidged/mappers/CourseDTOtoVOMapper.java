@@ -29,13 +29,14 @@ public class CourseDTOtoVOMapper extends GenericMapper<CourseDTO, CourseVO>{
 	public CourseVO map(CourseDTO dto) {
 		CourseVO valueObject = CourseVO.builder()
 				.name(dto.getName())
+				.code(dto.getCourseCode())
 				.shift(dto.getShift())
 				.year(dto.getYear())
 				.periodNumber(dto.getPeriodNumber())
 				.periodType(dto.getPeriodType())
 				.timeSinceId(dto.getTimeSinceId())
 				.timeUntilId(dto.getTimeUntilId())
-				.careerId(dto.getCareerId())
+				.careerCode(dto.getCareerCode())
 				.chair(dto.getChair())
 				.build();
 		return valueObject;

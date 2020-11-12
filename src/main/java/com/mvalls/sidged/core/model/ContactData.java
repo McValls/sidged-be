@@ -30,7 +30,7 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class ContactData implements Identifiable {
+public class ContactData implements Model {
 	
 	private Long id;
 	@Builder.Default

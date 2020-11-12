@@ -61,6 +61,9 @@ public class CourseDTO implements RepositoryDTO {
 	private Long id;
 	
 	@Column(nullable = false)
+	private String code;
+	
+	@Column(nullable = false)
 	private String name;
 	
 	@Column(nullable = false)
@@ -85,6 +88,9 @@ public class CourseDTO implements RepositoryDTO {
 	@Column(nullable = true)
 	private String chair;
 	
+	@Column(name = "career_code", nullable = false)
+	private String careerCode;
+	
 	@Builder.Default
 	@ManyToMany
 	@JoinTable(name = "course_teacher",
@@ -102,7 +108,10 @@ public class CourseDTO implements RepositoryDTO {
 	private Set<StudentDTO> students = new HashSet<>();
 	
 	@Builder.Default
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.MERGE)
+	@JoinTable(name = "course_classes", 
+			joinColumns = {@JoinColumn(name = "coursedto_id", referencedColumnName = "id")},
+			inverseJoinColumns = {@JoinColumn(name = "classes_id", referencedColumnName = "id", insertable = false, updatable = true)})
 	private Set<CourseClassDTO> classes = new HashSet<>();
 	
 	@Builder.Default

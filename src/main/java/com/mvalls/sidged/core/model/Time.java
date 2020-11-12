@@ -27,7 +27,7 @@ import lombok.Data;
  */
 @Data
 @Builder
-public class Time implements Identifiable {
+public class Time implements Model {
 
 	private Long id;
 	private LocalTime since;

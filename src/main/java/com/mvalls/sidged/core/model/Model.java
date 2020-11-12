@@ -1,6 +1,6 @@
 package com.mvalls.sidged.core.model;
 
-public interface Identifiable {
+public interface Model {
 
 	Long getId();
 	void setId(Long id);

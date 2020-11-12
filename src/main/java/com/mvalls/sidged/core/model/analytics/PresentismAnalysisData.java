@@ -27,7 +27,7 @@ import lombok.Data;
 @Data
 public class PresentismAnalysisData {
 	
-	private Long courseId;
+	private String courseCode;
 	private String courseName;
 	private Integer courseYear;
 	private Integer numberOfClasses;

@@ -69,22 +69,23 @@ public class CourseClassRestController {
 	public CourseClassCreateResponseDTO createClass(HttpServletRequest request, 
 			UserTeacher userTeacher,
 			@RequestBody CourseClassCreateRequestDTO createDTO) throws UnauthorizedUserException {
-		CourseClass courseClass = courseClassService.create(userTeacher.getTeacher(), createDTO.getCourseId(), createDTO.getDate());
+		CourseClass courseClass = courseClassService.create(userTeacher.getTeacher(), createDTO.getCourseCode(), createDTO.getDate());
 		return courseClassCreateResponseMapper.map(courseClass);
 	}
 	
 	@JwtTeacher
-	@GetMapping("/{classNumber}/course/{courseId}")
-	public CourseClassCreateResponseDTO getClassById(HttpServletRequest request, 
+	@GetMapping("/{classNumber}/course/{courseCode}")
+	public CourseClassCreateResponseDTO getClassByNumberAndCourseCode(HttpServletRequest request, 
 			UserTeacher userTeacher, 
-			@PathVariable("courseId") Long courseId, @PathVariable("classNumber") Integer classNumber) throws UnauthorizedUserException {
-		CourseClass courseClass = courseClassService.findByTeacherAndCourseIdAndClassNumber(userTeacher.getTeacher(), courseId, classNumber);
+			@PathVariable("classNumber") Integer classNumber,
+			@PathVariable("courseCode") String courseCode) throws UnauthorizedUserException {
+		CourseClass courseClass = courseClassService.findByTeacherAndCourseCodeAndClassNumber(userTeacher.getTeacher(), courseCode, classNumber);
 		return courseClassCreateResponseMapper.map(courseClass);
 	}
 		
-	@GetMapping("/course/{courseId}")
-	public Collection<CourseClassCreateResponseDTO> getClassesByCourse(@PathVariable("courseId") Long courseId){
-		Collection<CourseClass> classes = courseClassService.findClassesByCourseId(courseId);
+	@GetMapping("/course/{courseCode}")
+	public Collection<CourseClassCreateResponseDTO> getClassesByCourse(@PathVariable("courseCode") String courseCode){
+		Collection<CourseClass> classes = courseClassService.findClassesByCourseCode(courseCode);
 		Collection<CourseClassCreateResponseDTO> classesDTO = classes.stream()
 				.map(course -> courseClassCreateResponseMapper.map(course))
 				.sorted((CourseClassCreateResponseDTO c1, CourseClassCreateResponseDTO c2) -> c1.getClassNumber() - c2.getClassNumber())
@@ -93,10 +94,10 @@ public class CourseClassRestController {
 		return classesDTO;
 	}
 	
-	@GetMapping("/{classId}/course/{courseId}/students")
-	public Collection<ClassStudentDTO> getStudentsByClass(@PathVariable("classId") Long classId,
-			@PathVariable("courseId") Long courseId){
-		Collection<ClassStudentPresent> classStudents = courseClassService.getClassStudents(courseId, classId);
+	@GetMapping("/{classNumber}/course/{courseCode}/students")
+	public Collection<ClassStudentDTO> getStudentsByClass(@PathVariable("classNumber") Integer classNumber,
+			@PathVariable("courseCode") String courseCode){
+		Collection<ClassStudentPresent> classStudents = courseClassService.getClassStudents(courseCode, classNumber);
 		Collection<ClassStudentDTO> studentsDTO = classStudents.stream()
 				.map(student -> classStudentPresentMapper.map(student))
 				.collect(Collectors.toList());
@@ -104,30 +105,31 @@ public class CourseClassRestController {
 		return studentsDTO;	
 	}
 	
-	@PutMapping("/{classId}")
+	@Deprecated
+	@PutMapping("/{classNumber}")
 	public void updateComments(@PathVariable("classId") Long classId, 
 			@RequestBody CourseClassCommentDTO courseClassCommentDTO) {
 		courseClassService.updateComments(classId, courseClassCommentDTO.getComments());
 	}
 	
 	@JwtTeacher
-	@PutMapping("/finish/{classId}/course/{courseId}")
+	@PutMapping("/finish/{classNumber}/course/{courseCode}")
 	public void finishClass(HttpServletRequest request, 
 			UserTeacher userTeacher,			
-			@PathVariable("classId") Long classId, 
-			@PathVariable("courseId") Long courseId,
+			@PathVariable("classNumber") Integer classNumber, 
+			@PathVariable("courseCode") String courseCode,
 			@RequestBody ClassStudentDTO studentDTO) throws UnauthorizedUserException {
-		courseClassService.updateClassState(userTeacher.getTeacher(), courseId, classId, ClassState.FINALIZADA);
+		courseClassService.updateClassState(userTeacher.getTeacher(), courseCode, classNumber, ClassState.FINALIZADA);
 	}
 
 	@JwtTeacher
-	@PutMapping("/reopen/{classId}/course/{courseId}")
+	@PutMapping("/reopen/{classNumber}/course/{courseCode}")
 	public void reopenClass(HttpServletRequest request, 
 			UserTeacher userTeacher,
-			@PathVariable("classId") Long classId, 
-			@PathVariable("courseId") Long courseId,
+			@PathVariable("classNumber") Integer classNumber, 
+			@PathVariable("courseCode") String courseCode,
 			@RequestBody ClassStudentDTO studentDTO) throws UnauthorizedUserException {
-		courseClassService.updateClassState(userTeacher.getTeacher(), courseId, classId, ClassState.PENDIENTE);
+		courseClassService.updateClassState(userTeacher.getTeacher(), courseCode, classNumber, ClassState.PENDIENTE);
 	}
 
 }

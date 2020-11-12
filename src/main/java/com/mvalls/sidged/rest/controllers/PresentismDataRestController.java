@@ -48,9 +48,9 @@ public class PresentismDataRestController {
 		this.courseService = courseService;
 	}
 
-	@GetMapping("/course/{courseId}")
-	public CoursePresentismData getPresentismData(@PathVariable(name = "courseId") Long courseId) {
-		return courseService.getPresentismByCourseGroupedByMonth(courseId);
+	@GetMapping("/course/{courseCode}")
+	public CoursePresentismData getPresentismData(@PathVariable(name = "courseCode") String courseCode) {
+		return courseService.getPresentismByCourseGroupedByMonth(courseCode);
 	}
 
 	@GetMapping("/student/{studentId}/year/{year}")

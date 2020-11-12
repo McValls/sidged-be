@@ -33,4 +33,5 @@ public interface CourseJpaRepository extends JpaRepository<CourseDTO, Long>{
 	Collection<CourseDTO> findByYear(Integer year);
 
 	CourseDTO findByClassesId(Long courseClassId);
+	CourseDTO findByCode(String code);
 }

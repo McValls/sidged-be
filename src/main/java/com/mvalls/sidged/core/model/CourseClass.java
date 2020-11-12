@@ -33,7 +33,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CourseClass implements Identifiable {
+public class CourseClass implements Model {
 
 	private Long id;
 	private Integer classNumber;

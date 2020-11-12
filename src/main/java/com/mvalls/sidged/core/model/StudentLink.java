@@ -25,7 +25,7 @@ import lombok.Data;
  */
 @Data
 @Builder
-public class StudentLink implements Identifiable {
+public class StudentLink implements Model {
 	
 	private Long id;
 	private String link;

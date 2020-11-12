@@ -56,8 +56,8 @@ public class CourseClassService extends GenericService<CourseClass, CourseClassR
 		this.courseRepository = courseRepository;
 	}
 	
-	public CourseClass create(Teacher teacher, Long courseId, LocalDate date) throws UnauthorizedUserException {
-		Course course = this.courseRepository.findById(courseId);
+	public CourseClass create(Teacher teacher, String courseCode, LocalDate date) throws UnauthorizedUserException {
+		Course course = this.courseRepository.findByCode(courseCode);
 		
 		validateTeacherAndCourse(teacher, course);
 		
@@ -83,26 +83,34 @@ public class CourseClassService extends GenericService<CourseClass, CourseClassR
 	}
 	
 	@Transactional
-	public Collection<CourseClass> findClassesByCourseId(Long courseId){
-		Course course = this.courseRepository.findById(courseId);
+	public Collection<CourseClass> findClassesByCourseCode(String courseCode){
+		Course course = this.courseRepository.findByCode(courseCode);
 		return course.getClasses();
 	}
 	
-	public Collection<ClassStudentPresent> getClassStudents(Long courseId, Long classId) {
-		CourseClass courseClass = this.repository.findById(classId);
+	public Collection<ClassStudentPresent> getClassStudents(String courseCode, Integer classNumber) {
+		Course course = this.courseRepository.findByCode(courseCode);
+		CourseClass courseClass = course.getClasses()
+				.stream()
+				.filter(c -> c.getClassNumber().equals(classNumber))
+				.findFirst()
+				.orElseThrow();
 		
 		return courseClass.getStudentPresents();
 	}
 	
-	public void updateClassState(Teacher teacher, Long courseId, Long classId, ClassState classState) throws UnauthorizedUserException {
-		CourseClass courseClass = this.repository.findById(classId);
-		Course course = this.courseRepository.findById(courseId);
-		if(courseClass != null) {
-			validateTeacherAndCourse(teacher, course);
-			
-			courseClass.setClassState(classState);
-			update(courseClass);
-		}
+	public void updateClassState(Teacher teacher, String courseCode, Integer classNumber, ClassState classState) throws UnauthorizedUserException {
+		Course course = this.courseRepository.findByCode(courseCode);
+		validateTeacherAndCourse(teacher, course);
+		
+		CourseClass courseClass = course.getClasses()
+				.stream()
+				.filter(c -> c.getClassNumber().equals(classNumber))
+				.findFirst()
+				.orElseThrow();
+		courseClass.setClassState(classState);
+	
+		this.repository.update(courseClass);
 	}
 	
 	/**
@@ -161,15 +169,14 @@ public class CourseClassService extends GenericService<CourseClass, CourseClassR
 		}
 	}
 
-	@Transactional
 	public void updateComments(Long classId, String comments) {
 		CourseClass courseClass = findById(classId);
 		courseClass.setComments(comments);
 		update(courseClass);
 	}
 
-	public CourseClass findByTeacherAndCourseIdAndClassNumber(Teacher teacher, Long courseId, Integer classNumber) throws UnauthorizedUserException {
-		Course course = this.courseRepository.findById(courseId);
+	public CourseClass findByTeacherAndCourseCodeAndClassNumber(Teacher teacher, String courseCode, Integer classNumber) throws UnauthorizedUserException {
+		Course course = this.courseRepository.findByCode(courseCode);
 		this.validateTeacherAndCourse(teacher, course);
 		return course.getClasses()
 				.stream()

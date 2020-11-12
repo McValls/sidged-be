@@ -11,4 +11,9 @@ public class CareerDatabaseRepository extends CommonDatabaseRepository<Career, c
 		super(jpaRepository, dtoMapper);
 	}
 
+	@Override
+	public Career findByCode(String careerCode) {
+		return this.dtoMapper.dtoToModel(this.jpaRepository.findByCode(careerCode));
+	}
+	
 }

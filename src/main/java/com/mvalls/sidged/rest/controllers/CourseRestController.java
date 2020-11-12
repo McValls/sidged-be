@@ -91,17 +91,17 @@ public class CourseRestController {
 				.collect(Collectors.toList());
 	}
 	
-	@GetMapping("/{id}/teacher")
-	public Collection<TeacherAllDTO> getTeachersByCourse(@PathVariable("id") Long id) {
-		Collection<Teacher> teachers = courseService.findTeachersByCourse(id);
+	@GetMapping("/{code}/teacher")
+	public Collection<TeacherAllDTO> getTeachersByCourse(@PathVariable("code") String code) {
+		Collection<Teacher> teachers = courseService.findTeachersByCourseCode(code);
 		return teachers.stream()
 				.map(teacher -> teacherAllMapper.map(teacher))
 				.collect(Collectors.toList());
 	}
 	
-	@GetMapping("/{id}/student")
-	public Collection<StudentAllDTO> getStudentsByCourse(@PathVariable(value = "id") Long id) {
-		Collection<Student> students = courseService.findStudentsByCourse(id);
+	@GetMapping("/{code}/student")
+	public Collection<StudentAllDTO> getStudentsByCourse(@PathVariable(value = "code") String code) {
+		Collection<Student> students = courseService.findStudentsByCourseCode(code);
 		
 		Collection<StudentAllDTO> studentsList = students.stream()
 				.map(student -> studentAllMapper.map(student))
@@ -111,26 +111,26 @@ public class CourseRestController {
 	}
 	
 	@JwtBackOffice
-	@PutMapping("/{id}/teacher")
+	@PutMapping("/{code}/teacher")
 	public Collection<TeacherAllDTO> updateTeachers(
 			HttpServletRequest request,
-			@PathVariable("id") Long id,
+			@PathVariable("code") String code,
 			@RequestBody TeacherAllDTO dto,
 			@RequestParam(name = "action", required = true) UpdateAction action) {
-		Collection<Teacher> teachers = courseService.updateTeacher(id, teacherModelMapper.map(dto), action);
+		Collection<Teacher> teachers = courseService.updateTeacher(code, teacherModelMapper.map(dto), action);
 		return teachers.stream()
 				.map(teacher -> teacherAllMapper.map(teacher))
 				.collect(Collectors.toList());
 	}
 	
 	@JwtBackOffice
-	@PutMapping("/{id}/student")
+	@PutMapping("/{code}/student")
 	public Collection<StudentAllDTO> updateStudents(
 			HttpServletRequest request,
-			@PathVariable("id") Long id, 
+			@PathVariable("code") String code, 
 			@RequestBody StudentDTO dto,
 			@RequestParam(name = "action", required = true) UpdateAction action) {
-		Collection<Student> students = courseService.updateStudent(id, studentModelMapper.map(dto), action);
+		Collection<Student> students = courseService.updateStudent(code, studentModelMapper.map(dto), action);
 		return students.stream()
 				.map(student -> studentAllMapper.map(student))
 				.collect(Collectors.toList());
@@ -167,7 +167,7 @@ public class CourseRestController {
 	public void notifyCourseStudents(HttpServletRequest request, 
 			UserTeacher userTeacher,
 			@RequestBody NotifyStudentsDTO notifyStudentsDTO) {
-		courseService.sendEmailToStudents(notifyStudentsDTO.getCourseId(), 
+		courseService.sendEmailToStudents(notifyStudentsDTO.getCourseCode(), 
 				userTeacher.getTeacher().getId(), 
 				notifyStudentsDTO.getSubject(), 
 				notifyStudentsDTO.getMessage());
