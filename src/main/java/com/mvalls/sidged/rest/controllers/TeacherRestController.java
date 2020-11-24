@@ -1,6 +1,7 @@
 package com.mvalls.sidged.rest.controllers;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,8 +12,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mvalls.sidged.core.enums.UpdateAction;
 import com.mvalls.sidged.core.model.Teacher;
 import com.mvalls.sidged.core.model.users.UserTeacher;
 import com.mvalls.sidged.core.services.TeacherService;
@@ -63,16 +66,35 @@ public class TeacherRestController {
 		this.teacherModelMapper = new TeacherModelMapper();
 	}
 
-	
 	@GetMapping
 	public Collection<TeacherAllDTO> getAll() {
-		Collection<UserTeacher> teachersDb = userTeacherService.findAll();
-		
-		Collection<TeacherAllDTO> teachersResponse = teachersDb.stream()
-				.map(teacher -> userTeacherAllMapper.map(teacher))
+		List<Teacher> teachers = this.teacherService.findAll();
+		return teachers
+				.stream()
+				.map(teacherAllMapper::map)
 				.collect(Collectors.toList());
-		
-		return teachersResponse;
+	}
+	
+	@GetMapping("/course/{courseCode}")
+	public List<TeacherAllDTO> getTeachersByCourseCode(@PathVariable("courseCode") String courseCode) {
+		List<Teacher> teachers = this.teacherService.findByCourseCode(courseCode);
+		return teachers
+				.stream()
+				.map(teacherAllMapper::map)
+				.collect(Collectors.toList());
+	}
+	
+	@JwtBackOffice
+	@PutMapping("/course/{courseCode}")
+	public List<TeacherAllDTO> updateTeacherCourse(HttpServletRequest request,
+			@PathVariable("courseCode") String courseCode,
+			@RequestBody TeacherAllDTO dto,
+			@RequestParam(name = "action", required = true) UpdateAction action) {
+		List<Teacher> teachers = this.teacherService.updateCourseTeacher(courseCode, dto.getId(), action);
+		return teachers
+				.stream()
+				.map(teacherAllMapper::map)
+				.collect(Collectors.toList());
 	}
 	
 	@JwtBackOffice

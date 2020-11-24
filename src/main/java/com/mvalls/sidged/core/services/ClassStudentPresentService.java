@@ -3,17 +3,18 @@ package com.mvalls.sidged.core.services;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.mvalls.sidged.core.analysis.PresentAnalysisCalculator;
 import com.mvalls.sidged.core.model.ClassStudentPresent;
 import com.mvalls.sidged.core.model.Course;
-import com.mvalls.sidged.core.model.CourseClass;
 import com.mvalls.sidged.core.model.StudentPresent;
 import com.mvalls.sidged.core.model.Teacher;
 import com.mvalls.sidged.core.model.analytics.PresentismAnalysisData;
 import com.mvalls.sidged.core.repositories.ClassStudentPresentRepository;
 import com.mvalls.sidged.core.repositories.CourseRepository;
+import com.mvalls.sidged.core.repositories.TeacherRepository;
 import com.mvalls.sidged.rest.exceptions.UnauthorizedUserException;
 
 /**
@@ -40,34 +41,29 @@ public class ClassStudentPresentService extends GenericService<ClassStudentPrese
 
 	private final PresentAnalysisCalculator presentAnalysisCalculator;
 	private final CourseRepository courseRepository;
+	private final TeacherRepository teacherRepository;
 	
 	public ClassStudentPresentService(ClassStudentPresentRepository repository,
 			CourseRepository courseRepository,
+			TeacherRepository teacherRepository,
 			PresentAnalysisCalculator presentAnalysisCalculator) {
 		super(repository);
 		this.presentAnalysisCalculator = presentAnalysisCalculator;
 		this.courseRepository = courseRepository;
+		this.teacherRepository = teacherRepository;
 	}
 
 	public void updatePresent(Teacher teacher, String courseCode, Integer classNumber, Long studentId, StudentPresent present) throws UnauthorizedUserException {
-		Course course = this.courseRepository.findByCode(courseCode);
+		List<Teacher> teachersByCourse = this.teacherRepository.findByCourseCode(courseCode);
+		if (!teachersByCourse.contains(teacher)) throw new UnauthorizedUserException();
 		
-		if(!course.getTeachers().contains(teacher)) throw new UnauthorizedUserException();
+		Optional<ClassStudentPresent> classStudentPresent = 
+				this.repository.findByCourseCodeAndClassNumberAndStudentId(courseCode, classNumber, studentId);
 		
-		CourseClass courseClass = course.getClasses()
-				.stream()
-				.filter(c -> c.getClassNumber().equals(classNumber))
-				.findAny()
-				.orElseThrow();
-		
-		ClassStudentPresent classStudentPresent = courseClass.getStudentPresents()
-				.stream()
-				.filter(studentPresent -> studentPresent.getStudent().getId().equals(studentId))
-				.findFirst()
-				.orElse(null);
-		
-		classStudentPresent.setPresent(present);
-		this.courseRepository.update(course);
+		classStudentPresent.ifPresent(studentPresent -> {
+			studentPresent.setPresent(present);
+			this.repository.update(studentPresent);
+		});
 	}
 	
 	public List<PresentismAnalysisData> getPresentismDataByStudentIdAndYear(Long studentId, int year) {

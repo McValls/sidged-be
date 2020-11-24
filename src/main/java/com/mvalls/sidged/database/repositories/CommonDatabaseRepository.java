@@ -10,6 +10,7 @@ import com.mvalls.sidged.core.repositories.GenericRepository;
 import com.mvalls.sidged.core.repositories.RepositoryDTO;
 import com.mvalls.sidged.core.repositories.RepositoryDTOMapper;
 
+@Deprecated
 public abstract class CommonDatabaseRepository<T extends Model, S extends RepositoryDTO, U extends JpaRepository<S, Long>> implements GenericRepository<T, Long> {
 
 	protected final U jpaRepository;

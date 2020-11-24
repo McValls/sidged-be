@@ -34,7 +34,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ClassFileDocumentLinkDTO extends DataTransferObject {
 	
-	private Long classId;
+	private String courseCode;
+	private Integer classNumber;
 	private String name;
 	private String link;
 

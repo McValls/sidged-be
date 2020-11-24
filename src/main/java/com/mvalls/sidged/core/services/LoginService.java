@@ -1,6 +1,6 @@
 package com.mvalls.sidged.core.services;
 
-import org.springframework.transaction.annotation.Transactional;
+import java.util.Optional;
 
 import com.mvalls.sidged.core.model.emails.Email;
 import com.mvalls.sidged.core.model.users.User;
@@ -46,11 +46,10 @@ public class LoginService extends GenericService<User, UserRepository>{
 	}
 
 	public User login(String username, String password) {
-		User user = this.repository.getUserByUsername(username);
-		if(user != null && isValidPassword(user, password)) {
-			return user;
-		}
-		return null;
+		Optional<User> optionalUser = this.repository.findByUserName(username);
+		return optionalUser
+				.filter(user -> isValidPassword(user, password))
+				.orElse(null);
 	}
 
 	private boolean isValidPassword(User user, String password) {
@@ -61,7 +60,7 @@ public class LoginService extends GenericService<User, UserRepository>{
 		return false;
 	}
 
-	@Transactional
+	//TODO: refactor
 	public void signUp(User user, SignUpVO signUpVO) {
 		user.setPassword(EncryptionUtils.encryptSHA256(user.getPassword()));
 		UserType userType = user.getUserType();
@@ -77,7 +76,7 @@ public class LoginService extends GenericService<User, UserRepository>{
 		emailsService.sendEmail(email);
 	}
 	
-	@Transactional
+	//TODO: refactor
 	public void changePassword(String username, String oldPassword, String newPassword) throws WrongPasswordException {
 		User user = this.login(username, oldPassword);
 		if(user != null) {
@@ -89,9 +88,9 @@ public class LoginService extends GenericService<User, UserRepository>{
 		}
 	}
 	
-	@Transactional
 	public void recoveryPassword(String username, String email) throws BadCredentialsException {
-		User user = this.repository.getUserByUsername(username);
+		Optional<User> optionalUser = this.repository.findByUserName(username);
+		User user = optionalUser.orElseThrow();
 		if(user.getEmail().equalsIgnoreCase(email)) {
 			String randomPassword = EncryptionUtils.generateRandomPassword();
 			String randomPasswordEncrypted = EncryptionUtils.encryptSHA256(randomPassword);

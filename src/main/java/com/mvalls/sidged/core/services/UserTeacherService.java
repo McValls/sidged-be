@@ -34,6 +34,5 @@ public class UserTeacherService extends GenericService<UserTeacher, UserTeacherR
 	public UserTeacher findByUsername(String username) {
 		return this.repository.findByUserUsername(username);
 	}
-	
 		
 }

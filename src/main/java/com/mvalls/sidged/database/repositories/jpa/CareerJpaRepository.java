@@ -24,6 +24,7 @@ import com.mvalls.sidged.database.dtos.CareerDTO;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
+@Deprecated
 public interface CareerJpaRepository extends JpaRepository<CareerDTO, Long> {
 
 	CareerDTO findByCode(String careerCode);

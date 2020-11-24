@@ -17,11 +17,11 @@ public class CareerRepositoryDTOMapper implements RepositoryDTOMapper<Career, Ca
 
 	@Override
 	public CareerDTO modelToDto(Career model) {
-		CareerDTO dto = new CareerDTO();
-		dto.setId(model.getId());
-		dto.setCode(model.getCode());
-		dto.setName(model.getName());
-		
+		CareerDTO dto = CareerDTO.builder()
+				.id(model.getId())
+				.code(model.getCode())
+				.name(model.getName())
+				.build();
 		return dto;
 	}
 

@@ -43,13 +43,13 @@ import com.mvalls.sidged.core.model.analytics.PresentismAnalysisData;
  */
 public class PresentAnalysisCalculator {
 	
-	public CoursePresentismData getPresentismByCourseGroupedByMonth(Course course) {
+	public CoursePresentismData getPresentismByCourseGroupedByMonth(List<CourseClass> classes) {
 		Map<Integer, List<CourseClass>> classesByMonth = 
-				course.getClasses().stream().collect(Collectors.groupingBy(cc -> cc.getDate().getMonth().getValue()));
+				classes.stream().collect(Collectors.groupingBy(cc -> cc.getDate().getMonth().getValue()));
 		
 		CoursePresentismData presentismData = new CoursePresentismData();
 		fillPresentismDataGroupedByMonth(classesByMonth, presentismData);
-		fillPresentismDataTotalAveragesPercentages(course.getClasses(), presentismData);
+		fillPresentismDataTotalAveragesPercentages(classes, presentismData);
 		
 		return presentismData;
 		

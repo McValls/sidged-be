@@ -1,14 +1,13 @@
 package com.mvalls.sidged.core.services;
 
-import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
 
+import com.mvalls.sidged.core.enums.UpdateAction;
 import com.mvalls.sidged.core.model.Student;
 import com.mvalls.sidged.core.model.users.User;
 import com.mvalls.sidged.core.model.users.UserStudent;
 import com.mvalls.sidged.core.repositories.StudentRepository;
-import com.mvalls.sidged.core.repositories.UserRepository;
 import com.mvalls.sidged.core.repositories.UserStudentRepository;
-import com.mvalls.sidged.core.utils.ContactDataUtils;
 
 /**
  * 
@@ -33,35 +32,53 @@ import com.mvalls.sidged.core.utils.ContactDataUtils;
 public class StudentService extends GenericService<Student, StudentRepository> {
 	
 	private final UserStudentRepository userStudentRepository;
-	private final UserRepository userRepository;
 	
 	public StudentService(StudentRepository repository,
-			UserStudentRepository userStudentRepository,
-			UserRepository userRepository) {
+			UserStudentRepository userStudentRepository) {
 		super(repository);
 		this.userStudentRepository = userStudentRepository;
-		this.userRepository = userRepository;
 	}
 	
 	
 	@Override
-	@Transactional
 	public Student update(Student student) {
-		Student persistedStudent = findById(student.getId());
-		if(ContactDataUtils.mailsHaveChanged(student.getContactData(), persistedStudent.getContactData())) {
-			UserStudent userStudent = userStudentRepository.findByStudentId(student.getId());
-			User user = userStudent.getUser();
-			user.setEmail(student.getContactData().getDefaultEmail());
-			userRepository.create(user);
-		}
-		
+		UserStudent userStudent = userStudentRepository.findByStudentId(student.getId());
+		User user = userStudent.getUser();
+		user.setEmail(student.getContactData().getDefaultEmail());
+
+		Student persistedStudent = userStudent.getStudent();
 		persistedStudent.setNames(student.getNames());
 		persistedStudent.setLastname(student.getLastname());
 		persistedStudent.getContactData().setEmails(student.getContactData().getEmails());
 		persistedStudent.setIdentificationNumber(student.getIdentificationNumber());
 		
-		return this.repository.update(persistedStudent);
+		this.userStudentRepository.update(userStudent);
+		return student;
+	}
+
+
+	public List<Student> findByCourseCode(String courseCode) {
+		return this.repository.findByCourseCode(courseCode);
+	}
+
+
+	public List<Student> updateCourseStudent(String courseCode, Long studentId, UpdateAction action) {
+		switch (action) {
+			case REMOVE:
+				this.repository.removeCourseStudent(courseCode, studentId);
+				break;
+			case ADD:
+				this.repository.addCourseStudent(courseCode, studentId);
+				break;
+			default:
+				throw new IllegalArgumentException("Action " + action + " is not supported");
+		}
+		return this.findByCourseCode(courseCode);
 	}
 	
-
+	@Override
+	public List<Student> findAll() {
+		return this.repository.findAll();
+	}
+	
 }

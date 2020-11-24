@@ -57,5 +57,9 @@ public class ClassStudentPresentDTO implements RepositoryDTO {
 	@Column(name = "present")
 	@Enumerated(EnumType.STRING)
 	private StudentPresentDTO present;
-
+	
+	@ManyToOne
+	@JoinColumn(name = "course_class_id")
+	private CourseClassDTO courseClass;
+	
 }

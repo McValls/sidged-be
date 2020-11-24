@@ -23,18 +23,20 @@ import com.mvalls.sidged.valueObjects.ClassFileDocumentVO;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
+@Deprecated
 public class ClassFileDocumentDTOToVOMapper extends GenericMapper<ClassFileDocumentLinkDTO, ClassFileDocumentVO> {
 
 	@Override
 	public ClassFileDocumentVO map(ClassFileDocumentLinkDTO file) {
-		ClassFileDocumentVO classFileVO;
-		classFileVO = ClassFileDocumentVO.builder()
-				.name(file.getName())
-				.classId(file.getClassId())
-				.link(file.getLink())
-				.contentType("Link")
-				.build();
-		return classFileVO;
+//		ClassFileDocumentVO classFileVO;
+//		classFileVO = ClassFileDocumentVO.builder()
+//				.name(file.getName())
+//				.classId(file.getClassId())
+//				.link(file.getLink())
+//				.contentType("Link")
+//				.build();
+//		return classFileVO;
+		return null;
 	}
 
 }

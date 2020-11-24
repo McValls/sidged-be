@@ -39,12 +39,9 @@ public class CourseClass implements Model {
 	private Integer classNumber;
 	private LocalDate date;
 	private ClassState classState;
-	@Builder.Default
-	private Collection<Student> inscribedStudents = new ArrayList<>();
-	@Builder.Default
-	private Collection<ClassStudentPresent> studentPresents = new ArrayList<>();
-	@Builder.Default
-	private Collection<ClassFileDocument> classFileDocuments = new ArrayList<>();
+	private Course course;
+	@Builder.Default private Collection<ClassStudentPresent> studentPresents = new ArrayList<>();
+	@Builder.Default private Collection<ClassFileDocument> classFileDocuments = new ArrayList<>();
 	
 	private String comments;
 

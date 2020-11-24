@@ -34,5 +34,6 @@ public class ClassStudentPresent implements Model {
 	private Long id;
 	private Student student;
 	private StudentPresent present;
+	private CourseClass courseClass;
 
 }

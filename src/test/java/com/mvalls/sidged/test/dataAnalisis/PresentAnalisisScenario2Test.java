@@ -13,12 +13,12 @@ import java.util.Set;
 import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.mvalls.sidged.core.model.analytics.CoursePresentismByMonthData;
 import com.mvalls.sidged.core.analysis.PresentAnalysisCalculator;
 import com.mvalls.sidged.core.model.ClassStudentPresent;
 import com.mvalls.sidged.core.model.Course;
 import com.mvalls.sidged.core.model.CourseClass;
 import com.mvalls.sidged.core.model.StudentPresent;
+import com.mvalls.sidged.core.model.analytics.CoursePresentismByMonthData;
 
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -125,7 +125,7 @@ public class PresentAnalisisScenario2Test {
 
 	@When("I ask for the presentism of the course")
 	public void i_ask_for_the_presentism_of_the_course() {
-	    this.presentismByCourse = presentAnalysisCalculator.getPresentismByCourseGroupedByMonth(this.course).getPresentismByMonth();
+	    this.presentismByCourse = presentAnalysisCalculator.getPresentismByCourseGroupedByMonth(new ArrayList<>(this.course.getClasses())).getPresentismByMonth();
 	}
 
 	@Then("I get a non empty list")

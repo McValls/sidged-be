@@ -1,14 +1,13 @@
 package com.mvalls.sidged.core.services;
 
-import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
 
+import com.mvalls.sidged.core.enums.UpdateAction;
 import com.mvalls.sidged.core.model.Teacher;
 import com.mvalls.sidged.core.model.users.User;
 import com.mvalls.sidged.core.model.users.UserTeacher;
 import com.mvalls.sidged.core.repositories.TeacherRepository;
-import com.mvalls.sidged.core.repositories.UserRepository;
 import com.mvalls.sidged.core.repositories.UserTeacherRepository;
-import com.mvalls.sidged.core.utils.ContactDataUtils;
 
 /**
  * 
@@ -33,31 +32,50 @@ import com.mvalls.sidged.core.utils.ContactDataUtils;
 public class TeacherService extends GenericService<Teacher, TeacherRepository>{
 	
 	private final UserTeacherRepository userTeacherRepository;
-	private final UserRepository userRepository;
 
 	public TeacherService(TeacherRepository repository,
-			UserTeacherRepository userTeacherRepository, UserRepository userRepository) {
+			UserTeacherRepository userTeacherRepository) {
 		super(repository);
 		this.userTeacherRepository = userTeacherRepository;
-		this.userRepository = userRepository;
 	}
 
 	@Override
-	@Transactional
-	public Teacher update(Teacher teacher) {
-		Teacher persistedTeacher = findById(teacher.getId());
-		if(ContactDataUtils.mailsHaveChanged(teacher.getContactData(), persistedTeacher.getContactData())) {
-			UserTeacher userTeacher = userTeacherRepository.findByTeacherId(teacher.getId());
-			User user = userTeacher.getUser();
-			user.setEmail(teacher.getContactData().getDefaultEmail());
-			userRepository.create(user);
+	public Teacher update(Teacher aTeacher) {
+		UserTeacher userTeacher = this.userTeacherRepository.findByTeacherId(aTeacher.getId());
+
+		User user = userTeacher.getUser();
+		user.setEmail(aTeacher.getContactData().getDefaultEmail());
+		
+		Teacher teacher = userTeacher.getTeacher();
+		teacher.setNames(aTeacher.getNames());
+		teacher.setLastname(aTeacher.getLastname());
+		teacher.getContactData().setEmails(aTeacher.getContactData().getEmails());
+		
+		this.userTeacherRepository.update(userTeacher);
+		return teacher;
+	}
+
+	public List<Teacher> findByCourseCode(String courseCode) {
+		return this.repository.findByCourseCode(courseCode);
+	}
+
+	public List<Teacher> updateCourseTeacher(String courseCode, Long teacherId, UpdateAction action) {
+		switch (action) {
+			case REMOVE:
+				this.repository.removeCourseTeacher(courseCode, teacherId);
+				break;
+			case ADD:
+				this.repository.addCourseTeacher(courseCode, teacherId);
+				break;
+			default:
+				throw new IllegalArgumentException("Action " + action + " not supported");
 		}
-		
-		persistedTeacher.setNames(teacher.getNames());
-		persistedTeacher.setLastname(teacher.getLastname());
-		persistedTeacher.getContactData().setEmails(teacher.getContactData().getEmails());
-		
-		return this.repository.create(persistedTeacher);
+		return this.findByCourseCode(courseCode);
+	}
+	
+	@Override
+	public List<Teacher> findAll() {
+		return this.repository.findAll();
 	}
 	
 }

@@ -9,6 +9,7 @@ import javax.persistence.Table;
 
 import com.mvalls.sidged.core.repositories.RepositoryDTO;
 
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -34,6 +35,7 @@ import lombok.Data;
 @Entity
 @Table(name = "career")
 @Data
+@Builder
 public class CareerDTO implements RepositoryDTO {
 
 	@Id

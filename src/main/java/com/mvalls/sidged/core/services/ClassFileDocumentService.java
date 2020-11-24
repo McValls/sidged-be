@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
 import com.mvalls.sidged.core.model.ClassFileDocument;
-import com.mvalls.sidged.core.model.Course;
 import com.mvalls.sidged.core.model.CourseClass;
 import com.mvalls.sidged.core.model.FileDocumentType;
 import com.mvalls.sidged.core.repositories.ClassFileDocumentRepository;
@@ -51,55 +50,40 @@ public class ClassFileDocumentService extends GenericService<ClassFileDocument, 
 		this.courseRepository = courseRepository;
 	}
 	
+	
 	public Collection<ClassFileDocument> findByCourseCodeAndClassNumber(String courseCode, Integer classNumber) {
-		Course course = this.courseRepository.findByCode(courseCode);
-		CourseClass courseClass = course.getClasses()
-				.stream()
-				.filter(c -> c.getClassNumber().equals(classNumber))
-				.findFirst()
-				.orElseThrow();
-		return courseClass.getClassFileDocuments();
+		return this.repository.findByCourseCodeAndClassNumber(courseCode, classNumber);
 	}
 	
 	public Collection<ClassFileDocument> findByCourseCode(String courseCode) {
-		return this.courseRepository.findByCode(courseCode)
-				.getClasses().stream()
-					.map(courseClass -> courseClass.getClassFileDocuments())
-					.flatMap(Collection::stream)
-					.collect(Collectors.toList());
+		return this.repository.findByCourseCode(courseCode);
 	}
 	
 	@Transactional
-	public void saveFileDocument(Long classId, ClassFileDocumentVO valueObject) {
-		CourseClass courseClass = this.courseClassRepository.findById(classId);
-		log.info("Saving file " + valueObject.getName() + " for class with id: " + courseClass.getId());
+	public void saveFileDocument(String courseCode, Integer classNumber, ClassFileDocumentVO valueObject) {
+		CourseClass courseClass = this.courseClassRepository.findByCourseCodeAndClassNumber(courseCode, classNumber).orElseThrow();
 		ClassFileDocument fileDocument = ClassFileDocument.builder()
 				.name(valueObject.getName())
 				.content(valueObject.getContent())
 				.contentType(valueObject.getContentType())
 				.fileDocumentType(FileDocumentType.BLOB)
+				.courseClass(courseClass)
 				.build();
 		
-		courseClass.getClassFileDocuments().add(fileDocument);
-		this.courseClassRepository.update(courseClass);
-		
-		log.info("File " + valueObject.getName() + " saved with id " + fileDocument.getId());
+		this.repository.create(fileDocument);
 	}
 	
-	public void saveFileLink(ClassFileDocumentVO valueObject) {
-		CourseClass courseClass = this.courseClassRepository.findById(valueObject.getClassId());
-		log.info("Saving link file " + valueObject.getName() + " for class with id: " + courseClass.getId());
+	public void saveFileLink(String courseCode, Integer classNumber, String link, String name) {
+		CourseClass courseClass = this.courseClassRepository.findByCourseCodeAndClassNumber(courseCode, classNumber).orElseThrow();
 		ClassFileDocument fileDocument = ClassFileDocument.builder()
-				.name(valueObject.getName())
-				.content(valueObject.getLink().getBytes())
+				.name(name)
+				.content(link.getBytes())
 				.contentType("Link")
 				.fileDocumentType(FileDocumentType.LINK)
+				.courseClass(courseClass)
 				.build();
 		
-		courseClass.getClassFileDocuments().add(fileDocument);
-		this.courseClassRepository.update(courseClass);
-
-		log.info("File " + valueObject.getName() + " saved with id " + fileDocument.getId());
+		this.repository.create(fileDocument);
 	}
 
 

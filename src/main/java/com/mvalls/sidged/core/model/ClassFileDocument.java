@@ -36,5 +36,6 @@ public class ClassFileDocument implements Model {
 	private FileDocumentType fileDocumentType;
 	private byte[] content;
 	private String contentType;
+	private CourseClass courseClass;
 	
 }

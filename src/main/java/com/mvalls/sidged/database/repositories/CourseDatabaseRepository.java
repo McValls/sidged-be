@@ -1,80 +1,96 @@
 package com.mvalls.sidged.database.repositories;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.mvalls.sidged.core.model.Career;
 import com.mvalls.sidged.core.model.Course;
-import com.mvalls.sidged.core.repositories.CareerRepository;
 import com.mvalls.sidged.core.repositories.CourseRepository;
-import com.mvalls.sidged.database.dtos.CourseDTO;
 import com.mvalls.sidged.database.mappers.CourseRepositoryDTOMapper;
-import com.mvalls.sidged.database.repositories.jpa.CourseJpaRepository;
+import com.mvalls.sidged.database.mybatis.dtos.CourseDTO;
+import com.mvalls.sidged.database.mybatis.mappers.CourseMapper;
 
-public class CourseDatabaseRepository extends CommonDatabaseRepository<Course, com.mvalls.sidged.database.dtos.CourseDTO, CourseJpaRepository>
-	implements CourseRepository {
+public class CourseDatabaseRepository implements CourseRepository {
 
-	private final CareerRepository careerRepository;
+	private final CourseMapper courseMapper;
+	private final CourseRepositoryDTOMapper dtoMapper;
 	
-	public CourseDatabaseRepository(CourseJpaRepository jpaRepository,
-			CareerRepository careerRepository,
+	public CourseDatabaseRepository(
+			CourseMapper courseMapper,
 			CourseRepositoryDTOMapper dtoMapper) {
-		super(jpaRepository, dtoMapper);
-		this.careerRepository = careerRepository;
+		this.courseMapper = courseMapper;
+		this.dtoMapper = dtoMapper;
 	}
 	
 	@Override
-	public List<Course> findByTeachersId(Long teacherId) {
-		return this.jpaRepository.findByTeachersId(teacherId)
-				.stream()
-				.map(this::getCourseWithCareer)
+	public Course create(Course course) {
+		CourseDTO dto = dtoMapper.modelToDto(course);
+		this.courseMapper.insert(dto);
+		return course;
+	}
+	
+	@Override
+	public List<Course> findByTeacherId(Long teacherId) {
+		List<CourseDTO> dtos = this.courseMapper.findByTeacherId(teacherId);
+		return dtos.stream()
+				.map(dtoMapper::dtoToModel)
 				.collect(Collectors.toList());
 	}
 	
 	@Override
 	public List<Course> findByStudentsId(Long studentId) {
-		return this.jpaRepository.findByStudentsId(studentId)
-				.stream()
-				.map(this::getCourseWithCareer)
+		List<CourseDTO> dtos = this.courseMapper.findByStudentId(studentId);
+		return dtos.stream()
+				.map(dtoMapper::dtoToModel)
 				.collect(Collectors.toList());
 	}
 
 	@Override
-	public Course findByCourseClassId(Long courseClassId) {
-		CourseDTO courseDTO = this.jpaRepository.findByClassesId(courseClassId);
-		if (courseDTO == null) {
-			throw new IllegalStateException();
-		}
-		return this.getCourseWithCareer(courseDTO);
+	public Optional<Course> findByCourseClassId(Long courseClassId) {
+		Optional<CourseDTO> dto = this.courseMapper.findByCourseClassId(courseClassId);
+		return dto.map(dtoMapper::dtoToModel);
 	}
 	
 	@Override
 	public List<Course> findByYear(Integer year) {
-		return this.jpaRepository.findByYear(year)
-				.stream()
-				.map(this::getCourseWithCareer)
+		List<CourseDTO> dtos = this.courseMapper.findByYear(year);
+		return dtos.stream()
+				.map(dtoMapper::dtoToModel)
 				.collect(Collectors.toList());
 	}
 	
 	@Override
-	public Course findByCode(String code) {
-		CourseDTO dto = this.jpaRepository.findByCode(code);
-		return this.getCourseWithCareer(dto);
+	public Optional<Course> findByCode(String code) {
+		Optional<CourseDTO> dto = this.courseMapper.findByCode(code);
+		return dto.map(dtoMapper::dtoToModel);
 	}
 	
 	@Override
 	public List<Course> findAll() {
-		List<CourseDTO> dtos = this.jpaRepository.findAll();
+		List<CourseDTO> dtos = this.courseMapper.findAll();
 		return dtos.stream()
-			.map(this::getCourseWithCareer)
-			.collect(Collectors.toList());
+				.map(dtoMapper::dtoToModel)
+				.collect(Collectors.toList());
 	}
+
+	//TODO: Liskov principle
+	@Override
+	public Course update(Course obj) {
+		throw new UnsupportedOperationException();
+	}
+
+	//TODO: Liskov principle
+	@Override
+	public void delete(Long obj) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
+	}
+
 	
-	private Course getCourseWithCareer(CourseDTO dto) {
-		Course course = dtoMapper.dtoToModel(dto);
-		Career career = this.careerRepository.findByCode(dto.getCareerCode());
-		course.setCareer(career);
-		return course;
+	@Override
+	public Course findById(Long id) {
+		CourseDTO dto = this.courseMapper.findById(id);
+		return dtoMapper.dtoToModel(dto);
 	}
 
 }

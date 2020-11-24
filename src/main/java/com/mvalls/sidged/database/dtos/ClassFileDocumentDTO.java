@@ -7,7 +7,9 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.mvalls.sidged.core.model.FileDocumentType;
@@ -63,5 +65,9 @@ public class ClassFileDocumentDTO implements RepositoryDTO {
 	
 	@Column(name = "contentType", nullable = true)
 	private String contentType;
+	
+	@ManyToOne
+	@JoinColumn(name = "course_class_id")
+	private CourseClassDTO courseClass;
 	
 }

@@ -7,18 +7,12 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mvalls.sidged.core.enums.UpdateAction;
 import com.mvalls.sidged.core.model.Course;
-import com.mvalls.sidged.core.model.Student;
-import com.mvalls.sidged.core.model.Teacher;
 import com.mvalls.sidged.core.model.users.UserStudent;
 import com.mvalls.sidged.core.model.users.UserTeacher;
 import com.mvalls.sidged.core.services.CourseService;
@@ -34,9 +28,7 @@ import com.mvalls.sidged.rest.annotations.JwtTeacher;
 import com.mvalls.sidged.rest.dtos.CourseDTO;
 import com.mvalls.sidged.rest.dtos.CourseListDTO;
 import com.mvalls.sidged.rest.dtos.NotifyStudentsDTO;
-import com.mvalls.sidged.rest.dtos.StudentAllDTO;
-import com.mvalls.sidged.rest.dtos.StudentDTO;
-import com.mvalls.sidged.rest.dtos.TeacherAllDTO;
+import com.mvalls.sidged.rest.exceptions.UnauthorizedUserException;
 import com.mvalls.sidged.valueObjects.CourseVO;
 
 /**
@@ -90,52 +82,7 @@ public class CourseRestController {
 				.map(course -> courseListMapper.map(course))
 				.collect(Collectors.toList());
 	}
-	
-	@GetMapping("/{code}/teacher")
-	public Collection<TeacherAllDTO> getTeachersByCourse(@PathVariable("code") String code) {
-		Collection<Teacher> teachers = courseService.findTeachersByCourseCode(code);
-		return teachers.stream()
-				.map(teacher -> teacherAllMapper.map(teacher))
-				.collect(Collectors.toList());
-	}
-	
-	@GetMapping("/{code}/student")
-	public Collection<StudentAllDTO> getStudentsByCourse(@PathVariable(value = "code") String code) {
-		Collection<Student> students = courseService.findStudentsByCourseCode(code);
-		
-		Collection<StudentAllDTO> studentsList = students.stream()
-				.map(student -> studentAllMapper.map(student))
-				.collect(Collectors.toList());
-		
-		return studentsList;
-	}
-	
-	@JwtBackOffice
-	@PutMapping("/{code}/teacher")
-	public Collection<TeacherAllDTO> updateTeachers(
-			HttpServletRequest request,
-			@PathVariable("code") String code,
-			@RequestBody TeacherAllDTO dto,
-			@RequestParam(name = "action", required = true) UpdateAction action) {
-		Collection<Teacher> teachers = courseService.updateTeacher(code, teacherModelMapper.map(dto), action);
-		return teachers.stream()
-				.map(teacher -> teacherAllMapper.map(teacher))
-				.collect(Collectors.toList());
-	}
-	
-	@JwtBackOffice
-	@PutMapping("/{code}/student")
-	public Collection<StudentAllDTO> updateStudents(
-			HttpServletRequest request,
-			@PathVariable("code") String code, 
-			@RequestBody StudentDTO dto,
-			@RequestParam(name = "action", required = true) UpdateAction action) {
-		Collection<Student> students = courseService.updateStudent(code, studentModelMapper.map(dto), action);
-		return students.stream()
-				.map(student -> studentAllMapper.map(student))
-				.collect(Collectors.toList());
-	}
-	
+
 	@JwtBackOffice
 	@PostMapping
 	public void createCourse(HttpServletRequest request, @RequestBody CourseDTO dto) {
@@ -166,9 +113,9 @@ public class CourseRestController {
 	@PostMapping("/notify-students")
 	public void notifyCourseStudents(HttpServletRequest request, 
 			UserTeacher userTeacher,
-			@RequestBody NotifyStudentsDTO notifyStudentsDTO) {
+			@RequestBody NotifyStudentsDTO notifyStudentsDTO) throws UnauthorizedUserException {
 		courseService.sendEmailToStudents(notifyStudentsDTO.getCourseCode(), 
-				userTeacher.getTeacher().getId(), 
+				userTeacher.getTeacher(), 
 				notifyStudentsDTO.getSubject(), 
 				notifyStudentsDTO.getMessage());
 	}

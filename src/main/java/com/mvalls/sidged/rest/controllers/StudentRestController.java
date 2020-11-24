@@ -1,6 +1,7 @@
 package com.mvalls.sidged.rest.controllers;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,10 +14,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mvalls.sidged.core.enums.UpdateAction;
 import com.mvalls.sidged.core.model.Student;
-import com.mvalls.sidged.core.model.users.UserStudent;
 import com.mvalls.sidged.core.services.StudentService;
 import com.mvalls.sidged.core.services.UserStudentService;
 import com.mvalls.sidged.mappers.StudentAllMapper;
@@ -68,10 +70,32 @@ public class StudentRestController {
 	
 	@GetMapping
 	public Collection<StudentAllDTO> getAll() {
-		Collection<UserStudent> studentsDb = userStudentService.findAll();
-		
-		return studentsDb.stream()
-				.map(student -> userStudentAllMapper.map(student))
+		List<Student> students = this.studentService.findAll();
+		return students
+			.stream()
+			.map(this.studentAllMapper::map)
+			.collect(Collectors.toList());
+	}
+	
+	@GetMapping("/course/{courseCode}")
+	public List<StudentAllDTO> getStudentsByCourseCode(@PathVariable("courseCode") String courseCode) {
+		List<Student> students = this.studentService.findByCourseCode(courseCode);
+		return students
+				.stream()
+				.map(this.studentAllMapper::map)
+				.collect(Collectors.toList());
+	}
+	
+	@JwtBackOffice
+	@PutMapping("/course/{courseCode}")
+	public List<StudentAllDTO> updateCourseStudent(HttpServletRequest request,
+			@PathVariable("courseCode") String courseCode,
+			@RequestBody StudentAllDTO dto,
+			@RequestParam(name = "action", required = true) UpdateAction action) {
+		List<Student> students = this.studentService.updateCourseStudent(courseCode, dto.getId(), action);
+		return students
+				.stream()
+				.map(this.studentAllMapper::map)
 				.collect(Collectors.toList());
 	}
 	

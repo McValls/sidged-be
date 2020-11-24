@@ -1,7 +1,5 @@
 package com.mvalls.sidged.database.repositories.jpa;
 
-import java.util.Collection;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.mvalls.sidged.database.dtos.CourseDTO;
@@ -26,12 +24,6 @@ import com.mvalls.sidged.database.dtos.CourseDTO;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
+@Deprecated
 public interface CourseJpaRepository extends JpaRepository<CourseDTO, Long>{
-	
-	Collection<CourseDTO> findByTeachersId(Long id);
-	Collection<CourseDTO> findByStudentsId(Long id);
-	Collection<CourseDTO> findByYear(Integer year);
-
-	CourseDTO findByClassesId(Long courseClassId);
-	CourseDTO findByCode(String code);
 }

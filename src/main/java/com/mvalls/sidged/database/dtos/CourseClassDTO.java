@@ -12,6 +12,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -68,13 +70,17 @@ public class CourseClassDTO implements RepositoryDTO {
 	@Enumerated(EnumType.STRING)
 	private ClassState classState;
 	
-	@OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "courseClass")
 	@Builder.Default
 	private Collection<ClassStudentPresentDTO> studentPresents = new ArrayList<>();
 	
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "courseClass")
 	@Builder.Default
 	private Collection<ClassFileDocumentDTO> classFileDocuments = new ArrayList<>();
+	
+	@ManyToOne
+	@JoinColumn(name = "course_id")
+	private CourseDTO course;
 	
 	@Column(name = "comments", nullable = true)
 	private String comments;

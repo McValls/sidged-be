@@ -22,7 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.mvalls.sidged.core.model.ClassFileDocument;
 import com.mvalls.sidged.core.model.FileDocumentType;
 import com.mvalls.sidged.core.services.ClassFileDocumentService;
-import com.mvalls.sidged.mappers.ClassFileDocumentDTOToVOMapper;
 import com.mvalls.sidged.mappers.ClassFileDocumentModelToDTOMapper;
 import com.mvalls.sidged.mappers.MultipartFileToClassFileDocumentVOMapper;
 import com.mvalls.sidged.rest.dtos.ClassFileDocumentDTO;
@@ -55,7 +54,6 @@ import com.mvalls.sidged.valueObjects.ClassFileDocumentVO;
 public class ClassFileDocumentRestController {
 
 	private final MultipartFileToClassFileDocumentVOMapper fileToFileDocumentMapper;
-	private final ClassFileDocumentDTOToVOMapper classFileDocumentDTOToVOMapper;
 	private final ClassFileDocumentService classFileDocumentService;
 	private final ClassFileDocumentModelToDTOMapper classFileDocumentModelToDTOMapper;
 
@@ -65,11 +63,10 @@ public class ClassFileDocumentRestController {
 		super();
 		this.classFileDocumentService = classFileDocumentService;
 		this.fileToFileDocumentMapper = new MultipartFileToClassFileDocumentVOMapper();
-		this.classFileDocumentDTOToVOMapper = new ClassFileDocumentDTOToVOMapper();
 		this.classFileDocumentModelToDTOMapper = new ClassFileDocumentModelToDTOMapper(serverHost);
 	}
 
-	@GetMapping("/class/{classNumber}/course/{courseCode}")
+	@GetMapping("/course/{courseCode}/class/{classNumber}")
 	public Collection<ClassFileDocumentDTO> getFileDocuments(@PathVariable("classNumber") Integer classNumber,
 			@PathVariable("courseCode") String courseCode) {
 		Collection<ClassFileDocument> fileDocuments = classFileDocumentService.findByCourseCodeAndClassNumber(courseCode, classNumber);
@@ -86,16 +83,17 @@ public class ClassFileDocumentRestController {
 		return dtos;
 	}
 
-	@PostMapping(value = { "/class/{classId}" }, consumes = { "multipart/form-data" })
-	public void uploadFile(@PathVariable("classId") Long classId, @RequestParam("file0") MultipartFile file) {
+	@PostMapping(value = { "/course/{courseCode}/class/{classNumber}" }, consumes = { "multipart/form-data" })
+	public void uploadFile(@PathVariable("courseCode") String courseCode,
+			@PathVariable("classNumber") Integer classNumber, 
+			@RequestParam("file0") MultipartFile file) {
 		ClassFileDocumentVO vo = fileToFileDocumentMapper.map(file);
-		classFileDocumentService.saveFileDocument(classId, vo);
+		classFileDocumentService.saveFileDocument(courseCode, classNumber, vo);
 	}
 
 	@PostMapping("/link")
 	public void uploadLink(@RequestBody ClassFileDocumentLinkDTO fileDTO) {
-		ClassFileDocumentVO vo = classFileDocumentDTOToVOMapper.map(fileDTO);
-		classFileDocumentService.saveFileLink(vo);
+		classFileDocumentService.saveFileLink(fileDTO.getCourseCode(), fileDTO.getClassNumber(), fileDTO.getLink(), fileDTO.getName());
 	}
 
 	@GetMapping("/file/{fileId}")

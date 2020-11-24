@@ -2,7 +2,7 @@ package com.mvalls.sidged.database.mappers;
 
 import com.mvalls.sidged.core.model.ClassFileDocument;
 import com.mvalls.sidged.core.repositories.RepositoryDTOMapper;
-import com.mvalls.sidged.database.dtos.ClassFileDocumentDTO;
+import com.mvalls.sidged.database.mybatis.dtos.ClassFileDocumentDTO;
 
 public class ClassFileDocumentRepositoryDTOMapper implements RepositoryDTOMapper<ClassFileDocument, ClassFileDocumentDTO> {
 
@@ -25,6 +25,7 @@ public class ClassFileDocumentRepositoryDTOMapper implements RepositoryDTOMapper
 				.fileDocumentType(model.getFileDocumentType())
 				.content(model.getContent())
 				.contentType(model.getContentType())
+				.courseClassId(model.getCourseClass().getId())
 				.build();
 	}
 

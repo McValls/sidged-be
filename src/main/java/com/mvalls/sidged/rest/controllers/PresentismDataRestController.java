@@ -10,8 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mvalls.sidged.core.model.analytics.CoursePresentismData;
 import com.mvalls.sidged.core.model.analytics.PresentismAnalysisData;
-import com.mvalls.sidged.core.services.ClassStudentPresentService;
-import com.mvalls.sidged.core.services.CourseService;
+import com.mvalls.sidged.core.services.PresentismDataService;
 
 /**
  * 
@@ -37,26 +36,23 @@ import com.mvalls.sidged.core.services.CourseService;
 @RequestMapping("/presentism-data")
 public class PresentismDataRestController {
 	
-	private final ClassStudentPresentService classStudentPresentService;
-	private final CourseService courseService;
+	private final PresentismDataService presentismDataService;
 	
 	@Autowired
-	public PresentismDataRestController(ClassStudentPresentService classStudentPresentService,
-			CourseService courseService) {
+	public PresentismDataRestController(PresentismDataService presentismDataService) {
 		super();
-		this.classStudentPresentService = classStudentPresentService;
-		this.courseService = courseService;
+		this.presentismDataService = presentismDataService;
 	}
 
 	@GetMapping("/course/{courseCode}")
 	public CoursePresentismData getPresentismData(@PathVariable(name = "courseCode") String courseCode) {
-		return courseService.getPresentismByCourseGroupedByMonth(courseCode);
+		return this.presentismDataService.getPresentismByCourseCodeGroupedByMonth(courseCode);
 	}
 
 	@GetMapping("/student/{studentId}/year/{year}")
 	public List<PresentismAnalysisData> getPresentismDataByStudentAndYear(@PathVariable(name = "studentId") Long studentId,
 			@PathVariable(name = "year") int year) {
-		return classStudentPresentService.getPresentismDataByStudentIdAndYear(studentId, year);
+		return this.presentismDataService.getPresentismDataByStudentIdAndYear(studentId, year);
 	}
 	
 }

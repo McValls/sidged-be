@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -18,6 +19,7 @@ import com.mvalls.sidged.core.analysis.PresentAnalysisCalculator;
 import com.mvalls.sidged.core.repositories.CareerRepository;
 import com.mvalls.sidged.core.repositories.ClassFileDocumentRepository;
 import com.mvalls.sidged.core.repositories.ClassStudentPresentRepository;
+import com.mvalls.sidged.core.repositories.ContactDataRepository;
 import com.mvalls.sidged.core.repositories.CourseClassRepository;
 import com.mvalls.sidged.core.repositories.CourseRepository;
 import com.mvalls.sidged.core.repositories.PeriodRepository;
@@ -37,6 +39,7 @@ import com.mvalls.sidged.core.services.DesertorService;
 import com.mvalls.sidged.core.services.EmailsService;
 import com.mvalls.sidged.core.services.LoginService;
 import com.mvalls.sidged.core.services.PeriodService;
+import com.mvalls.sidged.core.services.PresentismDataService;
 import com.mvalls.sidged.core.services.StudentLinkService;
 import com.mvalls.sidged.core.services.StudentService;
 import com.mvalls.sidged.core.services.TeacherService;
@@ -47,21 +50,26 @@ import com.mvalls.sidged.core.strategies.userCreation.StudentCreationStrategy;
 import com.mvalls.sidged.core.strategies.userCreation.TeacherCreationStrategy;
 import com.mvalls.sidged.core.strategies.userCreation.UserCreationStrategyService;
 import com.mvalls.sidged.database.mappers.CareerRepositoryDTOMapper;
-import com.mvalls.sidged.database.mappers.ClassFileDocumentRepositoryDTOMapper;
-import com.mvalls.sidged.database.mappers.ClassStudentPresentRepositoryDTOMapper;
-import com.mvalls.sidged.database.mappers.CourseClassRepositoryDTOMapper;
 import com.mvalls.sidged.database.mappers.CourseRepositoryDTOMapper;
 import com.mvalls.sidged.database.mappers.PeriodRepositoryDTOMapper;
 import com.mvalls.sidged.database.mappers.StudentLinkRepositoryDTOMapper;
-import com.mvalls.sidged.database.mappers.StudentRepositoryDTOMapper;
-import com.mvalls.sidged.database.mappers.TeacherRepositoryDTOMapper;
 import com.mvalls.sidged.database.mappers.TimeRepositoryDTOMapper;
 import com.mvalls.sidged.database.mappers.UserRepositoryDTOMapper;
-import com.mvalls.sidged.database.mappers.UserStudentRepositoryDTOMapper;
-import com.mvalls.sidged.database.mappers.UserTeacherRepositoryDTOMapper;
+import com.mvalls.sidged.database.mybatis.mappers.CareerMapper;
+import com.mvalls.sidged.database.mybatis.mappers.ClassFileDocumentMapper;
+import com.mvalls.sidged.database.mybatis.mappers.ClassStudentPresentMapper;
+import com.mvalls.sidged.database.mybatis.mappers.ContactDataMapper;
+import com.mvalls.sidged.database.mybatis.mappers.CourseClassMapper;
+import com.mvalls.sidged.database.mybatis.mappers.CourseMapper;
+import com.mvalls.sidged.database.mybatis.mappers.StudentMapper;
+import com.mvalls.sidged.database.mybatis.mappers.TeacherMapper;
+import com.mvalls.sidged.database.mybatis.mappers.UserMapper;
+import com.mvalls.sidged.database.mybatis.mappers.UserStudentMapper;
+import com.mvalls.sidged.database.mybatis.mappers.UserTeacherMapper;
 import com.mvalls.sidged.database.repositories.CareerDatabaseRepository;
 import com.mvalls.sidged.database.repositories.ClassFileDocumentDatabaseRepository;
 import com.mvalls.sidged.database.repositories.ClassStudentPresentDatabaseRepository;
+import com.mvalls.sidged.database.repositories.ContactDataDatabaseRepository;
 import com.mvalls.sidged.database.repositories.CourseClassDatabaseRepository;
 import com.mvalls.sidged.database.repositories.CourseDatabaseRepository;
 import com.mvalls.sidged.database.repositories.PeriodDatabaseRepository;
@@ -73,18 +81,10 @@ import com.mvalls.sidged.database.repositories.UserDatabaseRepository;
 import com.mvalls.sidged.database.repositories.UserStudentDatabaseRepository;
 import com.mvalls.sidged.database.repositories.UserTeacherDatabaseRepository;
 import com.mvalls.sidged.database.repositories.jpa.CareerJpaRepository;
-import com.mvalls.sidged.database.repositories.jpa.ClassFileDocumentJpaRepository;
 import com.mvalls.sidged.database.repositories.jpa.ClassStudentPresentJpaRepository;
-import com.mvalls.sidged.database.repositories.jpa.CourseClassJpaRepository;
-import com.mvalls.sidged.database.repositories.jpa.CourseJpaRepository;
 import com.mvalls.sidged.database.repositories.jpa.PeriodJpaRepository;
-import com.mvalls.sidged.database.repositories.jpa.StudentJpaRepository;
 import com.mvalls.sidged.database.repositories.jpa.StudentLinkJpaRepository;
-import com.mvalls.sidged.database.repositories.jpa.TeacherJpaRepository;
 import com.mvalls.sidged.database.repositories.jpa.TimeJpaRepository;
-import com.mvalls.sidged.database.repositories.jpa.UserJpaRepository;
-import com.mvalls.sidged.database.repositories.jpa.UserStudentJpaRepository;
-import com.mvalls.sidged.database.repositories.jpa.UserTeacherJpaRepository;
 import com.mvalls.sidged.mappers.CourseVOtoModelMapper;
 
 /**
@@ -110,6 +110,7 @@ import com.mvalls.sidged.mappers.CourseVOtoModelMapper;
 @PropertySource("classpath:email.properties")
 @SpringBootApplication
 @EnableJpaRepositories(basePackages = {"com.mvalls.sidged.database.repositories.jpa"})
+@EnableTransactionManagement
 @Configuration
 public class App {
 
@@ -118,19 +119,23 @@ public class App {
 	}
 	
 	@Autowired private Environment env;
-	@Autowired private CourseJpaRepository courseJpaRepository;
-	@Autowired private CourseClassJpaRepository courseClassJpaRepository;
-	@Autowired private StudentJpaRepository studentJpaRepositry;
-	@Autowired private TeacherJpaRepository teacherJpaRepository;
-	@Autowired private UserStudentJpaRepository userStudentJpaRepository;
-	@Autowired private UserTeacherJpaRepository userTeacherJpaRepository;
-	@Autowired private UserJpaRepository userJpaRepository;
 	@Autowired private TimeJpaRepository timeJpaRepository;
 	@Autowired private PeriodJpaRepository periodJpaRepository;
 	@Autowired private CareerJpaRepository careerJpaRepository;
-	@Autowired private ClassFileDocumentJpaRepository classFileDocumentJpaRepository;
 	@Autowired private ClassStudentPresentJpaRepository classStudentPresentJpaRepository;
 	@Autowired private StudentLinkJpaRepository studentLinkJpaRepository;
+	
+	@Autowired private CareerMapper careerMapper;
+	@Autowired private ClassStudentPresentMapper classStudentPresentMapper;
+	@Autowired private ContactDataMapper contactDataMapper;
+	@Autowired private CourseClassMapper courseClassMapper;
+	@Autowired private CourseMapper courseMapper;
+	@Autowired private StudentMapper studentMapper;
+	@Autowired private TeacherMapper teacherMapper;
+	@Autowired private UserMapper userMapper;
+	@Autowired private UserStudentMapper userStudentMapper;
+	@Autowired private UserTeacherMapper userTeacherMapper;
+	@Autowired private ClassFileDocumentMapper classFileDocumentMapper;
 	
 	@Bean
 	public WebMvcConfigurer corsConfigurer() {
@@ -168,34 +173,30 @@ public class App {
 	
 	@Bean
 	public CourseClassService courseClassService() {
-		return new CourseClassService(courseClassRepository(), courseRepository());
+		return new CourseClassService(courseClassRepository(), courseRepository(), classStudentPresentRepository(), teacherRepository(), studentRepository());
 	}
 	
 	@Bean
 	public CourseService courseService() {
-		return new CourseService(courseRepository(),
-				careerRepository(),
-				teacherService(),
-				studentService(),
-				timeService(),
-				periodService(),
-				courseVOtoModelMapper(),
-				presentAnalysisCalculator(),
-				emailsService());
+		return new CourseService(courseRepository(), 
+				timeService(), 
+				periodService(), 
+				courseVOtoModelMapper(), 
+				presentAnalysisCalculator(), 
+				emailsService(), 
+				careerRepository(), 
+				teacherRepository(), 
+				studentRepository());
 	}
 	
 	@Bean
 	public StudentService studentService() {
-		return new StudentService(studentRepository(), 
-				userStudentRepository(), 
-				userRepository());
+		return new StudentService(studentRepository(), userStudentRepository());
 	}
 	
 	@Bean
 	public TeacherService teacherService() {
-		return new TeacherService(teacherRepository(),
-				userTeacherRepository(),
-				userRepository());
+		return new TeacherService(teacherRepository(), userTeacherRepository());
 	}
 	
 	@Bean
@@ -260,7 +261,7 @@ public class App {
 	
 	@Bean
 	public ClassStudentPresentService classStudentPresentService() {
-		return new ClassStudentPresentService(classStudentPresentRepository(), courseRepository(), presentAnalysisCalculator());
+		return new ClassStudentPresentService(classStudentPresentRepository(), courseRepository(), teacherRepository(), presentAnalysisCalculator());
 	}
 
 	@Bean
@@ -278,42 +279,53 @@ public class App {
 		return new StudentLinkService(studentLinkRepository());
 	}
 	
+	@Bean
+	public PresentismDataService presentismDataService() {
+		return new PresentismDataService(courseClassRepository(), presentAnalysisCalculator());
+	}
+	
 	
 	/***** REPOSITORIES *********/
 	
 	@Bean
 	public CourseRepository courseRepository() {
-		return new CourseDatabaseRepository(this.courseJpaRepository, careerRepository(), new CourseRepositoryDTOMapper());
+		return new CourseDatabaseRepository(courseMapper, new CourseRepositoryDTOMapper());
 	}
 	
 	@Bean
 	public CourseClassRepository courseClassRepository() {
-		return new CourseClassDatabaseRepository(this.courseClassJpaRepository, new CourseClassRepositoryDTOMapper());
+		return new CourseClassDatabaseRepository(courseClassMapper, 
+				classStudentPresentRepository());
 	}
 	
 	@Bean
 	public StudentRepository studentRepository() {
-		return new StudentDatabaseRepository(this.studentJpaRepositry, new StudentRepositoryDTOMapper());
+		return new StudentDatabaseRepository(studentMapper, contactDataRepository());
 	}
 	
 	@Bean
 	public TeacherRepository teacherRepository() {
-		return new TeacherDatabaseRepository(this.teacherJpaRepository, new TeacherRepositoryDTOMapper());
+		return new TeacherDatabaseRepository(teacherMapper, contactDataRepository());
+	}
+	
+	@Bean
+	public ContactDataRepository contactDataRepository() {
+		return new ContactDataDatabaseRepository(contactDataMapper);
 	}
 	
 	@Bean
 	public UserRepository userRepository() {
-		return new UserDatabaseRepository(this.userJpaRepository, new UserRepositoryDTOMapper());
+		return new UserDatabaseRepository(userMapper, new UserRepositoryDTOMapper());
 	}
 	
 	@Bean
 	public UserStudentRepository userStudentRepository() {
-		return new UserStudentDatabaseRepository(this.userStudentJpaRepository, new UserStudentRepositoryDTOMapper());
+		return new UserStudentDatabaseRepository(userRepository(), studentRepository(), userStudentMapper);
 	}
 	
 	@Bean
 	public UserTeacherRepository userTeacherRepository() {
-		return new UserTeacherDatabaseRepository(this.userTeacherJpaRepository, new UserTeacherRepositoryDTOMapper());
+		return new UserTeacherDatabaseRepository(userRepository(), teacherRepository(), userTeacherMapper);
 	}
 	
 	@Bean
@@ -328,22 +340,107 @@ public class App {
 	
 	@Bean
 	public CareerRepository careerRepository() {
-		return new CareerDatabaseRepository(this.careerJpaRepository, new CareerRepositoryDTOMapper());
+		return new CareerDatabaseRepository(this.careerJpaRepository, careerMapper, new CareerRepositoryDTOMapper());
 	}
 	
 	@Bean
 	public ClassFileDocumentRepository classFileDocumentRepository() {
-		return new ClassFileDocumentDatabaseRepository(this.classFileDocumentJpaRepository, new ClassFileDocumentRepositoryDTOMapper());
+		return new ClassFileDocumentDatabaseRepository(classFileDocumentMapper);
 	}
 	
 	@Bean
 	public ClassStudentPresentRepository classStudentPresentRepository() {
-		return new ClassStudentPresentDatabaseRepository(this.classStudentPresentJpaRepository, new ClassStudentPresentRepositoryDTOMapper());
+		return new ClassStudentPresentDatabaseRepository(classStudentPresentJpaRepository, classStudentPresentMapper);
 	}
 	
 	@Bean
 	public StudentLinkRepository studentLinkRepository() {
 		return new StudentLinkDatabaseRepository(this.studentLinkJpaRepository, new StudentLinkRepositoryDTOMapper());
 	}
+	
+	/** MY BATIS **/
+
+//	@Bean
+//	public SqlSessionFactory sqlSessionFactory() {
+//		try {
+//			SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
+//			factoryBean.setDataSource(this.dataSource);
+//			factoryBean.setConfiguration(configuration());
+//			factoryBean.setTransactionFactory(new SpringManagedTransactionFactory());
+//			return factoryBean.getObject();
+//		} catch (Exception ex) {
+//			throw new RuntimeException(ex);
+//		}
+//	}
+	
+//	private org.apache.ibatis.session.Configuration configuration() {
+//		org.apache.ibatis.session.Configuration config = new org.apache.ibatis.session.Configuration();
+//		config.addMappers(CareerMapper.class.getPackage().getName());
+//		config.addMappers("com.mvalls.sidged.database.repositories.course");
+//		config.setMapUnderscoreToCamelCase(true);
+//		return config;
+//	}
+	
+//	@Bean
+//	public CareerMapper careerMapper() {
+//		return sqlSessionTemplate.getMapper(CareerMapper.class);
+//	}
+//	
+//	@Bean
+//	public CourseClassMapper courseClassMapper() {
+//		return sqlSessionTemplate.getMapper(CourseClassMapper.class);
+//	}
+//	
+//	@Bean 
+//	public CourseMapper courseMapper() {
+//		return sqlSessionTemplate.getMapper(CourseMapper.class);
+//	}
+//	
+//	@Bean 
+//	public PeriodMapper periodMapper() {
+//		return sqlSessionTemplate.getMapper(PeriodMapper.class);
+//	}
+//
+//	@Bean 
+//	public TimeMapper timeMapper() {
+//		return sqlSessionTemplate.getMapper(TimeMapper.class);
+//	}
+//
+//	@Bean 
+//	public ClassStudentPresentMapper classStudentPresentMapper() {
+//		return sqlSessionTemplate.getMapper(ClassStudentPresentMapper.class);
+//	}
+//	
+//
+//	@Bean 
+//	public TeacherMapper teacherMapper() {
+//		return sqlSessionTemplate.getMapper(TeacherMapper.class);
+//	}	
+//
+//
+//	@Bean 
+//	public StudentMapper studentMapper() {
+//		return sqlSessionTemplate.getMapper(StudentMapper.class);
+//	}
+//
+//	@Bean 
+//	public ContactDataMapper contactDataMapper() {
+//		return sqlSessionTemplate.getMapper(ContactDataMapper.class);
+//	}
+//	
+//	@Bean 
+//	public UserMapper userMapper() {
+//		return sqlSessionTemplate.getMapper(UserMapper.class);
+//	}
+//
+//	@Bean 
+//	public UserStudentMapper userStudentMapper() {
+//		return sqlSessionTemplate.getMapper(UserStudentMapper.class);
+//	}
+//	
+//	@Bean
+//	public PlatformTransactionManager transactionManager() {
+//		return new DataSourceTransactionManager(this.dataSource);
+//	}
 	
 }

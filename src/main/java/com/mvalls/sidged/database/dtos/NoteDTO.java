@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -52,10 +53,14 @@ public class NoteDTO implements RepositoryDTO {
 	@OneToOne
 	@JoinColumn(name = "student_id", nullable = false)
 	private StudentDTO student;
-	
+
 	@OneToOne
 	@JoinColumn(name = "teacher_id", nullable = false)
 	private TeacherDTO evaluatorTeacher;
+
+	@ManyToOne
+	@JoinColumn(name = "course_id", nullable = false)
+	private CourseDTO course;
 	
 	@Column
 	private String value;
