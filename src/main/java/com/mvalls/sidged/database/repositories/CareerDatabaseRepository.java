@@ -6,16 +6,15 @@ import java.util.stream.Collectors;
 import com.mvalls.sidged.core.model.Career;
 import com.mvalls.sidged.core.repositories.CareerRepository;
 import com.mvalls.sidged.database.dtos.CareerDTO;
-import com.mvalls.sidged.database.mappers.CareerRepositoryDTOMapper;
 import com.mvalls.sidged.database.mybatis.mappers.CareerMapper;
-import com.mvalls.sidged.database.repositories.jpa.CareerJpaRepository;
+import com.mvalls.sidged.database.repositories.mappers.CareerRepositoryDTOMapper;
 
-public class CareerDatabaseRepository extends CommonDatabaseRepository<Career, com.mvalls.sidged.database.dtos.CareerDTO, CareerJpaRepository> implements CareerRepository {
+public class CareerDatabaseRepository implements CareerRepository {
 	
 	private final CareerMapper careerMapper;
+	private final CareerRepositoryDTOMapper dtoMapper = new CareerRepositoryDTOMapper();
 	
-	public CareerDatabaseRepository(CareerJpaRepository jpaRepository, CareerMapper careerMapper, CareerRepositoryDTOMapper dtoMapper) {
-		super(jpaRepository, dtoMapper);
+	public CareerDatabaseRepository(CareerMapper careerMapper) {
 		this.careerMapper = careerMapper;
 	}
 	
@@ -32,6 +31,30 @@ public class CareerDatabaseRepository extends CommonDatabaseRepository<Career, c
 		return this.careerMapper.findByCode(careerCode)
 				.map(dtoMapper::dtoToModel)
 				.orElseThrow(() -> new IllegalArgumentException());
+	}
+
+	@Override
+	public Career create(Career obj) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Career update(Career obj) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void delete(Long obj) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Career findById(Long id) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

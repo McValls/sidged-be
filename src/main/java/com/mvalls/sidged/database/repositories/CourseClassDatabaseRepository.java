@@ -10,9 +10,9 @@ import com.mvalls.sidged.core.model.ClassStudentPresent;
 import com.mvalls.sidged.core.model.CourseClass;
 import com.mvalls.sidged.core.repositories.ClassStudentPresentRepository;
 import com.mvalls.sidged.core.repositories.CourseClassRepository;
-import com.mvalls.sidged.database.mappers.CourseClassRepositoryDTOMapper;
-import com.mvalls.sidged.database.mybatis.dtos.CourseClassDTO;
+import com.mvalls.sidged.database.dtos.CourseClassDTO;
 import com.mvalls.sidged.database.mybatis.mappers.CourseClassMapper;
+import com.mvalls.sidged.database.repositories.mappers.CourseClassRepositoryDTOMapper;
 
 public class CourseClassDatabaseRepository implements CourseClassRepository {
 	
@@ -73,24 +73,6 @@ public class CourseClassDatabaseRepository implements CourseClassRepository {
 	public CourseClass update(CourseClass courseClass) {
 		this.courseClassMapper.update(courseClass.getId(), courseClass.getClassState());
 		return courseClass;
-	}
-
-	@Override
-	public void delete(Long obj) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public CourseClass findById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<CourseClass> findAll() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

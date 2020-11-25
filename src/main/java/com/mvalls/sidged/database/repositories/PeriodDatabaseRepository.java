@@ -3,18 +3,26 @@ package com.mvalls.sidged.database.repositories;
 import com.mvalls.sidged.core.model.Period;
 import com.mvalls.sidged.core.model.PeriodType;
 import com.mvalls.sidged.core.repositories.PeriodRepository;
-import com.mvalls.sidged.database.mappers.PeriodRepositoryDTOMapper;
-import com.mvalls.sidged.database.repositories.jpa.PeriodJpaRepository;
+import com.mvalls.sidged.database.dtos.PeriodDTO;
+import com.mvalls.sidged.database.mybatis.mappers.PeriodMapper;
 
-public class PeriodDatabaseRepository extends CommonDatabaseRepository<Period, com.mvalls.sidged.database.dtos.PeriodDTO, PeriodJpaRepository>
-	implements PeriodRepository {
+public class PeriodDatabaseRepository implements PeriodRepository {
 
-	public PeriodDatabaseRepository(PeriodJpaRepository jpaRepository, PeriodRepositoryDTOMapper dtoMapper) {
-		super(jpaRepository, dtoMapper);
-	}
+	private final PeriodMapper periodMapper;
 	
+	public PeriodDatabaseRepository(PeriodMapper periodMapper) {
+		super();
+		this.periodMapper = periodMapper;
+	}
+
 	@Override
 	public Period findByPeriodTypeAndNumber(PeriodType type, Integer number) {
-		return this.dtoMapper.dtoToModel(this.jpaRepository.findByPeriodTypeAndNumber(type, number));
+		PeriodDTO dto = this.periodMapper.findByPeriodTypeAndNumber(type, number);
+		return Period.builder()
+				.id(dto.getId())
+				.number(dto.getNumber())
+				.periodType(dto.getPeriodType())
+				.build();
 	}
+
 }

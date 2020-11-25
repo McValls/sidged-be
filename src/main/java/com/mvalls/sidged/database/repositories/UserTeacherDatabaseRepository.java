@@ -1,7 +1,5 @@
 package com.mvalls.sidged.database.repositories;
 
-import java.util.List;
-
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mvalls.sidged.core.model.Teacher;
@@ -10,9 +8,9 @@ import com.mvalls.sidged.core.model.users.UserTeacher;
 import com.mvalls.sidged.core.repositories.TeacherRepository;
 import com.mvalls.sidged.core.repositories.UserRepository;
 import com.mvalls.sidged.core.repositories.UserTeacherRepository;
-import com.mvalls.sidged.database.mappers.UserTeacherMyBatisRepositoryDTOMapper;
-import com.mvalls.sidged.database.mybatis.dtos.UserTeacherMyBatisDTO;
+import com.mvalls.sidged.database.dtos.UserTeacherDTO;
 import com.mvalls.sidged.database.mybatis.mappers.UserTeacherMapper;
+import com.mvalls.sidged.database.repositories.mappers.UserTeacherRepositoryDTOMapper;
 
 public class UserTeacherDatabaseRepository
 	implements UserTeacherRepository {
@@ -20,7 +18,7 @@ public class UserTeacherDatabaseRepository
 	private final UserRepository userRepository;
 	private final TeacherRepository teacherRepository;
 	private final UserTeacherMapper userTeacherMapper;
-	private final UserTeacherMyBatisRepositoryDTOMapper dtoMapper = new UserTeacherMyBatisRepositoryDTOMapper();
+	private final UserTeacherRepositoryDTOMapper dtoMapper = new UserTeacherRepositoryDTOMapper();
 	
 	public UserTeacherDatabaseRepository(UserRepository userRepository,
 			TeacherRepository teacherRepository,
@@ -32,13 +30,13 @@ public class UserTeacherDatabaseRepository
 	
 	@Override
 	public UserTeacher findByTeacherId(Long id) {
-		UserTeacherMyBatisDTO dto = this.userTeacherMapper.findByTeacherId(id);
+		UserTeacherDTO dto = this.userTeacherMapper.findByTeacherId(id);
 		return dtoMapper.dtoToModel(dto);
 	}
 
 	@Override
 	public UserTeacher findByUserUsername(String username) {
-		UserTeacherMyBatisDTO dto = this.userTeacherMapper.findByUsername(username);
+		UserTeacherDTO dto = this.userTeacherMapper.findByUsername(username);
 		return dtoMapper.dtoToModel(dto);
 	}
 
@@ -51,7 +49,7 @@ public class UserTeacherDatabaseRepository
 		Teacher teacher = userTeacher.getTeacher();
 		this.teacherRepository.create(teacher);
 		
-		UserTeacherMyBatisDTO dto = this.dtoMapper.modelToDto(userTeacher);
+		UserTeacherDTO dto = this.dtoMapper.modelToDto(userTeacher);
 		this.userTeacherMapper.insert(dto);
 		
 		return userTeacher;
@@ -63,24 +61,6 @@ public class UserTeacherDatabaseRepository
 		this.userRepository.update(userTeacher.getUser());
 		this.teacherRepository.update(userTeacher.getTeacher());
 		return userTeacher;
-	}
-
-	@Override
-	public void delete(Long obj) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public UserTeacher findById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<UserTeacher> findAll() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

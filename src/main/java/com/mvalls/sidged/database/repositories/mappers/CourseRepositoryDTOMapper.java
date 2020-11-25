@@ -1,11 +1,11 @@
-package com.mvalls.sidged.database.mappers;
+package com.mvalls.sidged.database.repositories.mappers;
 
 import com.mvalls.sidged.core.model.Course;
 import com.mvalls.sidged.core.repositories.RepositoryDTOMapper;
 import com.mvalls.sidged.database.dtos.CareerDTO;
+import com.mvalls.sidged.database.dtos.CourseDTO;
 import com.mvalls.sidged.database.dtos.PeriodDTO;
 import com.mvalls.sidged.database.dtos.TimeDTO;
-import com.mvalls.sidged.database.mybatis.dtos.CourseDTO;
 
 public class CourseRepositoryDTOMapper implements RepositoryDTOMapper<Course, CourseDTO> {
 

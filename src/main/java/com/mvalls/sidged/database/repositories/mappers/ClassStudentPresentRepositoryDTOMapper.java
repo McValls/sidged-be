@@ -1,16 +1,16 @@
-package com.mvalls.sidged.database.mappers;
+package com.mvalls.sidged.database.repositories.mappers;
 
 import com.mvalls.sidged.core.model.ClassStudentPresent;
 import com.mvalls.sidged.core.model.StudentPresent;
 import com.mvalls.sidged.core.repositories.RepositoryDTOMapper;
-import com.mvalls.sidged.database.mybatis.dtos.ClassStudentPresentMyBatisDTO;
+import com.mvalls.sidged.database.dtos.ClassStudentPresentDTO;
 
-public class ClassStudentPresentMyBatisRepositoryDTOMapper implements RepositoryDTOMapper<ClassStudentPresent, ClassStudentPresentMyBatisDTO> {
+public class ClassStudentPresentRepositoryDTOMapper implements RepositoryDTOMapper<ClassStudentPresent, ClassStudentPresentDTO> {
 
-	private final StudentMyBatisRepositoryDTOMapper studentDTOMapper = new StudentMyBatisRepositoryDTOMapper();
+	private final StudentRepositoryDTOMapper studentDTOMapper = new StudentRepositoryDTOMapper();
 	
 	@Override
-	public ClassStudentPresent dtoToModel(ClassStudentPresentMyBatisDTO dto) {
+	public ClassStudentPresent dtoToModel(ClassStudentPresentDTO dto) {
 		return ClassStudentPresent.builder()
 				.id(dto.getId())
 				.student(studentDTOMapper.dtoToModel(dto.getStudent()))
@@ -19,9 +19,9 @@ public class ClassStudentPresentMyBatisRepositoryDTOMapper implements Repository
 	}
 
 	@Override
-	public ClassStudentPresentMyBatisDTO modelToDto(ClassStudentPresent model) {
+	public ClassStudentPresentDTO modelToDto(ClassStudentPresent model) {
 		CourseClassRepositoryDTOMapper courseClassDTOMapper = new CourseClassRepositoryDTOMapper();
-		return ClassStudentPresentMyBatisDTO.builder()
+		return ClassStudentPresentDTO.builder()
 				.id(model.getId())
 				.student(studentDTOMapper.modelToDto(model.getStudent()))
 				.present(StudentPresent.valueOf(model.getPresent().name()))

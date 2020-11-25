@@ -49,14 +49,13 @@ public class PresentAnalisisScenario2Test {
 	@Autowired
 	private PresentAnalysisCalculator presentAnalysisCalculator;
 	private Course course;
+	private List<CourseClass> classes = new ArrayList<>();
 	private List<CoursePresentismByMonthData> presentismByCourse;
 	
 	@Given("A Course with id {int}")
 	public void a_Course_with_id(Integer int1) {
 	    this.course = mock(Course.class);
-	    Set<CourseClass> classes = new HashSet<>();
 	    when(this.course.getId()).thenReturn(Integer.toUnsignedLong(int1));
-	    when(this.course.getClasses()).thenReturn(classes);
 	}
 
 	@Given("{int} classes dated in January")
@@ -64,7 +63,7 @@ public class PresentAnalisisScenario2Test {
 		for(int i = 0; i < int1; i++) {
 			CourseClass courseClass = mock(CourseClass.class);
 			when(courseClass.getDate()).thenReturn(LocalDate.of(2019, 1, int1+1));
-			this.course.getClasses().add(courseClass);
+			this.classes.add(courseClass);
 		}
 	}
 
@@ -73,7 +72,7 @@ public class PresentAnalisisScenario2Test {
 		for(int i = 0; i < int1; i++) {
 			CourseClass courseClass = mock(CourseClass.class);
 			when(courseClass.getDate()).thenReturn(LocalDate.of(2019, 2, int1+1));
-			this.course.getClasses().add(courseClass);
+			this.classes.add(courseClass);
 		}
 	}
 
@@ -82,13 +81,13 @@ public class PresentAnalisisScenario2Test {
 		for(int i = 0; i < int1; i++) {
 			CourseClass courseClass = mock(CourseClass.class);
 			when(courseClass.getDate()).thenReturn(LocalDate.of(2019, 3, int1+1));
-			this.course.getClasses().add(courseClass);
+			this.classes.add(courseClass);
 		}
 	}
 
 	@Given("That all classes have {int} students")
 	public void that_all_classes_have_students(Integer int1) {
-	    for(CourseClass courseClass : this.course.getClasses()) {
+	    for(CourseClass courseClass : this.classes) {
 	    	List<ClassStudentPresent> studentPresents = new ArrayList<ClassStudentPresent>();
 	    	for(int i = 0; i < int1; i++) {
 	    		ClassStudentPresent classStudentPresent = mock(ClassStudentPresent.class);
@@ -100,7 +99,7 @@ public class PresentAnalisisScenario2Test {
 
 	@Given("That {int} are present, {int} are late and {int} are absent in each class")
 	public void that_is_present_is_late_and_is_absent_in_each_class(Integer int1, Integer int2, Integer int3) {
-	    for(CourseClass courseClass : this.course.getClasses()) {
+	    for(CourseClass courseClass : this.classes) {
 	    	int i = 0;
 	    	Iterator<ClassStudentPresent> iterator = courseClass.getStudentPresents().iterator();
 	    	while(i < int1) {
@@ -125,7 +124,7 @@ public class PresentAnalisisScenario2Test {
 
 	@When("I ask for the presentism of the course")
 	public void i_ask_for_the_presentism_of_the_course() {
-	    this.presentismByCourse = presentAnalysisCalculator.getPresentismByCourseGroupedByMonth(new ArrayList<>(this.course.getClasses())).getPresentismByMonth();
+	    this.presentismByCourse = presentAnalysisCalculator.getPresentismByCourseGroupedByMonth(new ArrayList<>(this.classes)).getPresentismByMonth();
 	}
 
 	@Then("I get a non empty list")

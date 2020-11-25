@@ -1,8 +1,5 @@
 package com.mvalls.sidged.core.model;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import lombok.Builder;
 import lombok.Data;
 
@@ -33,7 +30,5 @@ public class Career implements Model {
 	private Long id;
 	private String name;
 	private String code;
-	@Builder.Default
-	private Collection<Course> courses = new ArrayList<>();
 	
 }

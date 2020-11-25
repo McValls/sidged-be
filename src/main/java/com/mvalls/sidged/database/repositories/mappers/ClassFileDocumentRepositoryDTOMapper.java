@@ -1,8 +1,8 @@
-package com.mvalls.sidged.database.mappers;
+package com.mvalls.sidged.database.repositories.mappers;
 
 import com.mvalls.sidged.core.model.ClassFileDocument;
 import com.mvalls.sidged.core.repositories.RepositoryDTOMapper;
-import com.mvalls.sidged.database.mybatis.dtos.ClassFileDocumentDTO;
+import com.mvalls.sidged.database.dtos.ClassFileDocumentDTO;
 
 public class ClassFileDocumentRepositoryDTOMapper implements RepositoryDTOMapper<ClassFileDocument, ClassFileDocumentDTO> {
 

@@ -1,4 +1,4 @@
-package com.mvalls.sidged.database.mappers;
+package com.mvalls.sidged.database.repositories.mappers;
 
 import com.mvalls.sidged.core.model.Time;
 import com.mvalls.sidged.core.repositories.RepositoryDTOMapper;

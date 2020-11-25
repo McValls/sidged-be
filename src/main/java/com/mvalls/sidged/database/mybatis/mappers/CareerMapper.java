@@ -10,10 +10,10 @@ import com.mvalls.sidged.database.dtos.CareerDTO;
 
 @Mapper
 public interface CareerMapper {
-	
+
 	@Select("SELECT * FROM career")
 	List<CareerDTO> findAllCareers();
-	
+
 	@Select("SELECT * FROM career WHERE CODE = #{code}")
 	Optional<CareerDTO> findByCode(String code);
 

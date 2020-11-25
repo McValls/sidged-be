@@ -1,13 +1,13 @@
-package com.mvalls.sidged.database.mappers;
+package com.mvalls.sidged.database.repositories.mappers;
 
 import com.mvalls.sidged.core.model.users.User;
 import com.mvalls.sidged.core.repositories.RepositoryDTOMapper;
-import com.mvalls.sidged.database.mybatis.dtos.UserMyBatisDTO;
+import com.mvalls.sidged.database.dtos.UserDTO;
 
-public class UserMyBatisRepositoryDTOMapper implements RepositoryDTOMapper<User, UserMyBatisDTO>{
+public class UserRepositoryDTOMapper implements RepositoryDTOMapper<User, UserDTO>{
 
 	@Override
-	public User dtoToModel(UserMyBatisDTO dto) {
+	public User dtoToModel(UserDTO dto) {
 		return User.builder()
 				.id(dto.getId())
 				.username(dto.getUsername())
@@ -21,8 +21,8 @@ public class UserMyBatisRepositoryDTOMapper implements RepositoryDTOMapper<User,
 	}
 
 	@Override
-	public UserMyBatisDTO modelToDto(User model) {
-		return UserMyBatisDTO.builder()
+	public UserDTO modelToDto(User model) {
+		return UserDTO.builder()
 				.id(model.getId())
 				.username(model.getUsername())
 				.password(model.getPassword())

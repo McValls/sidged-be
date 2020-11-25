@@ -1,4 +1,4 @@
-package com.mvalls.sidged.database.mybatis.dtos;
+package com.mvalls.sidged.database.dtos;
 
 import com.mvalls.sidged.core.repositories.RepositoryDTO;
 
@@ -11,9 +11,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ContactDataMyBatisDTO implements RepositoryDTO {
+public class UserStudentDTO implements RepositoryDTO {
 
 	private Long id;
-	private String emails;
-	private String phones;
+	private UserDTO user;
+	private StudentDTO student;
+	
 }

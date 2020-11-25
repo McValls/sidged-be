@@ -127,9 +127,9 @@ public class PresentAnalysisCalculator {
 			.add(new PercentageByStudentPresent(StudentPresent.ABSENT, this.getPercentage(total, absents).intValue()));
 	}
 
-	public List<PresentPercentages> getPresentPercentagesByClasses(Course course) {
+	public List<PresentPercentages> getPresentPercentagesByClasses(List<CourseClass> classes) {
 		List<PresentPercentages> presentPercentagesByClasses = new LinkedList<>();
-		Iterator<CourseClass> courseClassIterator = course.getClasses().iterator();
+		Iterator<CourseClass> courseClassIterator = classes.iterator();
 		int i = 1;
 		while(courseClassIterator.hasNext()) {
 			PresentPercentages percentage = PresentPercentages.builder()

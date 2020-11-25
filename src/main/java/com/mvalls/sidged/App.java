@@ -49,20 +49,17 @@ import com.mvalls.sidged.core.services.UserTeacherService;
 import com.mvalls.sidged.core.strategies.userCreation.StudentCreationStrategy;
 import com.mvalls.sidged.core.strategies.userCreation.TeacherCreationStrategy;
 import com.mvalls.sidged.core.strategies.userCreation.UserCreationStrategyService;
-import com.mvalls.sidged.database.mappers.CareerRepositoryDTOMapper;
-import com.mvalls.sidged.database.mappers.CourseRepositoryDTOMapper;
-import com.mvalls.sidged.database.mappers.PeriodRepositoryDTOMapper;
-import com.mvalls.sidged.database.mappers.StudentLinkRepositoryDTOMapper;
-import com.mvalls.sidged.database.mappers.TimeRepositoryDTOMapper;
-import com.mvalls.sidged.database.mappers.UserRepositoryDTOMapper;
 import com.mvalls.sidged.database.mybatis.mappers.CareerMapper;
 import com.mvalls.sidged.database.mybatis.mappers.ClassFileDocumentMapper;
 import com.mvalls.sidged.database.mybatis.mappers.ClassStudentPresentMapper;
 import com.mvalls.sidged.database.mybatis.mappers.ContactDataMapper;
 import com.mvalls.sidged.database.mybatis.mappers.CourseClassMapper;
 import com.mvalls.sidged.database.mybatis.mappers.CourseMapper;
+import com.mvalls.sidged.database.mybatis.mappers.PeriodMapper;
+import com.mvalls.sidged.database.mybatis.mappers.StudentLinkMapper;
 import com.mvalls.sidged.database.mybatis.mappers.StudentMapper;
 import com.mvalls.sidged.database.mybatis.mappers.TeacherMapper;
+import com.mvalls.sidged.database.mybatis.mappers.TimeMapper;
 import com.mvalls.sidged.database.mybatis.mappers.UserMapper;
 import com.mvalls.sidged.database.mybatis.mappers.UserStudentMapper;
 import com.mvalls.sidged.database.mybatis.mappers.UserTeacherMapper;
@@ -80,11 +77,6 @@ import com.mvalls.sidged.database.repositories.TimeDatabaseRepository;
 import com.mvalls.sidged.database.repositories.UserDatabaseRepository;
 import com.mvalls.sidged.database.repositories.UserStudentDatabaseRepository;
 import com.mvalls.sidged.database.repositories.UserTeacherDatabaseRepository;
-import com.mvalls.sidged.database.repositories.jpa.CareerJpaRepository;
-import com.mvalls.sidged.database.repositories.jpa.ClassStudentPresentJpaRepository;
-import com.mvalls.sidged.database.repositories.jpa.PeriodJpaRepository;
-import com.mvalls.sidged.database.repositories.jpa.StudentLinkJpaRepository;
-import com.mvalls.sidged.database.repositories.jpa.TimeJpaRepository;
 import com.mvalls.sidged.mappers.CourseVOtoModelMapper;
 
 /**
@@ -119,11 +111,6 @@ public class App {
 	}
 	
 	@Autowired private Environment env;
-	@Autowired private TimeJpaRepository timeJpaRepository;
-	@Autowired private PeriodJpaRepository periodJpaRepository;
-	@Autowired private CareerJpaRepository careerJpaRepository;
-	@Autowired private ClassStudentPresentJpaRepository classStudentPresentJpaRepository;
-	@Autowired private StudentLinkJpaRepository studentLinkJpaRepository;
 	
 	@Autowired private CareerMapper careerMapper;
 	@Autowired private ClassStudentPresentMapper classStudentPresentMapper;
@@ -136,6 +123,9 @@ public class App {
 	@Autowired private UserStudentMapper userStudentMapper;
 	@Autowired private UserTeacherMapper userTeacherMapper;
 	@Autowired private ClassFileDocumentMapper classFileDocumentMapper;
+	@Autowired private StudentLinkMapper studentLinkMapper;
+	@Autowired private PeriodMapper periodMapper;
+	@Autowired private TimeMapper timeMapper;
 	
 	@Bean
 	public WebMvcConfigurer corsConfigurer() {
@@ -256,7 +246,7 @@ public class App {
 	
 	@Bean
 	public ClassFileDocumentService classFileDocumentService() {
-		return new ClassFileDocumentService(classFileDocumentRepository(), courseClassRepository(), courseRepository());
+		return new ClassFileDocumentService(classFileDocumentRepository(), courseClassRepository());
 	}
 	
 	@Bean
@@ -289,7 +279,10 @@ public class App {
 	
 	@Bean
 	public CourseRepository courseRepository() {
-		return new CourseDatabaseRepository(courseMapper, new CourseRepositoryDTOMapper());
+		return new CourseDatabaseRepository(courseMapper,
+				courseClassRepository(),
+				studentRepository(),
+				teacherRepository());
 	}
 	
 	@Bean
@@ -315,7 +308,7 @@ public class App {
 	
 	@Bean
 	public UserRepository userRepository() {
-		return new UserDatabaseRepository(userMapper, new UserRepositoryDTOMapper());
+		return new UserDatabaseRepository(userMapper);
 	}
 	
 	@Bean
@@ -330,17 +323,17 @@ public class App {
 	
 	@Bean
 	public TimeRepository timeRepository() {
-		return new TimeDatabaseRepository(this.timeJpaRepository, new TimeRepositoryDTOMapper());
+		return new TimeDatabaseRepository(timeMapper);
 	}
 	
 	@Bean
 	public PeriodRepository periodRepository() {
-		return new PeriodDatabaseRepository(this.periodJpaRepository, new PeriodRepositoryDTOMapper());
+		return new PeriodDatabaseRepository(periodMapper);
 	}
 	
 	@Bean
 	public CareerRepository careerRepository() {
-		return new CareerDatabaseRepository(this.careerJpaRepository, careerMapper, new CareerRepositoryDTOMapper());
+		return new CareerDatabaseRepository(careerMapper);
 	}
 	
 	@Bean
@@ -350,12 +343,12 @@ public class App {
 	
 	@Bean
 	public ClassStudentPresentRepository classStudentPresentRepository() {
-		return new ClassStudentPresentDatabaseRepository(classStudentPresentJpaRepository, classStudentPresentMapper);
+		return new ClassStudentPresentDatabaseRepository(classStudentPresentMapper);
 	}
 	
 	@Bean
 	public StudentLinkRepository studentLinkRepository() {
-		return new StudentLinkDatabaseRepository(this.studentLinkJpaRepository, new StudentLinkRepositoryDTOMapper());
+		return new StudentLinkDatabaseRepository(studentLinkMapper);
 	}
 	
 	/** MY BATIS **/

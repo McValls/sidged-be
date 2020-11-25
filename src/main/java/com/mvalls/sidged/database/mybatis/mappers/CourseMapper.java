@@ -12,9 +12,9 @@ import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 
 import com.mvalls.sidged.database.dtos.CareerDTO;
+import com.mvalls.sidged.database.dtos.CourseDTO;
 import com.mvalls.sidged.database.dtos.PeriodDTO;
 import com.mvalls.sidged.database.dtos.TimeDTO;
-import com.mvalls.sidged.database.mybatis.dtos.CourseDTO;
 
 @Mapper
 public interface CourseMapper {

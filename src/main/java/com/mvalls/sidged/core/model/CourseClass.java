@@ -40,9 +40,8 @@ public class CourseClass implements Model {
 	private LocalDate date;
 	private ClassState classState;
 	private Course course;
-	@Builder.Default private Collection<ClassStudentPresent> studentPresents = new ArrayList<>();
-	@Builder.Default private Collection<ClassFileDocument> classFileDocuments = new ArrayList<>();
-	
+	@Builder.Default 
+	private Collection<ClassStudentPresent> studentPresents = new ArrayList<>();
 	private String comments;
 
 }

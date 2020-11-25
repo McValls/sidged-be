@@ -3,7 +3,6 @@ package com.mvalls.sidged.core.services;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -107,7 +106,6 @@ public class CourseClassService extends GenericService<CourseClass, CourseClassR
 		return this.classStudentPresentRepository.findByCourseAndClassNumber(courseCode, classNumber);
 	}
 	
-	//TODO: Refactor
 	public void updateClassState(Teacher teacher, String courseCode, Integer classNumber, ClassState classState) throws UnauthorizedUserException {
 		List<Teacher> teachersByCourse = this.teacherRepository.findByCourseCode(courseCode);
 		if (!teachersByCourse.contains(teacher)) throw new UnauthorizedUserException();
@@ -116,17 +114,6 @@ public class CourseClassService extends GenericService<CourseClass, CourseClassR
 		CourseClass courseClass = optionalCourseClass.orElseThrow();
 		courseClass.setClassState(classState);
 		this.repository.update(courseClass);
-//		Course course = this.courseRepository.findByCode(courseCode);
-//		validateTeacherAndCourse(teacher, course);
-//		
-//		CourseClass courseClass = course.getClasses()
-//				.stream()
-//				.filter(c -> c.getClassNumber().equals(classNumber))
-//				.findFirst()
-//				.orElseThrow();
-//		courseClass.setClassState(classState);
-//	
-//		this.repository.update(courseClass);
 	}
 	
 	/**
@@ -134,45 +121,47 @@ public class CourseClassService extends GenericService<CourseClass, CourseClassR
 	 * Si hay alumnos que tienen {DESERTOR_AMOUNT_OF_CLASSES} ausentes corridos, los toma como desertores y notifica.
 	 * @return
 	 */
+	@Deprecated
+	//TODO: Mover a DesertorService
 	public List<Desertor> getDesertors() {
 		List<Desertor> desertors = new ArrayList<>();
-		List<Course> coursesByYear = this.courseRepository.findByYear(LocalDate.now().getYear());
-		
-		Map<Course, List<CourseClass>> lastClassesByCourse = coursesByYear.stream()
-			.collect(Collectors.toMap(
-					course -> course,
-					course -> course.getClasses()
-						.stream()
-						.filter(cc -> cc.getClassState() == ClassState.FINALIZADA)
-						.sorted((cc1, cc2) -> cc1.getClassNumber().compareTo(cc2.getClassNumber()))
-						.collect(Collectors.toList())
-					));
-		
-		lastClassesByCourse.forEach((course, listOfClasses) -> {
-			if(listOfClasses.size() >= DESERTOR_AMOUNT_OF_CLASSES) {
-				List<CourseClass> lastClasses = listOfClasses.subList(0, DESERTOR_AMOUNT_OF_CLASSES);
-				Map<Student, Integer> absentsByStudent = new HashMap<>();
-				lastClasses.forEach(courseClass -> {
-					courseClass.getStudentPresents().forEach(classStudentPresent -> {
-						addAbsentByStudent(absentsByStudent, classStudentPresent);
-					});
-				});
-	
-				absentsByStudent.forEach((student, absents) -> {
-					if(absents.compareTo(DESERTOR_AMOUNT_OF_CLASSES) >= 0) {
-						Desertor desertor = Desertor.builder()
-								.course(course)
-								.student(student)
-								.localDate(LocalDate.now())
-								.build();
-						
-						desertors.add(desertor);
-					}
-				});
-			}
-			
-		});
-		
+//		List<Course> coursesByYear = this.courseRepository.findByYear(LocalDate.now().getYear());
+//		
+//		Map<Course, List<CourseClass>> lastClassesByCourse = coursesByYear.stream()
+//			.collect(Collectors.toMap(
+//					course -> course,
+//					course -> course.getClasses()
+//						.stream()
+//						.filter(cc -> cc.getClassState() == ClassState.FINALIZADA)
+//						.sorted((cc1, cc2) -> cc1.getClassNumber().compareTo(cc2.getClassNumber()))
+//						.collect(Collectors.toList())
+//					));
+//		
+//		lastClassesByCourse.forEach((course, listOfClasses) -> {
+//			if(listOfClasses.size() >= DESERTOR_AMOUNT_OF_CLASSES) {
+//				List<CourseClass> lastClasses = listOfClasses.subList(0, DESERTOR_AMOUNT_OF_CLASSES);
+//				Map<Student, Integer> absentsByStudent = new HashMap<>();
+//				lastClasses.forEach(courseClass -> {
+//					courseClass.getStudentPresents().forEach(classStudentPresent -> {
+//						addAbsentByStudent(absentsByStudent, classStudentPresent);
+//					});
+//				});
+//	
+//				absentsByStudent.forEach((student, absents) -> {
+//					if(absents.compareTo(DESERTOR_AMOUNT_OF_CLASSES) >= 0) {
+//						Desertor desertor = Desertor.builder()
+//								.course(course)
+//								.student(student)
+//								.localDate(LocalDate.now())
+//								.build();
+//						
+//						desertors.add(desertor);
+//					}
+//				});
+//			}
+//			
+//		});
+//		
 		return desertors;
 	}
 	

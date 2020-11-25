@@ -1,23 +1,21 @@
 package com.mvalls.sidged.database.repositories;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mvalls.sidged.core.model.users.User;
 import com.mvalls.sidged.core.repositories.UserRepository;
-import com.mvalls.sidged.database.mappers.UserMyBatisRepositoryDTOMapper;
-import com.mvalls.sidged.database.mappers.UserRepositoryDTOMapper;
-import com.mvalls.sidged.database.mybatis.dtos.UserMyBatisDTO;
+import com.mvalls.sidged.database.dtos.UserDTO;
 import com.mvalls.sidged.database.mybatis.mappers.UserMapper;
+import com.mvalls.sidged.database.repositories.mappers.UserRepositoryDTOMapper;
 
 public class UserDatabaseRepository implements UserRepository {
 
 	private final UserMapper userMapper;
-	private final UserMyBatisRepositoryDTOMapper userMyBatisDTOMapper = new UserMyBatisRepositoryDTOMapper();
+	private final UserRepositoryDTOMapper userMyBatisDTOMapper = new UserRepositoryDTOMapper();
 
-	public UserDatabaseRepository(UserMapper userMapper, UserRepositoryDTOMapper dtoMapper) {
+	public UserDatabaseRepository(UserMapper userMapper) {
 		this.userMapper = userMapper;
 	}
 	
@@ -31,7 +29,7 @@ public class UserDatabaseRepository implements UserRepository {
 	@Override
 	@Transactional
 	public User create(User user) {
-		UserMyBatisDTO dto = this.userMyBatisDTOMapper.modelToDto(user);
+		UserDTO dto = this.userMyBatisDTOMapper.modelToDto(user);
 		this.userMapper.insert(dto);
 		user.setId(dto.getId());
 		return user;
@@ -39,29 +37,9 @@ public class UserDatabaseRepository implements UserRepository {
 
 	@Override
 	public User update(User user) {
-		UserMyBatisDTO dto = this.userMyBatisDTOMapper.modelToDto(user);
+		UserDTO dto = this.userMyBatisDTOMapper.modelToDto(user);
 		this.userMapper.update(dto);
 		return user;
 	}
-
-	//TODO: LISKOV!!
-	@Override
-	public void delete(Long obj) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public User findById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<User> findAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 
 }

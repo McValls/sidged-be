@@ -1,8 +1,8 @@
-package com.mvalls.sidged.database.mappers;
+package com.mvalls.sidged.database.repositories.mappers;
 
 import com.mvalls.sidged.core.model.users.UserStudent;
 import com.mvalls.sidged.core.repositories.RepositoryDTOMapper;
-import com.mvalls.sidged.database.dtos.login.UserStudentDTO;
+import com.mvalls.sidged.database.dtos.UserStudentDTO;
 
 public class UserStudentRepositoryDTOMapper implements RepositoryDTOMapper<UserStudent, UserStudentDTO>{
 

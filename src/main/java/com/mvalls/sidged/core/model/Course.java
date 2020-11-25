@@ -44,9 +44,9 @@ public class Course implements Model {
 	private Time timeEnd;
 	private String chair;
 	private Career career;
+	
 	@Builder.Default private Set<Teacher> teachers = new HashSet<>();
 	@Builder.Default private Set<Student> students = new HashSet<>();
 	@Builder.Default private Set<CourseClass> classes = new HashSet<>();
-	@Builder.Default private Set<Note> notes = new HashSet<>();
 
 }

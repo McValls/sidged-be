@@ -13,8 +13,8 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import com.mvalls.sidged.core.model.ClassState;
-import com.mvalls.sidged.database.mybatis.dtos.CourseClassDTO;
-import com.mvalls.sidged.database.mybatis.dtos.CourseDTO;
+import com.mvalls.sidged.database.dtos.CourseClassDTO;
+import com.mvalls.sidged.database.dtos.CourseDTO;
 
 @Mapper
 public interface CourseClassMapper {

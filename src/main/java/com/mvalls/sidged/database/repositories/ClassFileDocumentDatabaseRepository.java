@@ -6,9 +6,9 @@ import java.util.stream.Collectors;
 
 import com.mvalls.sidged.core.model.ClassFileDocument;
 import com.mvalls.sidged.core.repositories.ClassFileDocumentRepository;
-import com.mvalls.sidged.database.mappers.ClassFileDocumentRepositoryDTOMapper;
-import com.mvalls.sidged.database.mybatis.dtos.ClassFileDocumentDTO;
+import com.mvalls.sidged.database.dtos.ClassFileDocumentDTO;
 import com.mvalls.sidged.database.mybatis.mappers.ClassFileDocumentMapper;
+import com.mvalls.sidged.database.repositories.mappers.ClassFileDocumentRepositoryDTOMapper;
 
 public class ClassFileDocumentDatabaseRepository implements ClassFileDocumentRepository {
 	

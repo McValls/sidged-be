@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 
-import com.mvalls.sidged.database.mybatis.dtos.ClassFileDocumentDTO;
+import com.mvalls.sidged.database.dtos.ClassFileDocumentDTO;
 
 @Mapper
 public interface ClassFileDocumentMapper {

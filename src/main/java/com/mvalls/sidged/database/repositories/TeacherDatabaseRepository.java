@@ -8,27 +8,27 @@ import org.springframework.transaction.annotation.Transactional;
 import com.mvalls.sidged.core.model.Teacher;
 import com.mvalls.sidged.core.repositories.ContactDataRepository;
 import com.mvalls.sidged.core.repositories.TeacherRepository;
-import com.mvalls.sidged.database.mappers.TeacherMyBatisRepositoryDTOMapper;
-import com.mvalls.sidged.database.mybatis.dtos.TeacherMyBatisDTO;
+import com.mvalls.sidged.database.dtos.TeacherDTO;
 import com.mvalls.sidged.database.mybatis.mappers.TeacherMapper;
+import com.mvalls.sidged.database.repositories.mappers.TeacherRepositoryDTOMapper;
 
 public class TeacherDatabaseRepository implements TeacherRepository {
 
 	private final TeacherMapper teacherMapper;
 	private final ContactDataRepository contactDataRepository;
-	private final TeacherMyBatisRepositoryDTOMapper dtoMyBatisMapper;
+	private final TeacherRepositoryDTOMapper dtoMyBatisMapper;
 	
 	public TeacherDatabaseRepository(TeacherMapper teacherMapper,
 			ContactDataRepository contactDataRepository) {
 		this.teacherMapper = teacherMapper;
 		this.contactDataRepository = contactDataRepository;
-		this.dtoMyBatisMapper = new TeacherMyBatisRepositoryDTOMapper();
+		this.dtoMyBatisMapper = new TeacherRepositoryDTOMapper();
 	}
 	
 
 	@Override
 	public List<Teacher> findByCourseCode(String courseCode) {
-		List<TeacherMyBatisDTO> dtos = this.teacherMapper.findByCourseCode(courseCode);
+		List<TeacherDTO> dtos = this.teacherMapper.findByCourseCode(courseCode);
 		return dtos
 				.stream()
 				.map(dtoMyBatisMapper::dtoToModel)
@@ -47,7 +47,7 @@ public class TeacherDatabaseRepository implements TeacherRepository {
 	
 	@Override
 	public List<Teacher> findAll() {
-		List<TeacherMyBatisDTO> dtos = this.teacherMapper.findAll();
+		List<TeacherDTO> dtos = this.teacherMapper.findAll();
 		return dtos
 				.stream()
 				.map(this.dtoMyBatisMapper::dtoToModel)
@@ -57,7 +57,7 @@ public class TeacherDatabaseRepository implements TeacherRepository {
 	@Override
 	@Transactional
 	public Teacher update(Teacher teacher) {
-		TeacherMyBatisDTO dto = this.dtoMyBatisMapper.modelToDto(teacher);
+		TeacherDTO dto = this.dtoMyBatisMapper.modelToDto(teacher);
 		this.teacherMapper.update(dto);
 		this.contactDataRepository.update(teacher.getContactData());
 		return teacher;
@@ -68,24 +68,10 @@ public class TeacherDatabaseRepository implements TeacherRepository {
 	public Teacher create(Teacher teacher) {
 		this.contactDataRepository.create(teacher.getContactData());
 		
-		TeacherMyBatisDTO dto = this.dtoMyBatisMapper.modelToDto(teacher);
+		TeacherDTO dto = this.dtoMyBatisMapper.modelToDto(teacher);
 		this.teacherMapper.insert(dto);
 		teacher.setId(dto.getId());
 		return teacher;
 	}
 
-
-	@Override
-	public void delete(Long obj) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	@Override
-	public Teacher findById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 }

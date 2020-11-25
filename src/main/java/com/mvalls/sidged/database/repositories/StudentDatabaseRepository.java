@@ -8,15 +8,15 @@ import org.springframework.transaction.annotation.Transactional;
 import com.mvalls.sidged.core.model.Student;
 import com.mvalls.sidged.core.repositories.ContactDataRepository;
 import com.mvalls.sidged.core.repositories.StudentRepository;
-import com.mvalls.sidged.database.mappers.StudentMyBatisRepositoryDTOMapper;
-import com.mvalls.sidged.database.mybatis.dtos.StudentMyBatisDTO;
+import com.mvalls.sidged.database.dtos.StudentDTO;
 import com.mvalls.sidged.database.mybatis.mappers.StudentMapper;
+import com.mvalls.sidged.database.repositories.mappers.StudentRepositoryDTOMapper;
 
 public class StudentDatabaseRepository implements StudentRepository {
 
 	private final ContactDataRepository contactDataRepository;
 	private final StudentMapper studentMapper;
-	private final StudentMyBatisRepositoryDTOMapper studentMyBatisRepositoryDTOMapper = new StudentMyBatisRepositoryDTOMapper();
+	private final StudentRepositoryDTOMapper studentMyBatisRepositoryDTOMapper = new StudentRepositoryDTOMapper();
 	
 	public StudentDatabaseRepository(StudentMapper studentMapper,
 			ContactDataRepository contactDataRepository) {
@@ -26,7 +26,7 @@ public class StudentDatabaseRepository implements StudentRepository {
 	
 	@Override
 	public List<Student> findByCourseCode(String courseCode) {
-		List<StudentMyBatisDTO> dtos = this.studentMapper.findByCourseCode(courseCode);
+		List<StudentDTO> dtos = this.studentMapper.findByCourseCode(courseCode);
 		return dtos
 				.stream()
 				.map(studentMyBatisRepositoryDTOMapper::dtoToModel)
@@ -46,7 +46,7 @@ public class StudentDatabaseRepository implements StudentRepository {
 	@Override
 	public Student create(Student student) {
 		this.contactDataRepository.create(student.getContactData());
-		StudentMyBatisDTO studentDTO = this.studentMyBatisRepositoryDTOMapper.modelToDto(student);
+		StudentDTO studentDTO = this.studentMyBatisRepositoryDTOMapper.modelToDto(student);
 		this.studentMapper.insert(studentDTO);
 		student.setId(studentDTO.getId());
 		return student;
@@ -55,27 +55,15 @@ public class StudentDatabaseRepository implements StudentRepository {
 	@Override
 	@Transactional
 	public Student update(Student student) {
-		StudentMyBatisDTO dto = this.studentMyBatisRepositoryDTOMapper.modelToDto(student);
+		StudentDTO dto = this.studentMyBatisRepositoryDTOMapper.modelToDto(student);
 		this.studentMapper.update(dto);
 		this.contactDataRepository.update(student.getContactData());
 		return student;
 	}
 
 	@Override
-	public void delete(Long obj) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Student findById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public List<Student> findAll() {
-		List<StudentMyBatisDTO> dtos = this.studentMapper.findAll();
+		List<StudentDTO> dtos = this.studentMapper.findAll();
 		return dtos
 				.stream()
 				.map(studentMyBatisRepositoryDTOMapper::dtoToModel)

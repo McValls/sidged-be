@@ -1,4 +1,4 @@
-package com.mvalls.sidged.database.mybatis.dtos;
+package com.mvalls.sidged.database.dtos;
 
 import java.time.LocalDateTime;
 
@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserMyBatisDTO implements RepositoryDTO {
+public class UserDTO implements RepositoryDTO {
 
 	private Long id;
 	private String username;

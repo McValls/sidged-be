@@ -1,7 +1,6 @@
 package com.mvalls.sidged.core.services;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -10,10 +9,7 @@ import com.mvalls.sidged.core.model.CourseClass;
 import com.mvalls.sidged.core.model.FileDocumentType;
 import com.mvalls.sidged.core.repositories.ClassFileDocumentRepository;
 import com.mvalls.sidged.core.repositories.CourseClassRepository;
-import com.mvalls.sidged.core.repositories.CourseRepository;
 import com.mvalls.sidged.valueObjects.ClassFileDocumentVO;
-
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * 
@@ -35,19 +31,15 @@ import lombok.extern.slf4j.Slf4j;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-@Slf4j
 public class ClassFileDocumentService extends GenericService<ClassFileDocument, ClassFileDocumentRepository>{
 	
 	private final CourseClassRepository courseClassRepository;
-	private final CourseRepository courseRepository;
 	
 
 	public ClassFileDocumentService(ClassFileDocumentRepository repository,
-			CourseClassRepository courseClassRepository,
-			CourseRepository courseRepository) {
+			CourseClassRepository courseClassRepository) {
 		super(repository);
 		this.courseClassRepository = courseClassRepository;
-		this.courseRepository = courseRepository;
 	}
 	
 	

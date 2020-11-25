@@ -6,6 +6,7 @@ import java.util.List;
 import com.mvalls.sidged.core.analysis.PresentAnalysisCalculator;
 import com.mvalls.sidged.core.model.Career;
 import com.mvalls.sidged.core.model.Course;
+import com.mvalls.sidged.core.model.CourseClass;
 import com.mvalls.sidged.core.model.Period;
 import com.mvalls.sidged.core.model.Student;
 import com.mvalls.sidged.core.model.Teacher;
@@ -84,16 +85,18 @@ public class CourseService extends GenericService<Course, CourseRepository> {
 		this.repository.create(course);
 	}
 
+	//TODO: Sacar a PresentismDataService
 	public PresentismAnalysisData getPresentismAnalysis(String courseCode) {
-		Course course = this.repository.findByCode(courseCode).orElseThrow();
-		List<PresentPercentages> presentPercentagesByClasses = presentAnalysisCalculator
-				.getPresentPercentagesByClasses(course);
-
-		PresentismAnalysisData analysisData = new PresentismAnalysisData();
-		analysisData.setPercentagesByClassNumber(presentPercentagesByClasses);
-		analysisData.setCourseCode(courseCode);
-		analysisData.setCourseName(course.getName());
-		return analysisData;
+//		Course course = this.repository.findByCode(courseCode).orElseThrow();
+//		List<PresentPercentages> presentPercentagesByClasses = presentAnalysisCalculator
+//				.getPresentPercentagesByClasses(course);
+//
+//		PresentismAnalysisData analysisData = new PresentismAnalysisData();
+//		analysisData.setPercentagesByClassNumber(presentPercentagesByClasses);
+//		analysisData.setCourseCode(courseCode);
+//		analysisData.setCourseName(course.getName());
+//		return analysisData;
+		return null;
 	}
 
 	public Collection<Course> findByTeacher(Long teacherId) {

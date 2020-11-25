@@ -1,6 +1,7 @@
-package com.mvalls.sidged.database.mappers;
+package com.mvalls.sidged.database.repositories.mappers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.mvalls.sidged.core.model.ContactData;
 import com.mvalls.sidged.core.repositories.RepositoryDTOMapper;
@@ -12,8 +13,8 @@ public class ContactDataRepositoryDTOMapper implements RepositoryDTOMapper<Conta
 	public ContactData dtoToModel(ContactDataDTO dto) {
 		return ContactData.builder()
 				.id(dto.getId())
-				.emails(new ArrayList<>(dto.getEmails()))
-				.phones(new ArrayList<>(dto.getPhones()))
+				.emails(dto.getEmails() != null? Arrays.asList(dto.getEmails().split(",")) : new ArrayList<>())
+				.phones(dto.getPhones() != null? Arrays.asList(dto.getPhones().split(",")) : new ArrayList<>())
 				.build();
 	}
 
@@ -21,8 +22,8 @@ public class ContactDataRepositoryDTOMapper implements RepositoryDTOMapper<Conta
 	public ContactDataDTO modelToDto(ContactData model) {
 		return ContactDataDTO.builder()
 				.id(model.getId())
-				.emails(new ArrayList<>(model.getEmails()))
-				.phones(new ArrayList<>(model.getPhones()))
+				.emails(String.join(",", model.getEmails()))
+				.phones(String.join(",", model.getPhones()))
 				.build();
 	}
 
