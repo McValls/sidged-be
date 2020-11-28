@@ -2,7 +2,8 @@ package com.mvalls.sidged.core.model.analytics;
 
 import java.util.List;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
 
 /**
  * 
@@ -16,7 +17,7 @@ import lombok.Data;
 * (at your option) any later version.
 * 
 * SIDGED-Backend is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* but WITHOUT ANY WARRANTY; without eve	n the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 * GNU General Public License for more details.
 * 
@@ -24,7 +25,8 @@ import lombok.Data;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-@Data
+@Getter
+@Builder
 public class PresentismAnalysisData {
 	
 	private String courseCode;

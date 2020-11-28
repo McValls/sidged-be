@@ -48,22 +48,4 @@ public class ClassStudentPresentDatabaseRepository implements ClassStudentPresen
 		return classStudentPresent;
 	}
 
-	@Override
-	public void delete(Long obj) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public ClassStudentPresent findById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<ClassStudentPresent> findAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

@@ -46,27 +46,9 @@ public class ClassFileDocumentDatabaseRepository implements ClassFileDocumentRep
 	}
 
 	@Override
-	public ClassFileDocument update(ClassFileDocument classFileDocument) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void delete(Long obj) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public ClassFileDocument findById(Long id) {
 		Optional<ClassFileDocumentDTO> dto = this.classFileDocumentMapper.findById(id);
 		return dto.map(dtoMapper::dtoToModel).orElseThrow();
-	}
-
-	@Override
-	public List<ClassFileDocument> findAll() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

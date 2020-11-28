@@ -5,10 +5,12 @@ import java.util.Optional;
 
 import com.mvalls.sidged.core.model.ClassStudentPresent;
 
-public interface ClassStudentPresentRepository extends GenericRepository<ClassStudentPresent, Long> {
+public interface ClassStudentPresentRepository {
 
 	List<ClassStudentPresent> findByCourseAndClassNumber(String courseCode, Integer classNumber);
 	Optional<ClassStudentPresent> findByCourseCodeAndClassNumberAndStudentId(
 			String courseCode, Integer classNumber, Long studentId);
+	ClassStudentPresent create(ClassStudentPresent classStudentPresent);
+	ClassStudentPresent update(ClassStudentPresent classStudentPresent);
 
 }

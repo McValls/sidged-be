@@ -1,8 +1,5 @@
 package com.mvalls.sidged.database.dtos;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.mvalls.sidged.core.model.Shift;
 import com.mvalls.sidged.core.repositories.RepositoryDTO;
 
@@ -26,9 +23,5 @@ public class CourseDTO implements RepositoryDTO {
 	private TimeDTO timeStart;
 	private TimeDTO timeEnd;
 	private CareerDTO career;
-
-	private Set<Long> teachersIds = new HashSet<>();
-	private Set<Long> studentsIds = new HashSet<>();
-	private Set<Long> coursesClassesIds = new HashSet<>();
 
 }

@@ -1,10 +1,8 @@
 package com.mvalls.sidged.core.services;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -12,14 +10,11 @@ import com.mvalls.sidged.core.model.ClassState;
 import com.mvalls.sidged.core.model.ClassStudentPresent;
 import com.mvalls.sidged.core.model.Course;
 import com.mvalls.sidged.core.model.CourseClass;
-import com.mvalls.sidged.core.model.Student;
 import com.mvalls.sidged.core.model.StudentPresent;
 import com.mvalls.sidged.core.model.Teacher;
-import com.mvalls.sidged.core.model.analytics.Desertor;
 import com.mvalls.sidged.core.repositories.ClassStudentPresentRepository;
 import com.mvalls.sidged.core.repositories.CourseClassRepository;
 import com.mvalls.sidged.core.repositories.CourseRepository;
-import com.mvalls.sidged.core.repositories.StudentRepository;
 import com.mvalls.sidged.core.repositories.TeacherRepository;
 import com.mvalls.sidged.rest.exceptions.UnauthorizedUserException;
 
@@ -43,41 +38,30 @@ import com.mvalls.sidged.rest.exceptions.UnauthorizedUserException;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-public class CourseClassService extends GenericService<CourseClass, CourseClassRepository>{
+public class CourseClassService {
 	
-
-	private static final int DESERTOR_AMOUNT_OF_CLASSES = 3;
-	
+	private final CourseClassRepository courseClassRepository;
 	private final CourseRepository courseRepository;
 	private final ClassStudentPresentRepository classStudentPresentRepository;
 	private final TeacherRepository teacherRepository;
-	private final StudentRepository studentRepository;
 	
-	
-	public CourseClassService(CourseClassRepository repository,
+	public CourseClassService(CourseClassRepository courseClassRepository,
 			CourseRepository courseRepository,
 			ClassStudentPresentRepository classStudentPresentRepository,
-			TeacherRepository teacherRepository,
-			StudentRepository studentRepository) {
-		super(repository);
+			TeacherRepository teacherRepository) {
+		this.courseClassRepository = courseClassRepository;
 		this.courseRepository = courseRepository;
 		this.classStudentPresentRepository = classStudentPresentRepository;
 		this.teacherRepository = teacherRepository;
-		this.studentRepository = studentRepository;
 	}
 	
-	@Deprecated
 	public CourseClass create(Teacher teacher, String courseCode, LocalDate date) throws UnauthorizedUserException {
-		List<Teacher> teachersByCourse = this.teacherRepository.findByCourseCode(courseCode);
-		if (!teachersByCourse.contains(teacher)) {
+		Course course = this.courseRepository.findByCode(courseCode).orElseThrow();
+		if (!course.getTeachers().contains(teacher)) {
 			throw new UnauthorizedUserException();
 		}
 		
-		Course course = this.courseRepository.findByCode(courseCode).orElseThrow();
-		List<CourseClass> previousClasses = this.repository.findByCourseCode(courseCode);
-		List<Student> students = this.studentRepository.findByCourseCode(courseCode);
-		
-		List<ClassStudentPresent> classStudents = students.stream()
+		List<ClassStudentPresent> classStudents = course.getStudents().stream()
 			.map(student -> ClassStudentPresent.builder()
 					.student(student)
 					.present(StudentPresent.ABSENT)
@@ -86,22 +70,21 @@ public class CourseClassService extends GenericService<CourseClass, CourseClassR
 		
 		
 		CourseClass courseClass = CourseClass.builder()
-				.classNumber(previousClasses.size() + 1)
+				.classNumber(course.getClasses().size() + 1)
 				.classState(ClassState.PENDIENTE)
 				.studentPresents(classStudents)
 				.date(date)
 				.course(course)
 				.build();
 		
-		this.repository.create(courseClass);
+		this.courseClassRepository.create(courseClass);
 		return courseClass;
 	}
 	
 	public Collection<CourseClass> findClassesByCourseCode(String courseCode){
-		return this.repository.findByCourseCode(courseCode);
+		return this.courseClassRepository.findByCourseCode(courseCode);
 	}
 	
-	//TODO: Refactor!!
 	public Collection<ClassStudentPresent> getClassStudents(String courseCode, Integer classNumber) {
 		return this.classStudentPresentRepository.findByCourseAndClassNumber(courseCode, classNumber);
 	}
@@ -110,82 +93,17 @@ public class CourseClassService extends GenericService<CourseClass, CourseClassR
 		List<Teacher> teachersByCourse = this.teacherRepository.findByCourseCode(courseCode);
 		if (!teachersByCourse.contains(teacher)) throw new UnauthorizedUserException();
 		
-		Optional<CourseClass> optionalCourseClass = this.repository.findByCourseCodeAndClassNumber(courseCode, classNumber);
+		Optional<CourseClass> optionalCourseClass = this.courseClassRepository.findByCourseCodeAndClassNumber(courseCode, classNumber);
 		CourseClass courseClass = optionalCourseClass.orElseThrow();
 		courseClass.setClassState(classState);
-		this.repository.update(courseClass);
-	}
-	
-	/**
-	 * Busca las ultimas 3 clases de cada curso y recorre la lista de presentes.
-	 * Si hay alumnos que tienen {DESERTOR_AMOUNT_OF_CLASSES} ausentes corridos, los toma como desertores y notifica.
-	 * @return
-	 */
-	@Deprecated
-	//TODO: Mover a DesertorService
-	public List<Desertor> getDesertors() {
-		List<Desertor> desertors = new ArrayList<>();
-//		List<Course> coursesByYear = this.courseRepository.findByYear(LocalDate.now().getYear());
-//		
-//		Map<Course, List<CourseClass>> lastClassesByCourse = coursesByYear.stream()
-//			.collect(Collectors.toMap(
-//					course -> course,
-//					course -> course.getClasses()
-//						.stream()
-//						.filter(cc -> cc.getClassState() == ClassState.FINALIZADA)
-//						.sorted((cc1, cc2) -> cc1.getClassNumber().compareTo(cc2.getClassNumber()))
-//						.collect(Collectors.toList())
-//					));
-//		
-//		lastClassesByCourse.forEach((course, listOfClasses) -> {
-//			if(listOfClasses.size() >= DESERTOR_AMOUNT_OF_CLASSES) {
-//				List<CourseClass> lastClasses = listOfClasses.subList(0, DESERTOR_AMOUNT_OF_CLASSES);
-//				Map<Student, Integer> absentsByStudent = new HashMap<>();
-//				lastClasses.forEach(courseClass -> {
-//					courseClass.getStudentPresents().forEach(classStudentPresent -> {
-//						addAbsentByStudent(absentsByStudent, classStudentPresent);
-//					});
-//				});
-//	
-//				absentsByStudent.forEach((student, absents) -> {
-//					if(absents.compareTo(DESERTOR_AMOUNT_OF_CLASSES) >= 0) {
-//						Desertor desertor = Desertor.builder()
-//								.course(course)
-//								.student(student)
-//								.localDate(LocalDate.now())
-//								.build();
-//						
-//						desertors.add(desertor);
-//					}
-//				});
-//			}
-//			
-//		});
-//		
-		return desertors;
-	}
-	
-	private void addAbsentByStudent(Map<Student, Integer> absentsByStudent, ClassStudentPresent classStudentPresent) {
-		if(!absentsByStudent.containsKey(classStudentPresent.getStudent())) {
-			absentsByStudent.put(classStudentPresent.getStudent(), 0);
-		}
-		if(classStudentPresent.getPresent() == StudentPresent.ABSENT) {
-			absentsByStudent.put(classStudentPresent.getStudent(), absentsByStudent.get(classStudentPresent.getStudent()) + 1);
-		}
+		this.courseClassRepository.update(courseClass);
 	}
 
-	public void updateComments(Long classId, String comments) {
-		CourseClass courseClass = findById(classId);
-		courseClass.setComments(comments);
-		update(courseClass);
-	}
-
-	//TODO: refactor!
 	public CourseClass findByTeacherAndCourseCodeAndClassNumber(Teacher teacher, String courseCode, Integer classNumber) throws UnauthorizedUserException {
 		List<Teacher> teachersByCourse = this.teacherRepository.findByCourseCode(courseCode);
 		if (!teachersByCourse.contains(teacher)) throw new UnauthorizedUserException();
 		
-		return this.repository.findByCourseCodeAndClassNumber(courseCode, classNumber)
+		return this.courseClassRepository.findByCourseCodeAndClassNumber(courseCode, classNumber)
 				.orElseThrow();
 	}
 	

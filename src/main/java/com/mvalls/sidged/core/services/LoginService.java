@@ -33,20 +33,21 @@ import com.mvalls.sidged.valueObjects.SignUpVO;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-public class LoginService extends GenericService<User, UserRepository>{
+public class LoginService {
 	
+	private final UserRepository userRepository;
 	private final UserCreationStrategyService userCreationStrategyService;
 	private final EmailsService emailsService;
 
-	public LoginService(UserRepository repository, UserCreationStrategyService userCreationStrategyService,
+	public LoginService(UserRepository userRepository, UserCreationStrategyService userCreationStrategyService,
 			EmailsService emailsService) {
-		super(repository);
+		this.userRepository = userRepository;
 		this.userCreationStrategyService = userCreationStrategyService;
 		this.emailsService = emailsService;
 	}
 
 	public User login(String username, String password) {
-		Optional<User> optionalUser = this.repository.findByUserName(username);
+		Optional<User> optionalUser = this.userRepository.findByUserName(username);
 		return optionalUser
 				.filter(user -> isValidPassword(user, password))
 				.orElse(null);
@@ -60,7 +61,6 @@ public class LoginService extends GenericService<User, UserRepository>{
 		return false;
 	}
 
-	//TODO: refactor
 	public void signUp(User user, SignUpVO signUpVO) {
 		user.setPassword(EncryptionUtils.encryptSHA256(user.getPassword()));
 		UserType userType = user.getUserType();
@@ -76,7 +76,6 @@ public class LoginService extends GenericService<User, UserRepository>{
 		emailsService.sendEmail(email);
 	}
 	
-	//TODO: refactor
 	public void changePassword(String username, String oldPassword, String newPassword) throws WrongPasswordException {
 		User user = this.login(username, oldPassword);
 		if(user != null) {
@@ -89,7 +88,7 @@ public class LoginService extends GenericService<User, UserRepository>{
 	}
 	
 	public void recoveryPassword(String username, String email) throws BadCredentialsException {
-		Optional<User> optionalUser = this.repository.findByUserName(username);
+		Optional<User> optionalUser = this.userRepository.findByUserName(username);
 		User user = optionalUser.orElseThrow();
 		if(user.getEmail().equalsIgnoreCase(email)) {
 			String randomPassword = EncryptionUtils.generateRandomPassword();
@@ -101,6 +100,10 @@ public class LoginService extends GenericService<User, UserRepository>{
 		} else {
 			throw new BadCredentialsException();
 		}
+	}
+	
+	private User update(User user) {
+		return this.userRepository.update(user);
 	}
 
 	private String getSubject(UserType userType) {

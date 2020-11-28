@@ -31,24 +31,24 @@ import com.mvalls.sidged.valueObjects.ClassFileDocumentVO;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-public class ClassFileDocumentService extends GenericService<ClassFileDocument, ClassFileDocumentRepository>{
+public class ClassFileDocumentService {
 	
 	private final CourseClassRepository courseClassRepository;
-	
+	private final ClassFileDocumentRepository classFileDocumentRepository;
 
-	public ClassFileDocumentService(ClassFileDocumentRepository repository,
+	public ClassFileDocumentService(ClassFileDocumentRepository classFileDocumentRepository,
 			CourseClassRepository courseClassRepository) {
-		super(repository);
+		this.classFileDocumentRepository = classFileDocumentRepository;
 		this.courseClassRepository = courseClassRepository;
 	}
 	
 	
 	public Collection<ClassFileDocument> findByCourseCodeAndClassNumber(String courseCode, Integer classNumber) {
-		return this.repository.findByCourseCodeAndClassNumber(courseCode, classNumber);
+		return this.classFileDocumentRepository.findByCourseCodeAndClassNumber(courseCode, classNumber);
 	}
 	
 	public Collection<ClassFileDocument> findByCourseCode(String courseCode) {
-		return this.repository.findByCourseCode(courseCode);
+		return this.classFileDocumentRepository.findByCourseCode(courseCode);
 	}
 	
 	@Transactional
@@ -62,7 +62,7 @@ public class ClassFileDocumentService extends GenericService<ClassFileDocument, 
 				.courseClass(courseClass)
 				.build();
 		
-		this.repository.create(fileDocument);
+		this.classFileDocumentRepository.create(fileDocument);
 	}
 	
 	public void saveFileLink(String courseCode, Integer classNumber, String link, String name) {
@@ -75,8 +75,11 @@ public class ClassFileDocumentService extends GenericService<ClassFileDocument, 
 				.courseClass(courseClass)
 				.build();
 		
-		this.repository.create(fileDocument);
+		this.classFileDocumentRepository.create(fileDocument);
 	}
-
+	
+	public ClassFileDocument findById(Long id) {
+		return this.classFileDocumentRepository.findById(id);
+	}
 
 }

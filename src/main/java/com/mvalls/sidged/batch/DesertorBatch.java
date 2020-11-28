@@ -7,10 +7,8 @@ import javax.annotation.PostConstruct;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
-import org.springframework.stereotype.Component;
 
 import com.mvalls.sidged.core.services.DesertorService;
 
@@ -34,14 +32,12 @@ import com.mvalls.sidged.core.services.DesertorService;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-@Component
 public class DesertorBatch {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DesertorBatch.class);
 	private ThreadPoolTaskScheduler taskScheduler;
 	private final DesertorService desertorService;
 	
-	@Autowired
 	public DesertorBatch(DesertorService desertorService) {
 		this.desertorService = desertorService;
 	}

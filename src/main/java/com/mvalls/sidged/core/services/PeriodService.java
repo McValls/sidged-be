@@ -24,15 +24,16 @@ import com.mvalls.sidged.core.repositories.PeriodRepository;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-public class PeriodService extends GenericService<Period, PeriodRepository>{
+public class PeriodService {
 
+	private final PeriodRepository periodRepository;
 	
-	public PeriodService(PeriodRepository repository) {
-		super(repository);
+	public PeriodService(PeriodRepository periodRepository) {
+		this.periodRepository = periodRepository;
 	}
 
 	public Period findByTypeAndNumber(PeriodType type, Integer number) {
-		return this.repository.findByPeriodTypeAndNumber(type, number);
+		return this.periodRepository.findByPeriodTypeAndNumber(type, number);
 	}
 	
 }

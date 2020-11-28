@@ -1,7 +1,5 @@
 package com.mvalls.sidged.database.repositories;
 
-import java.util.List;
-
 import com.mvalls.sidged.core.model.ContactData;
 import com.mvalls.sidged.core.repositories.ContactDataRepository;
 import com.mvalls.sidged.database.dtos.ContactDataDTO;
@@ -31,24 +29,6 @@ public class ContactDataDatabaseRepository implements ContactDataRepository {
 		ContactDataDTO dto = this.dtoMapper.modelToDto(contactData);
 		this.contactDataMapper.update(dto);
 		return contactData;
-	}
-
-	@Override
-	public void delete(ContactDataDTO obj) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public ContactData findById(ContactDataDTO id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<ContactData> findAll() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

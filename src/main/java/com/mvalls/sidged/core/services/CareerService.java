@@ -1,5 +1,7 @@
 package com.mvalls.sidged.core.services;
 
+import java.util.List;
+
 import com.mvalls.sidged.core.model.Career;
 import com.mvalls.sidged.core.repositories.CareerRepository;
 
@@ -23,10 +25,16 @@ import com.mvalls.sidged.core.repositories.CareerRepository;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-public class CareerService extends GenericService<Career, CareerRepository>{
+public class CareerService {
 
-	public CareerService(CareerRepository repository) {
-		super(repository);
+	private final CareerRepository careerRepository;
+	
+	public CareerService(CareerRepository careerRepository) {
+		this.careerRepository = careerRepository;
+	}
+	
+	public List<Career> findAll() {
+		return this.careerRepository.findAll();
 	}
 
 	

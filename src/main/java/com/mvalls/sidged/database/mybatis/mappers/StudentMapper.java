@@ -61,4 +61,8 @@ public interface StudentMapper {
 			+ "where id = #{id}")
 	void update(StudentDTO dto);
 
+	
+	@Delete("delete from student where id = #{id}")
+	void delete(Long id);
+
 }

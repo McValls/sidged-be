@@ -70,4 +70,9 @@ public class StudentDatabaseRepository implements StudentRepository {
 				.collect(Collectors.toList());
 	}
 	
+	@Override
+	public void delete(Long id) {
+		this.studentMapper.delete(id);
+	}
+	
 }

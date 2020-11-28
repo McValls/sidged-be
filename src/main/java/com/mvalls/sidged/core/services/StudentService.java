@@ -29,18 +29,18 @@ import com.mvalls.sidged.core.repositories.UserStudentRepository;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-public class StudentService extends GenericService<Student, StudentRepository> {
+public class StudentService {
 	
+	private final StudentRepository studentRepository;
 	private final UserStudentRepository userStudentRepository;
 	
-	public StudentService(StudentRepository repository,
+	public StudentService(StudentRepository studentRepository,
 			UserStudentRepository userStudentRepository) {
-		super(repository);
+		this.studentRepository = studentRepository;
 		this.userStudentRepository = userStudentRepository;
 	}
 	
 	
-	@Override
 	public Student update(Student student) {
 		UserStudent userStudent = userStudentRepository.findByStudentId(student.getId());
 		User user = userStudent.getUser();
@@ -58,17 +58,17 @@ public class StudentService extends GenericService<Student, StudentRepository> {
 
 
 	public List<Student> findByCourseCode(String courseCode) {
-		return this.repository.findByCourseCode(courseCode);
+		return this.studentRepository.findByCourseCode(courseCode);
 	}
 
 
 	public List<Student> updateCourseStudent(String courseCode, Long studentId, UpdateAction action) {
 		switch (action) {
 			case REMOVE:
-				this.repository.removeCourseStudent(courseCode, studentId);
+				this.studentRepository.removeCourseStudent(courseCode, studentId);
 				break;
 			case ADD:
-				this.repository.addCourseStudent(courseCode, studentId);
+				this.studentRepository.addCourseStudent(courseCode, studentId);
 				break;
 			default:
 				throw new IllegalArgumentException("Action " + action + " is not supported");
@@ -76,9 +76,16 @@ public class StudentService extends GenericService<Student, StudentRepository> {
 		return this.findByCourseCode(courseCode);
 	}
 	
-	@Override
 	public List<Student> findAll() {
-		return this.repository.findAll();
+		return this.studentRepository.findAll();
+	}
+	
+	public Student create(Student student) {
+		return this.studentRepository.create(student);
+	}
+	
+	public void delete(Long id) {
+		this.studentRepository.delete(id);
 	}
 	
 }

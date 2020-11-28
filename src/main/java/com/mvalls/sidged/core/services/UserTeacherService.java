@@ -24,15 +24,20 @@ import com.mvalls.sidged.core.repositories.UserTeacherRepository;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-public class UserTeacherService extends GenericService<UserTeacher, UserTeacherRepository>{
+public class UserTeacherService {
 
+	private final UserTeacherRepository userTeacherRepository;
 
-	public UserTeacherService(UserTeacherRepository repository) {
-		super(repository);
+	public UserTeacherService(UserTeacherRepository userTeacherRepository) {
+		this.userTeacherRepository = userTeacherRepository;
 	}
 
 	public UserTeacher findByUsername(String username) {
-		return this.repository.findByUserUsername(username);
+		return this.userTeacherRepository.findByUserUsername(username);
+	}
+	
+	public UserTeacher create(UserTeacher userTeacher) {
+		return this.userTeacherRepository.create(userTeacher);
 	}
 		
 }

@@ -1,14 +1,13 @@
 package com.mvalls.sidged.core.analysis;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.mvalls.sidged.core.model.ClassStudentPresent;
@@ -127,7 +126,7 @@ public class PresentAnalysisCalculator {
 			.add(new PercentageByStudentPresent(StudentPresent.ABSENT, this.getPercentage(total, absents).intValue()));
 	}
 
-	public List<PresentPercentages> getPresentPercentagesByClasses(List<CourseClass> classes) {
+	public List<PresentPercentages> getPresentPercentagesByClasses(Set<CourseClass> classes) {
 		List<PresentPercentages> presentPercentagesByClasses = new LinkedList<>();
 		Iterator<CourseClass> courseClassIterator = classes.iterator();
 		int i = 1;
@@ -176,40 +175,41 @@ public class PresentAnalysisCalculator {
 	}
 	
 	public List<PresentismAnalysisData> getPresentismByStudentGroupedByCourse(Map<Course, List<ClassStudentPresent>> presentismGroupedByCourse) {
-		List<PresentismAnalysisData> analysisData = new ArrayList<>();
-		
-		for(Entry<Course, List<ClassStudentPresent>> listPresentsByCourse: presentismGroupedByCourse.entrySet()) {
-			List<ClassStudentPresent> listPresents = listPresentsByCourse.getValue();
-			int total = listPresents.size();
-			int presents = 0, lates = 0, absents = 0;
-			for(ClassStudentPresent classStudentPresent : listPresents) {
-				switch(classStudentPresent.getPresent()) {
-					case PRESENT:
-						presents++;
-						break;
-					case LATE:
-						lates++;
-						break;
-					case ABSENT:
-						absents++;
-						break;
+		return presentismGroupedByCourse.entrySet()
+			.stream()
+			.map(entry -> {
+				Course course = entry.getKey();
+				List<ClassStudentPresent> listPresents = entry.getValue();
+				int total = listPresents.size();
+				
+				int presents = 0, lates = 0, absents = 0;
+				for(ClassStudentPresent classStudentPresent : listPresents) {
+					switch(classStudentPresent.getPresent()) {
+						case PRESENT:
+							presents++;
+							break;
+						case LATE:
+							lates++;
+							break;
+						case ABSENT:
+							absents++;
+							break;
+					}
 				}
-			}
-			PresentismAnalysisData presentismAnalysisData = new PresentismAnalysisData();
-			presentismAnalysisData.setCourseCode(listPresentsByCourse.getKey().getCode());
-			presentismAnalysisData.setCourseName(listPresentsByCourse.getKey().getName());
-			presentismAnalysisData.setNumberOfClasses(total);
-			presentismAnalysisData.setCourseYear(listPresentsByCourse.getKey().getYear());
-			
-			PercentageByStudentPresent presentsPercentage = new PercentageByStudentPresent(StudentPresent.PRESENT, getPercentage(total, presents).intValue());
-			PercentageByStudentPresent latesPercentage = new PercentageByStudentPresent(StudentPresent.LATE, getPercentage(total, lates).intValue());
-			PercentageByStudentPresent absentsPercentage = new PercentageByStudentPresent(StudentPresent.ABSENT, getPercentage(total, absents).intValue());
-			presentismAnalysisData.setPercentagesByStudentPresent(Arrays.asList(presentsPercentage, latesPercentage, absentsPercentage));
-			
-			analysisData.add(presentismAnalysisData);
-		}
-		
-		return analysisData;
+				
+				var presentsPercentage = new PercentageByStudentPresent(StudentPresent.PRESENT, getPercentage(total, presents).intValue());
+				var latesPercentage = new PercentageByStudentPresent(StudentPresent.LATE, getPercentage(total, lates).intValue());
+				var absentsPercentage = new PercentageByStudentPresent(StudentPresent.ABSENT, getPercentage(total, absents).intValue());
+				var presentismAnalysisData = PresentismAnalysisData.builder()
+							.courseCode(course.getCode())
+							.courseName(course.getName())
+							.courseYear(course.getYear())
+							.numberOfClasses(total)
+							.percentagesByStudentPresent(List.of(presentsPercentage, latesPercentage, absentsPercentage))
+							.build();
+				return presentismAnalysisData;
+			})
+			.collect(Collectors.toList());
 	}
 
 }

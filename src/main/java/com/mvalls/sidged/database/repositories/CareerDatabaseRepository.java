@@ -32,29 +32,5 @@ public class CareerDatabaseRepository implements CareerRepository {
 				.map(dtoMapper::dtoToModel)
 				.orElseThrow(() -> new IllegalArgumentException());
 	}
-
-	@Override
-	public Career create(Career obj) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Career update(Career obj) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void delete(Long obj) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Career findById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	
 }

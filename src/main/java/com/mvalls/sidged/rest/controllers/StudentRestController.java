@@ -23,7 +23,6 @@ import com.mvalls.sidged.core.services.StudentService;
 import com.mvalls.sidged.core.services.UserStudentService;
 import com.mvalls.sidged.mappers.StudentAllMapper;
 import com.mvalls.sidged.mappers.StudentModelMapper;
-import com.mvalls.sidged.mappers.UserStudentAllMapper;
 import com.mvalls.sidged.rest.annotations.JwtBackOffice;
 import com.mvalls.sidged.rest.dtos.StudentAllDTO;
 import com.mvalls.sidged.rest.dtos.StudentDTO;
@@ -53,18 +52,14 @@ import com.mvalls.sidged.rest.dtos.StudentDTO;
 public class StudentRestController {
 
 	private final StudentService studentService;
-	private final UserStudentService userStudentService;
 	private final StudentAllMapper studentAllMapper;
-	private final UserStudentAllMapper userStudentAllMapper;
 	private final StudentModelMapper studentModelMapper;
 	
 	@Autowired
 	public StudentRestController(StudentService studentService, UserStudentService userStudentService) {
 		super();
 		this.studentService = studentService;
-		this.userStudentService = userStudentService;
 		this.studentAllMapper = new StudentAllMapper();
-		this.userStudentAllMapper = new UserStudentAllMapper();
 		this.studentModelMapper = new StudentModelMapper();
 	}
 	

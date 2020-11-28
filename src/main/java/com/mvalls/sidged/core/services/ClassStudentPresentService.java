@@ -3,12 +3,10 @@ package com.mvalls.sidged.core.services;
 import java.util.List;
 import java.util.Optional;
 
-import com.mvalls.sidged.core.analysis.PresentAnalysisCalculator;
 import com.mvalls.sidged.core.model.ClassStudentPresent;
 import com.mvalls.sidged.core.model.StudentPresent;
 import com.mvalls.sidged.core.model.Teacher;
 import com.mvalls.sidged.core.repositories.ClassStudentPresentRepository;
-import com.mvalls.sidged.core.repositories.CourseRepository;
 import com.mvalls.sidged.core.repositories.TeacherRepository;
 import com.mvalls.sidged.rest.exceptions.UnauthorizedUserException;
 
@@ -32,32 +30,28 @@ import com.mvalls.sidged.rest.exceptions.UnauthorizedUserException;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-public class ClassStudentPresentService extends GenericService<ClassStudentPresent, ClassStudentPresentRepository>{
+public class ClassStudentPresentService {
 
-	private final PresentAnalysisCalculator presentAnalysisCalculator;
-	private final CourseRepository courseRepository;
 	private final TeacherRepository teacherRepository;
+	private final ClassStudentPresentRepository classStudentPresentRepository;
 	
-	public ClassStudentPresentService(ClassStudentPresentRepository repository,
-			CourseRepository courseRepository,
-			TeacherRepository teacherRepository,
-			PresentAnalysisCalculator presentAnalysisCalculator) {
-		super(repository);
-		this.presentAnalysisCalculator = presentAnalysisCalculator;
-		this.courseRepository = courseRepository;
+	public ClassStudentPresentService(ClassStudentPresentRepository classStudentPresentRepository,
+			TeacherRepository teacherRepository) {
+		this.classStudentPresentRepository = classStudentPresentRepository;
 		this.teacherRepository = teacherRepository;
 	}
 
-	public void updatePresent(Teacher teacher, String courseCode, Integer classNumber, Long studentId, StudentPresent present) throws UnauthorizedUserException {
+	public void updatePresent(Teacher teacher, String courseCode, Integer classNumber, 
+			Long studentId, StudentPresent present) throws UnauthorizedUserException {
 		List<Teacher> teachersByCourse = this.teacherRepository.findByCourseCode(courseCode);
 		if (!teachersByCourse.contains(teacher)) throw new UnauthorizedUserException();
 		
 		Optional<ClassStudentPresent> classStudentPresent = 
-				this.repository.findByCourseCodeAndClassNumberAndStudentId(courseCode, classNumber, studentId);
+				this.classStudentPresentRepository.findByCourseCodeAndClassNumberAndStudentId(courseCode, classNumber, studentId);
 		
 		classStudentPresent.ifPresent(studentPresent -> {
 			studentPresent.setPresent(present);
-			this.repository.update(studentPresent);
+			this.classStudentPresentRepository.update(studentPresent);
 		});
 	}
 	

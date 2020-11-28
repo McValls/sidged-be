@@ -29,17 +29,17 @@ import com.mvalls.sidged.core.repositories.UserTeacherRepository;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-public class TeacherService extends GenericService<Teacher, TeacherRepository>{
+public class TeacherService {
 	
+	private final TeacherRepository teacherRepository;
 	private final UserTeacherRepository userTeacherRepository;
 
-	public TeacherService(TeacherRepository repository,
+	public TeacherService(TeacherRepository teacherRepository,
 			UserTeacherRepository userTeacherRepository) {
-		super(repository);
+		this.teacherRepository = teacherRepository;
 		this.userTeacherRepository = userTeacherRepository;
 	}
 
-	@Override
 	public Teacher update(Teacher aTeacher) {
 		UserTeacher userTeacher = this.userTeacherRepository.findByTeacherId(aTeacher.getId());
 
@@ -56,16 +56,16 @@ public class TeacherService extends GenericService<Teacher, TeacherRepository>{
 	}
 
 	public List<Teacher> findByCourseCode(String courseCode) {
-		return this.repository.findByCourseCode(courseCode);
+		return this.teacherRepository.findByCourseCode(courseCode);
 	}
 
 	public List<Teacher> updateCourseTeacher(String courseCode, Long teacherId, UpdateAction action) {
 		switch (action) {
 			case REMOVE:
-				this.repository.removeCourseTeacher(courseCode, teacherId);
+				this.teacherRepository.removeCourseTeacher(courseCode, teacherId);
 				break;
 			case ADD:
-				this.repository.addCourseTeacher(courseCode, teacherId);
+				this.teacherRepository.addCourseTeacher(courseCode, teacherId);
 				break;
 			default:
 				throw new IllegalArgumentException("Action " + action + " not supported");
@@ -73,9 +73,8 @@ public class TeacherService extends GenericService<Teacher, TeacherRepository>{
 		return this.findByCourseCode(courseCode);
 	}
 	
-	@Override
 	public List<Teacher> findAll() {
-		return this.repository.findAll();
+		return this.teacherRepository.findAll();
 	}
 	
 }

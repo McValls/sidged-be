@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -38,6 +37,7 @@ import com.mvalls.sidged.core.services.CourseService;
 import com.mvalls.sidged.core.services.DesertorService;
 import com.mvalls.sidged.core.services.EmailsService;
 import com.mvalls.sidged.core.services.LoginService;
+import com.mvalls.sidged.core.services.NotificationService;
 import com.mvalls.sidged.core.services.PeriodService;
 import com.mvalls.sidged.core.services.PresentismDataService;
 import com.mvalls.sidged.core.services.StudentLinkService;
@@ -77,7 +77,6 @@ import com.mvalls.sidged.database.repositories.TimeDatabaseRepository;
 import com.mvalls.sidged.database.repositories.UserDatabaseRepository;
 import com.mvalls.sidged.database.repositories.UserStudentDatabaseRepository;
 import com.mvalls.sidged.database.repositories.UserTeacherDatabaseRepository;
-import com.mvalls.sidged.mappers.CourseVOtoModelMapper;
 
 /**
  * 
@@ -101,7 +100,6 @@ import com.mvalls.sidged.mappers.CourseVOtoModelMapper;
  */
 @PropertySource("classpath:email.properties")
 @SpringBootApplication
-@EnableJpaRepositories(basePackages = {"com.mvalls.sidged.database.repositories.jpa"})
 @EnableTransactionManagement
 @Configuration
 public class App {
@@ -158,12 +156,15 @@ public class App {
 	
 	@Bean
 	public DesertorService desertorService() {
-		return new DesertorService(courseClassService(), emailsService(), this.env);
+		return new DesertorService(emailsService(), notificationService(), courseRepository());
 	}
 	
 	@Bean
 	public CourseClassService courseClassService() {
-		return new CourseClassService(courseClassRepository(), courseRepository(), classStudentPresentRepository(), teacherRepository(), studentRepository());
+		return new CourseClassService(courseClassRepository(), 
+				courseRepository(), 
+				classStudentPresentRepository(), 
+				teacherRepository());
 	}
 	
 	@Bean
@@ -171,12 +172,7 @@ public class App {
 		return new CourseService(courseRepository(), 
 				timeService(), 
 				periodService(), 
-				courseVOtoModelMapper(), 
-				presentAnalysisCalculator(), 
-				emailsService(), 
-				careerRepository(), 
-				teacherRepository(), 
-				studentRepository());
+				careerRepository());
 	}
 	
 	@Bean
@@ -202,11 +198,6 @@ public class App {
 	@Bean
 	public CareerService careerService() {
 		return new CareerService(careerRepository());
-	}
-	
-	@Bean
-	public CourseVOtoModelMapper courseVOtoModelMapper() {
-		return new CourseVOtoModelMapper();
 	}
 	
 	@Bean
@@ -251,7 +242,7 @@ public class App {
 	
 	@Bean
 	public ClassStudentPresentService classStudentPresentService() {
-		return new ClassStudentPresentService(classStudentPresentRepository(), courseRepository(), teacherRepository(), presentAnalysisCalculator());
+		return new ClassStudentPresentService(classStudentPresentRepository(), teacherRepository());
 	}
 
 	@Bean
@@ -271,9 +262,16 @@ public class App {
 	
 	@Bean
 	public PresentismDataService presentismDataService() {
-		return new PresentismDataService(courseClassRepository(), presentAnalysisCalculator());
+		return new PresentismDataService(courseRepository(), courseClassRepository(), presentAnalysisCalculator());
 	}
 	
+	@Bean
+	public NotificationService notificationService() {
+		return new NotificationService(emailsService(), 
+				courseRepository(),
+				this.env.getProperty("email.institution.account"),
+				this.env.getProperty("email.desertors.subject"));
+	}
 	
 	/***** REPOSITORIES *********/
 	
@@ -350,90 +348,5 @@ public class App {
 	public StudentLinkRepository studentLinkRepository() {
 		return new StudentLinkDatabaseRepository(studentLinkMapper);
 	}
-	
-	/** MY BATIS **/
-
-//	@Bean
-//	public SqlSessionFactory sqlSessionFactory() {
-//		try {
-//			SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
-//			factoryBean.setDataSource(this.dataSource);
-//			factoryBean.setConfiguration(configuration());
-//			factoryBean.setTransactionFactory(new SpringManagedTransactionFactory());
-//			return factoryBean.getObject();
-//		} catch (Exception ex) {
-//			throw new RuntimeException(ex);
-//		}
-//	}
-	
-//	private org.apache.ibatis.session.Configuration configuration() {
-//		org.apache.ibatis.session.Configuration config = new org.apache.ibatis.session.Configuration();
-//		config.addMappers(CareerMapper.class.getPackage().getName());
-//		config.addMappers("com.mvalls.sidged.database.repositories.course");
-//		config.setMapUnderscoreToCamelCase(true);
-//		return config;
-//	}
-	
-//	@Bean
-//	public CareerMapper careerMapper() {
-//		return sqlSessionTemplate.getMapper(CareerMapper.class);
-//	}
-//	
-//	@Bean
-//	public CourseClassMapper courseClassMapper() {
-//		return sqlSessionTemplate.getMapper(CourseClassMapper.class);
-//	}
-//	
-//	@Bean 
-//	public CourseMapper courseMapper() {
-//		return sqlSessionTemplate.getMapper(CourseMapper.class);
-//	}
-//	
-//	@Bean 
-//	public PeriodMapper periodMapper() {
-//		return sqlSessionTemplate.getMapper(PeriodMapper.class);
-//	}
-//
-//	@Bean 
-//	public TimeMapper timeMapper() {
-//		return sqlSessionTemplate.getMapper(TimeMapper.class);
-//	}
-//
-//	@Bean 
-//	public ClassStudentPresentMapper classStudentPresentMapper() {
-//		return sqlSessionTemplate.getMapper(ClassStudentPresentMapper.class);
-//	}
-//	
-//
-//	@Bean 
-//	public TeacherMapper teacherMapper() {
-//		return sqlSessionTemplate.getMapper(TeacherMapper.class);
-//	}	
-//
-//
-//	@Bean 
-//	public StudentMapper studentMapper() {
-//		return sqlSessionTemplate.getMapper(StudentMapper.class);
-//	}
-//
-//	@Bean 
-//	public ContactDataMapper contactDataMapper() {
-//		return sqlSessionTemplate.getMapper(ContactDataMapper.class);
-//	}
-//	
-//	@Bean 
-//	public UserMapper userMapper() {
-//		return sqlSessionTemplate.getMapper(UserMapper.class);
-//	}
-//
-//	@Bean 
-//	public UserStudentMapper userStudentMapper() {
-//		return sqlSessionTemplate.getMapper(UserStudentMapper.class);
-//	}
-//	
-//	@Bean
-//	public PlatformTransactionManager transactionManager() {
-//		return new DataSourceTransactionManager(this.dataSource);
-//	}
 	
 }

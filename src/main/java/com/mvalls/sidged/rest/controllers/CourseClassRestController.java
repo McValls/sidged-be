@@ -23,7 +23,6 @@ import com.mvalls.sidged.mappers.ClassStudentPresentMapper;
 import com.mvalls.sidged.mappers.CourseClassCreateResponseMapper;
 import com.mvalls.sidged.rest.annotations.JwtTeacher;
 import com.mvalls.sidged.rest.dtos.ClassStudentDTO;
-import com.mvalls.sidged.rest.dtos.CourseClassCommentDTO;
 import com.mvalls.sidged.rest.dtos.courseClass.CourseClassCreateRequestDTO;
 import com.mvalls.sidged.rest.dtos.courseClass.CourseClassCreateResponseDTO;
 import com.mvalls.sidged.rest.exceptions.UnauthorizedUserException;
@@ -104,14 +103,7 @@ public class CourseClassRestController {
 		
 		return studentsDTO;	
 	}
-	
-	@Deprecated
-	@PutMapping("/{classNumber}")
-	public void updateComments(@PathVariable("classId") Long classId, 
-			@RequestBody CourseClassCommentDTO courseClassCommentDTO) {
-		courseClassService.updateComments(classId, courseClassCommentDTO.getComments());
-	}
-	
+
 	@JwtTeacher
 	@PutMapping("/finish/{classNumber}/course/{courseCode}")
 	public void finishClass(HttpServletRequest request, 

@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-//TODO: Cambiar nombre
 @Data
 @Builder
 @NoArgsConstructor

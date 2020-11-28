@@ -1,5 +1,7 @@
 package com.mvalls.sidged.core.services;
 
+import java.util.List;
+
 import com.mvalls.sidged.core.model.Time;
 import com.mvalls.sidged.core.repositories.TimeRepository;
 
@@ -24,10 +26,20 @@ import com.mvalls.sidged.core.repositories.TimeRepository;
  *
  */
 
-public class TimeService extends GenericService<Time, TimeRepository>{
+public class TimeService {
 
-	public TimeService(TimeRepository repository) {
-		super(repository);
+	TimeRepository timeRepository;
+	
+	public TimeService(TimeRepository timeRepository) {
+		this.timeRepository = timeRepository;
+	}
+	
+	public Time findById(Long id) {
+		return this.timeRepository.findById(id);
+	}
+	
+	public List<Time> findAll() {
+		return this.timeRepository.findAll();
 	}
 	
 }

@@ -16,12 +16,8 @@ import com.mvalls.sidged.core.model.Course;
 import com.mvalls.sidged.core.model.users.UserStudent;
 import com.mvalls.sidged.core.model.users.UserTeacher;
 import com.mvalls.sidged.core.services.CourseService;
-import com.mvalls.sidged.mappers.CourseDTOtoVOMapper;
+import com.mvalls.sidged.core.services.NotificationService;
 import com.mvalls.sidged.mappers.CourseListMapper;
-import com.mvalls.sidged.mappers.StudentAllMapper;
-import com.mvalls.sidged.mappers.StudentModelMapper;
-import com.mvalls.sidged.mappers.TeacherAllMapper;
-import com.mvalls.sidged.mappers.TeacherModelMapper;
 import com.mvalls.sidged.rest.annotations.JwtBackOffice;
 import com.mvalls.sidged.rest.annotations.JwtStudent;
 import com.mvalls.sidged.rest.annotations.JwtTeacher;
@@ -29,7 +25,6 @@ import com.mvalls.sidged.rest.dtos.CourseDTO;
 import com.mvalls.sidged.rest.dtos.CourseListDTO;
 import com.mvalls.sidged.rest.dtos.NotifyStudentsDTO;
 import com.mvalls.sidged.rest.exceptions.UnauthorizedUserException;
-import com.mvalls.sidged.valueObjects.CourseVO;
 
 /**
  * 
@@ -56,23 +51,15 @@ import com.mvalls.sidged.valueObjects.CourseVO;
 public class CourseRestController {
 	
 	private final CourseService courseService;
-	private final StudentAllMapper studentAllMapper;
-	private final StudentModelMapper studentModelMapper;
-	private final TeacherModelMapper teacherModelMapper;
-	private final TeacherAllMapper teacherAllMapper;
+	private final NotificationService notificationService;
 	private final CourseListMapper courseListMapper;
-	private final CourseDTOtoVOMapper courseDTOtoVOMapper;
 	
 	@Autowired
-	public CourseRestController(CourseService courseService) {
+	public CourseRestController(CourseService courseService, NotificationService notificationService) {
 		super();
 		this.courseService = courseService;
-		this.studentAllMapper = new StudentAllMapper();
-		this.studentModelMapper = new StudentModelMapper();
-		this.teacherModelMapper = new TeacherModelMapper();
-		this.teacherAllMapper = new TeacherAllMapper();
+		this.notificationService = notificationService;
 		this.courseListMapper = new CourseListMapper();
-		this.courseDTOtoVOMapper = new CourseDTOtoVOMapper();
 	}
 
 	@GetMapping
@@ -86,8 +73,19 @@ public class CourseRestController {
 	@JwtBackOffice
 	@PostMapping
 	public void createCourse(HttpServletRequest request, @RequestBody CourseDTO dto) {
-		CourseVO courseValueObject = courseDTOtoVOMapper.map(dto);
-		courseService.createCourse(courseValueObject);
+		Course.CourseBuilder courseBuilder = Course
+				.builder()
+				.name(dto.getName())
+				.code(dto.getCourseCode())
+				.shift(dto.getShift())
+				.year(dto.getYear());
+				
+		courseService.createCourse(courseBuilder, 
+				dto.getPeriodNumber(), 
+				dto.getPeriodType(),
+				dto.getTimeSinceId(),
+				dto.getTimeUntilId(),
+				dto.getCareerCode());
 	}
 	
 	@JwtTeacher
@@ -114,7 +112,7 @@ public class CourseRestController {
 	public void notifyCourseStudents(HttpServletRequest request, 
 			UserTeacher userTeacher,
 			@RequestBody NotifyStudentsDTO notifyStudentsDTO) throws UnauthorizedUserException {
-		courseService.sendEmailToStudents(notifyStudentsDTO.getCourseCode(), 
+		this.notificationService.sendEmailToStudents(notifyStudentsDTO.getCourseCode(), 
 				userTeacher.getTeacher(), 
 				notifyStudentsDTO.getSubject(), 
 				notifyStudentsDTO.getMessage());

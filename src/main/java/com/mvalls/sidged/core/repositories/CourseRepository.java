@@ -5,8 +5,10 @@ import java.util.Optional;
 
 import com.mvalls.sidged.core.model.Course;
 
-public interface CourseRepository extends GenericRepository<Course, Long> {
+public interface CourseRepository {
 
+	List<Course> findAll();
+	
 	List<Course> findByTeacherId(Long teacherId);
 
 	List<Course> findByStudentsId(Long studentId);
@@ -16,5 +18,7 @@ public interface CourseRepository extends GenericRepository<Course, Long> {
 	List<Course> findByYear(Integer year);
 	
 	Optional<Course> findByCode(String code);
+	
+	Course create(Course course);
 
 }
