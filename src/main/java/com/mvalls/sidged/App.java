@@ -217,7 +217,11 @@ public class App {
 	
 	@Bean
 	public LoginService loginService() {
-		return new LoginService(userRepository(), userCreationStrategyService(), emailsService());
+		return new LoginService(userRepository(), 
+				userStudentRepository(), 
+				userTeacherRepository(), 
+				userCreationStrategyService(), 
+				emailsService());
 	}
 	
 	@Bean

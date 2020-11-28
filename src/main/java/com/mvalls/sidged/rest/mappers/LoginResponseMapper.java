@@ -1,7 +1,7 @@
-package com.mvalls.sidged.mappers;
+package com.mvalls.sidged.rest.mappers;
 
-import com.mvalls.sidged.core.model.StudentLink;
-import com.mvalls.sidged.rest.dtos.StudentLinkDTO;
+import com.mvalls.sidged.core.model.users.User;
+import com.mvalls.sidged.rest.dtos.LoginResponseDTO;
 
 /**
  * 
@@ -23,16 +23,18 @@ import com.mvalls.sidged.rest.dtos.StudentLinkDTO;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-public class StudentLinkMapper extends GenericMapper<StudentLink, StudentLinkDTO>{
+public class LoginResponseMapper {
 
-	@Override
-	public StudentLinkDTO map(StudentLink model) {
-		StudentLinkDTO dto = StudentLinkDTO.builder()
-				.id(model.getId())
-				.link(model.getLink())
-				.title(model.getTitle())
-				.build();
-		return dto;
+	public LoginResponseMapper() {
+	}
+	
+	public LoginResponseDTO map(User loggedUser, String fullName) {
+		return LoginResponseDTO.builder()
+			.username(loggedUser.getUsername())
+			.userType(loggedUser.getUserType())
+			.fullName(fullName)
+			.userStatus(loggedUser.getUserStatus())
+			.build();
 	}
 	
 }

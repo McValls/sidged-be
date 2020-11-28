@@ -1,10 +1,10 @@
-package com.mvalls.sidged.mappers;
+package com.mvalls.sidged.rest.mappers;
 
-import java.io.IOException;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
-import org.springframework.web.multipart.MultipartFile;
-
-import com.mvalls.sidged.valueObjects.ClassFileDocumentVO;
+import com.mvalls.sidged.core.model.Time;
+import com.mvalls.sidged.rest.dtos.TimeDTO;
 
 /**
  * 
@@ -26,21 +26,19 @@ import com.mvalls.sidged.valueObjects.ClassFileDocumentVO;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-public class MultipartFileToClassFileDocumentVOMapper extends GenericMapper<MultipartFile, ClassFileDocumentVO>{
-	
-	@Override
-	public ClassFileDocumentVO map(MultipartFile file) {
-		try {
-			ClassFileDocumentVO classFileVO;
-			classFileVO = ClassFileDocumentVO.builder()
-					.name(file.getOriginalFilename())
-					.content(file.getBytes())
-					.contentType(file.getContentType())
-					.build();
-			return classFileVO;
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
+public class TimeMapper {
 
+	public TimeDTO map(Time time) {
+		TimeDTO dto = TimeDTO.builder()
+				.id(time.getId())
+				.since(format(time.getSince()))
+				.until(format(time.getUntil()))
+				.build();
+		return dto;
+	}
+	
+	private String format(LocalTime localTime) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+		return localTime.format(formatter);
+	}
 }

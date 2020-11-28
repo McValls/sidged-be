@@ -25,6 +25,6 @@ import com.mvalls.sidged.valueObjects.SignUpVO;
  */
 public interface UserCreationStrategy {
 
-	void execute(User user, SignUpVO valueObject);
+	void execute(User user, SignUpVO vo);
 	
 }

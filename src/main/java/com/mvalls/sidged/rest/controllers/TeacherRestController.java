@@ -19,10 +19,10 @@ import com.mvalls.sidged.core.enums.UpdateAction;
 import com.mvalls.sidged.core.model.Teacher;
 import com.mvalls.sidged.core.services.TeacherService;
 import com.mvalls.sidged.core.services.UserTeacherService;
-import com.mvalls.sidged.mappers.TeacherAllMapper;
-import com.mvalls.sidged.mappers.TeacherModelMapper;
 import com.mvalls.sidged.rest.annotations.JwtBackOffice;
 import com.mvalls.sidged.rest.dtos.TeacherAllDTO;
+import com.mvalls.sidged.rest.mappers.TeacherAllMapper;
+import com.mvalls.sidged.rest.mappers.TeacherModelMapper;
 
 /**
  * 

@@ -1,10 +1,7 @@
-package com.mvalls.sidged.valueObjects;
+package com.mvalls.sidged.rest.mappers;
 
-import com.mvalls.sidged.core.model.PeriodType;
-import com.mvalls.sidged.core.model.Shift;
-
-import lombok.Builder;
-import lombok.Data;
+import com.mvalls.sidged.core.model.ClassStudentPresent;
+import com.mvalls.sidged.rest.dtos.ClassStudentDTO;
 
 /**
  * 
@@ -26,19 +23,15 @@ import lombok.Data;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-@Data
-@Builder
-public class CourseVO {
-	
-	private String name;
-	private String code;
-	private Shift shift;
-	private Integer year;
-	private PeriodType periodType;
-	private Integer periodNumber;
-	private Long timeSinceId;
-	private Long timeUntilId;
-	private String chair;
-	private String careerCode;
+public class ClassStudentPresentMapper {
+
+	public ClassStudentDTO map(ClassStudentPresent studentPresent) {
+		return ClassStudentDTO.builder()
+				.id(studentPresent.getStudent().getId())
+				.names(studentPresent.getStudent().getNames())
+				.lastname(studentPresent.getStudent().getLastname())
+				.present(studentPresent.getPresent())
+				.build();
+	}
 	
 }

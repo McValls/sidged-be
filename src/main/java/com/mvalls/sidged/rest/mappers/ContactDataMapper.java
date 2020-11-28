@@ -1,7 +1,10 @@
-package com.mvalls.sidged.mappers;
+package com.mvalls.sidged.rest.mappers;
 
-import com.mvalls.sidged.core.model.users.User;
-import com.mvalls.sidged.rest.dtos.SignUpRequestDTO;
+import java.util.ArrayList;
+
+import com.mvalls.sidged.core.model.ContactData;
+import com.mvalls.sidged.rest.dtos.ContactDataDTO;
+
 
 /**
  * 
@@ -23,15 +26,12 @@ import com.mvalls.sidged.rest.dtos.SignUpRequestDTO;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-public class SignUpModelMapper extends GenericMapper<SignUpRequestDTO, User>{
+public class ContactDataMapper {
 
-	@Override
-	public User map(SignUpRequestDTO dto) {
-		return User.builder()
-				.username(dto.getUsername())
-				.password(dto.getPassword())
-				.email(dto.getEmail())
-				.userType(dto.getUserType())
+	public ContactDataDTO map(ContactData contactData) {
+		return ContactDataDTO.builder()
+				.emails(new ArrayList<>(contactData.getEmails()))
+				.phones(new ArrayList<>(contactData.getPhones()))
 				.build();
 	}
 	

@@ -19,13 +19,13 @@ import com.mvalls.sidged.core.model.ClassStudentPresent;
 import com.mvalls.sidged.core.model.CourseClass;
 import com.mvalls.sidged.core.model.users.UserTeacher;
 import com.mvalls.sidged.core.services.CourseClassService;
-import com.mvalls.sidged.mappers.ClassStudentPresentMapper;
-import com.mvalls.sidged.mappers.CourseClassCreateResponseMapper;
 import com.mvalls.sidged.rest.annotations.JwtTeacher;
 import com.mvalls.sidged.rest.dtos.ClassStudentDTO;
 import com.mvalls.sidged.rest.dtos.courseClass.CourseClassCreateRequestDTO;
 import com.mvalls.sidged.rest.dtos.courseClass.CourseClassCreateResponseDTO;
 import com.mvalls.sidged.rest.exceptions.UnauthorizedUserException;
+import com.mvalls.sidged.rest.mappers.ClassStudentPresentMapper;
+import com.mvalls.sidged.rest.mappers.CourseClassCreateResponseMapper;
 
 /**
  * 

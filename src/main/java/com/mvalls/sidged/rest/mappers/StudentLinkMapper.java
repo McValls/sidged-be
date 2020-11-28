@@ -1,7 +1,7 @@
-package com.mvalls.sidged.mappers;
+package com.mvalls.sidged.rest.mappers;
 
-import com.mvalls.sidged.core.model.Teacher;
-import com.mvalls.sidged.rest.dtos.TeacherAllDTO;
+import com.mvalls.sidged.core.model.StudentLink;
+import com.mvalls.sidged.rest.dtos.StudentLinkDTO;
 
 /**
  * 
@@ -23,18 +23,15 @@ import com.mvalls.sidged.rest.dtos.TeacherAllDTO;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-public class TeacherModelMapper extends GenericMapper<TeacherAllDTO, Teacher>{
+public class StudentLinkMapper {
 
-	private final ContactDataModelMapper contactDataModelMapper = new ContactDataModelMapper();
-	
-	@Override
-	public Teacher map(TeacherAllDTO dto) {
-		return Teacher.builder()
-			.id(dto.getId())
-			.names(dto.getNames())
-			.lastname(dto.getLastname())
-			.contactData(contactDataModelMapper.map(dto.getContactData()))
-			.build();
+	public StudentLinkDTO map(StudentLink model) {
+		StudentLinkDTO dto = StudentLinkDTO.builder()
+				.id(model.getId())
+				.link(model.getLink())
+				.title(model.getTitle())
+				.build();
+		return dto;
 	}
 	
 }

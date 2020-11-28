@@ -1,10 +1,9 @@
-package com.mvalls.sidged.mappers;
+package com.mvalls.sidged.rest.mappers;
 
 import java.util.ArrayList;
 
 import com.mvalls.sidged.core.model.ContactData;
 import com.mvalls.sidged.rest.dtos.ContactDataDTO;
-
 
 /**
  * 
@@ -26,13 +25,12 @@ import com.mvalls.sidged.rest.dtos.ContactDataDTO;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-public class ContactDataMapper extends GenericMapper<ContactData, ContactDataDTO> {
+public class ContactDataModelMapper {
 
-	@Override
-	public ContactDataDTO map(ContactData contactData) {
-		return ContactDataDTO.builder()
-				.emails(new ArrayList<>(contactData.getEmails()))
-				.phones(new ArrayList<>(contactData.getPhones()))
+	public ContactData map(ContactDataDTO dto) {
+		return ContactData.builder()
+				.emails(new ArrayList<>(dto.getEmails()))
+				.phones(new ArrayList<>(dto.getPhones()))
 				.build();
 	}
 	

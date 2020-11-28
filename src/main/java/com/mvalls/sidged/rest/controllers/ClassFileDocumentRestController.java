@@ -22,11 +22,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.mvalls.sidged.core.model.ClassFileDocument;
 import com.mvalls.sidged.core.model.FileDocumentType;
 import com.mvalls.sidged.core.services.ClassFileDocumentService;
-import com.mvalls.sidged.mappers.ClassFileDocumentModelToDTOMapper;
-import com.mvalls.sidged.mappers.MultipartFileToClassFileDocumentVOMapper;
 import com.mvalls.sidged.rest.dtos.ClassFileDocumentDTO;
 import com.mvalls.sidged.rest.dtos.ClassFileDocumentLinkDTO;
-import com.mvalls.sidged.valueObjects.ClassFileDocumentVO;
+import com.mvalls.sidged.rest.mappers.ClassFileDocumentModelToDTOMapper;
+import com.mvalls.sidged.rest.mappers.MultipartFileToClassFileDocumentMapper;
 
 /**
  * 
@@ -53,7 +52,7 @@ import com.mvalls.sidged.valueObjects.ClassFileDocumentVO;
 @RequestMapping("/file-documents")
 public class ClassFileDocumentRestController {
 
-	private final MultipartFileToClassFileDocumentVOMapper fileToFileDocumentMapper;
+	private final MultipartFileToClassFileDocumentMapper fileToFileDocumentMapper;
 	private final ClassFileDocumentService classFileDocumentService;
 	private final ClassFileDocumentModelToDTOMapper classFileDocumentModelToDTOMapper;
 
@@ -62,7 +61,7 @@ public class ClassFileDocumentRestController {
 			@Value("${server.host}") String serverHost) {
 		super();
 		this.classFileDocumentService = classFileDocumentService;
-		this.fileToFileDocumentMapper = new MultipartFileToClassFileDocumentVOMapper();
+		this.fileToFileDocumentMapper = new MultipartFileToClassFileDocumentMapper();
 		this.classFileDocumentModelToDTOMapper = new ClassFileDocumentModelToDTOMapper(serverHost);
 	}
 
@@ -87,8 +86,8 @@ public class ClassFileDocumentRestController {
 	public void uploadFile(@PathVariable("courseCode") String courseCode,
 			@PathVariable("classNumber") Integer classNumber, 
 			@RequestParam("file0") MultipartFile file) {
-		ClassFileDocumentVO vo = fileToFileDocumentMapper.map(file);
-		classFileDocumentService.saveFileDocument(courseCode, classNumber, vo);
+		ClassFileDocument fileDocument = fileToFileDocumentMapper.map(file);
+		classFileDocumentService.saveFileDocument(courseCode, classNumber, fileDocument);
 	}
 
 	@PostMapping("/link")

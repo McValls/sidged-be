@@ -2,10 +2,16 @@ package com.mvalls.sidged.core.services;
 
 import java.util.Optional;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+
 import com.mvalls.sidged.core.model.emails.Email;
+import com.mvalls.sidged.core.model.interfaces.UserPerson;
 import com.mvalls.sidged.core.model.users.User;
 import com.mvalls.sidged.core.model.users.UserType;
 import com.mvalls.sidged.core.repositories.UserRepository;
+import com.mvalls.sidged.core.repositories.UserStudentRepository;
+import com.mvalls.sidged.core.repositories.UserTeacherRepository;
 import com.mvalls.sidged.core.strategies.userCreation.UserCreationStrategy;
 import com.mvalls.sidged.core.strategies.userCreation.UserCreationStrategyService;
 import com.mvalls.sidged.core.utils.EncryptionUtils;
@@ -36,21 +42,46 @@ import com.mvalls.sidged.valueObjects.SignUpVO;
 public class LoginService {
 	
 	private final UserRepository userRepository;
+	private final UserStudentRepository userStudentRepository;
+	private final UserTeacherRepository userTeacherRepository;
 	private final UserCreationStrategyService userCreationStrategyService;
 	private final EmailsService emailsService;
 
-	public LoginService(UserRepository userRepository, UserCreationStrategyService userCreationStrategyService,
+	public LoginService(UserRepository userRepository,
+			UserStudentRepository userStudentRepository,
+			UserTeacherRepository userTeacherRepository,
+			UserCreationStrategyService userCreationStrategyService,
 			EmailsService emailsService) {
 		this.userRepository = userRepository;
+		this.userStudentRepository = userStudentRepository;
+		this.userTeacherRepository = userTeacherRepository;
 		this.userCreationStrategyService = userCreationStrategyService;
 		this.emailsService = emailsService;
 	}
 
-	public User login(String username, String password) {
+	public Pair<Optional<User>, Optional<UserPerson>> login(String username, String password) {
 		Optional<User> optionalUser = this.userRepository.findByUserName(username);
-		return optionalUser
-				.filter(user -> isValidPassword(user, password))
-				.orElse(null);
+		
+		if (optionalUser.filter(user -> isValidPassword(user, password)).isEmpty()) {
+			return ImmutablePair.of(Optional.empty(), Optional.empty());
+		}
+		
+		return ImmutablePair.of(optionalUser, optionalUser.map(user -> findUserPerson(username, user.getUserType())));
+	}
+	
+	private UserPerson findUserPerson(String username, UserType userType) {
+		UserPerson userPerson = null;
+		switch (userType) {
+			case TEACHER:
+				userPerson = this.userTeacherRepository.findByUserUsername(username);
+				break;
+			case STUDENT:
+				userPerson = this.userStudentRepository.findByUserUsername(username);
+				break;
+			default:
+				break;
+		}
+		return userPerson;
 	}
 
 	private boolean isValidPassword(User user, String password) {
@@ -77,14 +108,12 @@ public class LoginService {
 	}
 	
 	public void changePassword(String username, String oldPassword, String newPassword) throws WrongPasswordException {
-		User user = this.login(username, oldPassword);
-		if(user != null) {
-			String newPasswordEncrypted = EncryptionUtils.encryptSHA256(newPassword);
-			user.setPassword(newPasswordEncrypted);
-			this.update(user);
-		} else {
-			throw new WrongPasswordException();
-		}
+		Optional<User> optionalUser = this.login(username, oldPassword).getLeft();
+		
+		User user = optionalUser.orElseThrow(WrongPasswordException::new);
+		String newPasswordEncrypted = EncryptionUtils.encryptSHA256(newPassword);
+		user.setPassword(newPasswordEncrypted);
+		this.update(user);
 	}
 	
 	public void recoveryPassword(String username, String email) throws BadCredentialsException {

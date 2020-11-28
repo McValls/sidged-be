@@ -2,6 +2,7 @@ package com.mvalls.sidged.core.model.users;
 
 import com.mvalls.sidged.core.model.Model;
 import com.mvalls.sidged.core.model.Teacher;
+import com.mvalls.sidged.core.model.interfaces.UserPerson;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,7 +33,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserTeacher implements Model {
+public class UserTeacher implements Model, UserPerson {
 	
 	private Long id;
 	private User user;
@@ -42,6 +43,11 @@ public class UserTeacher implements Model {
 		super();
 		this.user = user;
 		this.teacher = teacher;
+	}
+	
+	@Override
+	public String getFullName() {
+		return this.teacher.getNames() + " " + this.teacher.getLastname();
 	}
 	
 }

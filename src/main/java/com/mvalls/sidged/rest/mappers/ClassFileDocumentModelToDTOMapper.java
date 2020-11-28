@@ -1,4 +1,4 @@
-package com.mvalls.sidged.mappers;
+package com.mvalls.sidged.rest.mappers;
 
 import com.mvalls.sidged.core.model.ClassFileDocument;
 import com.mvalls.sidged.core.model.FileDocumentType;
@@ -24,7 +24,7 @@ import com.mvalls.sidged.rest.dtos.ClassFileDocumentDTO;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-public class ClassFileDocumentModelToDTOMapper extends GenericMapper<ClassFileDocument, ClassFileDocumentDTO>{
+public class ClassFileDocumentModelToDTOMapper {
 
 	private final String serverHost;
 	
@@ -33,8 +33,6 @@ public class ClassFileDocumentModelToDTOMapper extends GenericMapper<ClassFileDo
 		this.serverHost = serverHost;
 	}
 
-
-	@Override
 	public ClassFileDocumentDTO map(ClassFileDocument model) {
 		return ClassFileDocumentDTO.builder()
 				.id(model.getId())

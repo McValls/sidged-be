@@ -1,7 +1,8 @@
-package com.mvalls.sidged.mappers;
+package com.mvalls.sidged.rest.mappers;
 
-import com.mvalls.sidged.core.model.Teacher;
-import com.mvalls.sidged.rest.dtos.TeacherAllDTO;
+import com.mvalls.sidged.core.model.Student;
+import com.mvalls.sidged.core.model.users.UserStudent;
+import com.mvalls.sidged.rest.dtos.StudentAllDTO;
 
 /**
  * 
@@ -23,19 +24,21 @@ import com.mvalls.sidged.rest.dtos.TeacherAllDTO;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-public class TeacherAllMapper extends GenericMapper<Teacher, TeacherAllDTO>{
+public class UserStudentAllMapper {
 	
 	private final ContactDataMapper contactDataMapper = new ContactDataMapper();
 	
-	@Override
-	public TeacherAllDTO map(Teacher teacher) {
-		return TeacherAllDTO.builder()
-			.id(teacher.getId())
-			.names(teacher.getNames())
-			.lastname(teacher.getLastname())
-			.legacyNumber(teacher.getLegacyNumber())
-			.contactData(contactDataMapper.map(teacher.getContactData()))
-			.build();
+	public StudentAllDTO map(UserStudent userStudent) {
+		Student student = userStudent.getStudent();
+		return StudentAllDTO.builder()
+				.id(student.getId())
+				.username(userStudent.getUser().getUsername())
+				.names(student.getNames())
+				.lastname(student.getLastname())
+				.identificationNumber(student.getIdentificationNumber())
+				.legacyNumber(student.getLegacyNumber())
+				.contactData(contactDataMapper.map(student.getContactData()))
+				.build();
 	}
 	
 }

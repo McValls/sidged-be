@@ -1,7 +1,10 @@
-package com.mvalls.sidged.mappers;
+package com.mvalls.sidged.rest.mappers;
 
-import com.mvalls.sidged.core.model.ClassStudentPresent;
-import com.mvalls.sidged.rest.dtos.ClassStudentDTO;
+import java.io.IOException;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import com.mvalls.sidged.core.model.ClassFileDocument;
 
 /**
  * 
@@ -23,16 +26,20 @@ import com.mvalls.sidged.rest.dtos.ClassStudentDTO;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-public class ClassStudentPresentMapper extends GenericMapper<ClassStudentPresent, ClassStudentDTO> {
-
-	@Override
-	public ClassStudentDTO map(ClassStudentPresent studentPresent) {
-		return ClassStudentDTO.builder()
-				.id(studentPresent.getStudent().getId())
-				.names(studentPresent.getStudent().getNames())
-				.lastname(studentPresent.getStudent().getLastname())
-				.present(studentPresent.getPresent())
-				.build();
-	}
+public class MultipartFileToClassFileDocumentMapper {
 	
+	public ClassFileDocument map(MultipartFile file) {
+		try {
+			ClassFileDocument classFile;
+			classFile = ClassFileDocument.builder()
+					.name(file.getOriginalFilename())
+					.content(file.getBytes())
+					.contentType(file.getContentType())
+					.build();
+			return classFile;
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 }

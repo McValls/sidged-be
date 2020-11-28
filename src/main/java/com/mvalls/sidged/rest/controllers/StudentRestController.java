@@ -21,11 +21,11 @@ import com.mvalls.sidged.core.enums.UpdateAction;
 import com.mvalls.sidged.core.model.Student;
 import com.mvalls.sidged.core.services.StudentService;
 import com.mvalls.sidged.core.services.UserStudentService;
-import com.mvalls.sidged.mappers.StudentAllMapper;
-import com.mvalls.sidged.mappers.StudentModelMapper;
 import com.mvalls.sidged.rest.annotations.JwtBackOffice;
 import com.mvalls.sidged.rest.dtos.StudentAllDTO;
 import com.mvalls.sidged.rest.dtos.StudentDTO;
+import com.mvalls.sidged.rest.mappers.StudentAllMapper;
+import com.mvalls.sidged.rest.mappers.StudentModelMapper;
 
 /**
  * 

@@ -17,7 +17,6 @@ import com.mvalls.sidged.core.model.users.UserStudent;
 import com.mvalls.sidged.core.model.users.UserTeacher;
 import com.mvalls.sidged.core.services.CourseService;
 import com.mvalls.sidged.core.services.NotificationService;
-import com.mvalls.sidged.mappers.CourseListMapper;
 import com.mvalls.sidged.rest.annotations.JwtBackOffice;
 import com.mvalls.sidged.rest.annotations.JwtStudent;
 import com.mvalls.sidged.rest.annotations.JwtTeacher;
@@ -25,6 +24,7 @@ import com.mvalls.sidged.rest.dtos.CourseDTO;
 import com.mvalls.sidged.rest.dtos.CourseListDTO;
 import com.mvalls.sidged.rest.dtos.NotifyStudentsDTO;
 import com.mvalls.sidged.rest.exceptions.UnauthorizedUserException;
+import com.mvalls.sidged.rest.mappers.CourseListMapper;
 
 /**
  * 

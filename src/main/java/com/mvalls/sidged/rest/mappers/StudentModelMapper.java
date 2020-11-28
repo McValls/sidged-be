@@ -1,7 +1,9 @@
-package com.mvalls.sidged.mappers;
+package com.mvalls.sidged.rest.mappers;
+
+import java.util.Base64;
 
 import com.mvalls.sidged.core.model.Student;
-import com.mvalls.sidged.rest.dtos.StudentAllDTO;
+import com.mvalls.sidged.rest.dtos.StudentDTO;
 
 /**
  * 
@@ -23,20 +25,24 @@ import com.mvalls.sidged.rest.dtos.StudentAllDTO;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-public class StudentAllMapper extends GenericMapper<Student, StudentAllDTO>{
+public class StudentModelMapper {
+
+	private final ContactDataModelMapper contactDataModelMapper = new ContactDataModelMapper();
 	
-	private final ContactDataMapper contactDataMapper = new ContactDataMapper();
-	
-	@Override
-	public StudentAllDTO map(Student student) {
-		return StudentAllDTO.builder()
-				.id(student.getId())
-				.names(student.getNames())
-				.lastname(student.getLastname())
-				.identificationNumber(student.getIdentificationNumber())
-				.legacyNumber(student.getLegacyNumber())
-				.contactData(contactDataMapper.map(student.getContactData()))
-				.build();
+	public Student map(StudentDTO dto) {
+		Student.StudentBuilder builder = Student.builder();
+		builder.legacyNumber(dto.getLegacyNumber())
+			.id(dto.getId())
+			.names(dto.getNames())
+			.lastname(dto.getLastname())
+			.identificationNumber(dto.getIdentificationNumber())
+			.contactData(contactDataModelMapper.map(dto.getContactData()));
+		
+		if(dto.getBase64EncodedPic() != null) {
+			builder.perfilPic(Base64.getDecoder().decode(dto.getBase64EncodedPic()));
+		}
+		
+		return builder.build();
 	}
 	
 }

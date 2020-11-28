@@ -1,9 +1,7 @@
-package com.mvalls.sidged.mappers;
+package com.mvalls.sidged.rest.mappers;
 
-import java.util.Base64;
-
-import com.mvalls.sidged.core.model.Student;
-import com.mvalls.sidged.rest.dtos.StudentListDTO;
+import com.mvalls.sidged.core.model.users.User;
+import com.mvalls.sidged.rest.dtos.SignUpRequestDTO;
 
 /**
  * 
@@ -25,19 +23,15 @@ import com.mvalls.sidged.rest.dtos.StudentListDTO;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-public class StudentListMapper extends GenericMapper<Student, StudentListDTO>{
+public class SignUpModelMapper {
 
-	@Override
-	public StudentListDTO map(Student student) {
-		StudentListDTO.StudentListDTOBuilder builder = StudentListDTO.builder();
-		builder.names(student.getNames())
-				.lastname(student.getLastname());
-		
-		if(student.getPerfilPic() != null) {
-			builder.base64EncodedPic(Base64.getEncoder().encodeToString(student.getPerfilPic()));
-		}
-				
-		return builder.build();
+	public User map(SignUpRequestDTO dto) {
+		return User.builder()
+				.username(dto.getUsername())
+				.password(dto.getPassword())
+				.email(dto.getEmail())
+				.userType(dto.getUserType())
+				.build();
 	}
 	
 }

@@ -1,10 +1,7 @@
-package com.mvalls.sidged.mappers;
+package com.mvalls.sidged.rest.mappers;
 
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-
-import com.mvalls.sidged.core.model.Time;
-import com.mvalls.sidged.rest.dtos.TimeDTO;
+import com.mvalls.sidged.core.model.CourseClass;
+import com.mvalls.sidged.rest.dtos.courseClass.CourseClassCreateResponseDTO;
 
 /**
  * 
@@ -26,20 +23,15 @@ import com.mvalls.sidged.rest.dtos.TimeDTO;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-public class TimeMapper extends GenericMapper<Time, TimeDTO>{
+public class CourseClassCreateResponseMapper {
 
-	@Override
-	public TimeDTO map(Time time) {
-		TimeDTO dto = TimeDTO.builder()
-				.id(time.getId())
-				.since(format(time.getSince()))
-				.until(format(time.getUntil()))
+	public CourseClassCreateResponseDTO map(CourseClass model) {
+		return CourseClassCreateResponseDTO.builder()
+				.id(model.getId())
+				.date(model.getDate())
+				.classNumber(model.getClassNumber())
+				.classState(model.getClassState())
 				.build();
-		return dto;
 	}
 	
-	private String format(LocalTime localTime) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-		return localTime.format(formatter);
-	}
 }

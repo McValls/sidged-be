@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mvalls.sidged.core.services.StudentLinkService;
-import com.mvalls.sidged.mappers.StudentLinkMapper;
 import com.mvalls.sidged.core.model.StudentLink;
 import com.mvalls.sidged.rest.dtos.StudentLinkDTO;
+import com.mvalls.sidged.rest.mappers.StudentLinkMapper;
 
 /**
  * 

@@ -2,14 +2,11 @@ package com.mvalls.sidged.core.services;
 
 import java.util.Collection;
 
-import javax.transaction.Transactional;
-
 import com.mvalls.sidged.core.model.ClassFileDocument;
 import com.mvalls.sidged.core.model.CourseClass;
 import com.mvalls.sidged.core.model.FileDocumentType;
 import com.mvalls.sidged.core.repositories.ClassFileDocumentRepository;
 import com.mvalls.sidged.core.repositories.CourseClassRepository;
-import com.mvalls.sidged.valueObjects.ClassFileDocumentVO;
 
 /**
  * 
@@ -51,18 +48,17 @@ public class ClassFileDocumentService {
 		return this.classFileDocumentRepository.findByCourseCode(courseCode);
 	}
 	
-	@Transactional
-	public void saveFileDocument(String courseCode, Integer classNumber, ClassFileDocumentVO valueObject) {
+	public void saveFileDocument(String courseCode, Integer classNumber, ClassFileDocument fileDocument) {
 		CourseClass courseClass = this.courseClassRepository.findByCourseCodeAndClassNumber(courseCode, classNumber).orElseThrow();
-		ClassFileDocument fileDocument = ClassFileDocument.builder()
-				.name(valueObject.getName())
-				.content(valueObject.getContent())
-				.contentType(valueObject.getContentType())
+		ClassFileDocument newFileDocument = ClassFileDocument.builder()
+				.name(fileDocument.getName())
+				.content(fileDocument.getContent())
+				.contentType(fileDocument.getContentType())
 				.fileDocumentType(FileDocumentType.BLOB)
 				.courseClass(courseClass)
 				.build();
 		
-		this.classFileDocumentRepository.create(fileDocument);
+		this.classFileDocumentRepository.create(newFileDocument);
 	}
 	
 	public void saveFileLink(String courseCode, Integer classNumber, String link, String name) {

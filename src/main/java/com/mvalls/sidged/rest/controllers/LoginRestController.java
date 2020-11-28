@@ -1,8 +1,11 @@
 package com.mvalls.sidged.rest.controllers;
 
+import java.util.Optional;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,13 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mvalls.sidged.core.model.interfaces.UserPerson;
 import com.mvalls.sidged.core.model.users.User;
 import com.mvalls.sidged.core.services.LoginService;
-import com.mvalls.sidged.core.services.UserStudentService;
-import com.mvalls.sidged.core.services.UserTeacherService;
-import com.mvalls.sidged.mappers.LoginResponseMapper;
-import com.mvalls.sidged.mappers.SignUpModelMapper;
-import com.mvalls.sidged.mappers.SignUpVOMapper;
 import com.mvalls.sidged.rest.annotations.JwtBackOffice;
 import com.mvalls.sidged.rest.dtos.ChangePasswordDTO;
 import com.mvalls.sidged.rest.dtos.LoginRequestDTO;
@@ -26,6 +25,9 @@ import com.mvalls.sidged.rest.dtos.LoginResponseDTO;
 import com.mvalls.sidged.rest.dtos.SignUpRequestDTO;
 import com.mvalls.sidged.rest.exceptions.BadCredentialsException;
 import com.mvalls.sidged.rest.exceptions.WrongPasswordException;
+import com.mvalls.sidged.rest.mappers.LoginResponseMapper;
+import com.mvalls.sidged.rest.mappers.SignUpModelMapper;
+import com.mvalls.sidged.rest.mappers.SignUpVOMapper;
 import com.mvalls.sidged.rest.security.jwt.JwtTokenUtils;
 import com.mvalls.sidged.valueObjects.SignUpVO;
 
@@ -54,37 +56,28 @@ import com.mvalls.sidged.valueObjects.SignUpVO;
 public class LoginRestController {
 	
 	private final LoginService loginService;
-	private final SignUpModelMapper signUpModelMapper;
-	private final SignUpVOMapper signUpVOMapper;
 	private final JwtTokenUtils jwtTokenUtils;
-	
-	//TODO: LoginResponseMapper agnostico de servicios
-	private final UserStudentService userStudentService;
-	private final UserTeacherService userTeacherService;
+	private final SignUpModelMapper signUpModelMapper = new SignUpModelMapper();
+	private final LoginResponseMapper loginResponseMapper = new LoginResponseMapper();
+	private final SignUpVOMapper signUpVOMapper = new SignUpVOMapper();
 
 	@Autowired
-	public LoginRestController(LoginService loginService, JwtTokenUtils jwtTokenUtils,
-			UserStudentService userStudentService,
-			UserTeacherService userTeacherService) {
+	public LoginRestController(LoginService loginService, JwtTokenUtils jwtTokenUtils) {
 		super();
 		this.loginService = loginService;
 		this.jwtTokenUtils = jwtTokenUtils;
-		this.signUpVOMapper = new SignUpVOMapper();
-		this.signUpModelMapper = new SignUpModelMapper();
-		this.userStudentService = userStudentService;
-		this.userTeacherService = userTeacherService;
 	}
 
 	@PostMapping
 	public LoginResponseDTO login(@RequestBody LoginRequestDTO login, HttpServletResponse response) throws BadCredentialsException {
-		User loggedUser = loginService.login(login.getUsername(), login.getPassword());
-		if(loggedUser == null) {
-			throw new BadCredentialsException();
-		}
+		Pair<Optional<User>, Optional<UserPerson>> loginResponse = 
+				loginService.login(login.getUsername(), login.getPassword());
+		
+		User loggedUser = loginResponse.getLeft().orElseThrow(BadCredentialsException::new);
 		jwtTokenUtils.setTokenToResponse(loggedUser, response);
 		
-		LoginResponseMapper loginResponseMapper = new LoginResponseMapper(this.userStudentService, this.userTeacherService);
-		return loginResponseMapper.map(loggedUser);	
+		return loginResponseMapper.map(loggedUser, 
+				loginResponse.getRight().map(UserPerson::getFullName).orElse(""));	
 	}
 	
 	@JwtBackOffice

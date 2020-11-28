@@ -1,4 +1,4 @@
-package com.mvalls.sidged.mappers;
+package com.mvalls.sidged.rest.mappers;
 
 import com.mvalls.sidged.core.model.CourseClass;
 import com.mvalls.sidged.rest.dtos.courseClass.CourseClassCreateResponseDTO;
@@ -23,16 +23,13 @@ import com.mvalls.sidged.rest.dtos.courseClass.CourseClassCreateResponseDTO;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-public class CourseClassCreateResponseMapper extends GenericMapper<CourseClass, CourseClassCreateResponseDTO>{
+public class CourseClassModelMapper {
 
-	@Override
-	public CourseClassCreateResponseDTO map(CourseClass model) {
-		return CourseClassCreateResponseDTO.builder()
-				.id(model.getId())
-				.date(model.getDate())
-				.classNumber(model.getClassNumber())
-				.classState(model.getClassState())
+	public CourseClass map(CourseClassCreateResponseDTO dto) {
+		CourseClass courseClass = CourseClass.builder()
+				.date(dto.getDate())
 				.build();
+		return courseClass;
 	}
-	
+
 }

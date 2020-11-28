@@ -1,9 +1,7 @@
-package com.mvalls.sidged.valueObjects;
+package com.mvalls.sidged.rest.mappers;
 
-import com.mvalls.sidged.core.model.StudentPresent;
-
-import lombok.Builder;
-import lombok.Data;
+import com.mvalls.sidged.core.model.Teacher;
+import com.mvalls.sidged.rest.dtos.TeacherAllDTO;
 
 /**
  * 
@@ -25,13 +23,18 @@ import lombok.Data;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-@Data
-@Builder
-public class ClassUpdatePresentVO {
+public class TeacherAllMapper {
 	
-	private Long courseId;
-	private Long classId;
-	private Long studentId;
-	private StudentPresent present;
-
+	private final ContactDataMapper contactDataMapper = new ContactDataMapper();
+	
+	public TeacherAllDTO map(Teacher teacher) {
+		return TeacherAllDTO.builder()
+			.id(teacher.getId())
+			.names(teacher.getNames())
+			.lastname(teacher.getLastname())
+			.legacyNumber(teacher.getLegacyNumber())
+			.contactData(contactDataMapper.map(teacher.getContactData()))
+			.build();
+	}
+	
 }

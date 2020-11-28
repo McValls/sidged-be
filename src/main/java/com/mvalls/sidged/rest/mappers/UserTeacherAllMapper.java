@@ -1,4 +1,4 @@
-package com.mvalls.sidged.mappers;
+package com.mvalls.sidged.rest.mappers;
 
 import com.mvalls.sidged.core.model.Teacher;
 import com.mvalls.sidged.core.model.users.UserTeacher;
@@ -24,11 +24,10 @@ import com.mvalls.sidged.rest.dtos.TeacherAllDTO;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-public class UserTeacherAllMapper extends GenericMapper<UserTeacher, TeacherAllDTO>{
+public class UserTeacherAllMapper {
 	
 	private final ContactDataMapper contactDataMapper = new ContactDataMapper();
 	
-	@Override
 	public TeacherAllDTO map(UserTeacher userTeacher) {
 		Teacher teacher = userTeacher.getTeacher();
 		return TeacherAllDTO.builder()

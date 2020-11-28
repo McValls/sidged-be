@@ -1,7 +1,8 @@
-package com.mvalls.sidged.mappers;
+package com.mvalls.sidged.rest.mappers;
 
-import com.mvalls.sidged.core.model.Career;
-import com.mvalls.sidged.rest.dtos.CareerDTO;
+import com.mvalls.sidged.core.model.Course;
+import com.mvalls.sidged.rest.dtos.CourseListDTO;
+import com.mvalls.sidged.rest.dtos.PeriodDTO;
 
 /**
  * 
@@ -23,15 +24,23 @@ import com.mvalls.sidged.rest.dtos.CareerDTO;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-public class CareerMapper extends GenericMapper<Career, CareerDTO>{
-
-	@Override
-	public CareerDTO map(Career career) {
-		CareerDTO dto = CareerDTO.builder()
-				.code(career.getCode())
-				.name(career.getName())
-				.build();
-		return dto;
-	}
+public class CourseListMapper {
 	
+	public CourseListDTO map(Course course) {
+		return CourseListDTO.builder()
+				.code(course.getCode())
+				.name(course.getName())
+				.period(PeriodDTO
+						.builder()
+						.periodType(course.getPeriod().getPeriodType())
+						.number(course.getPeriod().getNumber())
+						.build())
+				.shift(course.getShift())
+				.timeSince(course.getTimeStart().getSince().toString())
+				.timeUntil(course.getTimeEnd().getUntil().toString())
+				.career(course.getCareer().getName())
+				.year(course.getYear())
+				.build();
+	}
+
 }

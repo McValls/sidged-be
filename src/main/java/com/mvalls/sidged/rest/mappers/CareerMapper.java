@@ -1,4 +1,7 @@
-package com.mvalls.sidged.mappers;
+package com.mvalls.sidged.rest.mappers;
+
+import com.mvalls.sidged.core.model.Career;
+import com.mvalls.sidged.rest.dtos.CareerDTO;
 
 /**
  * 
@@ -20,8 +23,14 @@ package com.mvalls.sidged.mappers;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-public abstract class GenericMapper<R, T> {
+public class CareerMapper {
 
-	public abstract T map(R r);
+	public CareerDTO map(Career career) {
+		CareerDTO dto = CareerDTO.builder()
+				.code(career.getCode())
+				.name(career.getName())
+				.build();
+		return dto;
+	}
 	
 }

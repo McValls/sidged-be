@@ -1,7 +1,4 @@
-package com.mvalls.sidged.valueObjects;
-
-import lombok.Builder;
-import lombok.Data;
+package com.mvalls.sidged.rest.mappers;
 
 /**
  * 
@@ -23,14 +20,8 @@ import lombok.Data;
 * along with SIDGED-Backend.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-@Data
-@Builder
-public class ClassFileDocumentVO {
-	
-	private String name;
-	private String link;
-	private byte[] content;
-	private String contentType;
-	private Long classId;
+public abstract class GenericMapper<R, T> {
 
+	public abstract T map(R r);
+	
 }
