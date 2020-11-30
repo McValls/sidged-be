@@ -37,5 +37,32 @@ public class CareerService {
 		return this.careerRepository.findAll();
 	}
 
+	public Career create(Career career) {
+		return this.careerRepository.create(career);
+	}
+
+	public Career update(Long id, String newName) {
+		if (id == null) {
+			throw new IllegalArgumentException("id cannot be null");
+		}
+		Career careerToUpdate = this.findById(id);
+		
+		return this.careerRepository.update(Career.builder()
+				.id(id)
+				.name(newName)
+				.code(careerToUpdate.getCode())
+				.build());
+	}
+
+	public boolean delete(Career career) {
+		if (career == null || career.getId() == null) {
+			throw new IllegalArgumentException("Nor career or id can be null");
+		}
+		return this.careerRepository.delete(career);
+	}
+
+	public Career findById(Long id) {
+		return this.careerRepository.findById(id);
+	}
 	
 }

@@ -34,6 +34,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CareerDTO extends DataTransferObject {
 	
+	private Long id;
 	private String code;
 	private String name;
 
