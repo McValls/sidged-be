@@ -27,6 +27,7 @@ public class CareerMapper {
 
 	public CareerDTO map(Career career) {
 		CareerDTO dto = CareerDTO.builder()
+				.id(career.getId())
 				.code(career.getCode())
 				.name(career.getName())
 				.build();

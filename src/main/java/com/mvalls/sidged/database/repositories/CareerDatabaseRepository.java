@@ -33,4 +33,30 @@ public class CareerDatabaseRepository implements CareerRepository {
 				.orElseThrow(() -> new IllegalArgumentException());
 	}
 	
+	@Override
+	public Career findById(Long id) {
+		return dtoMapper.dtoToModel(this.careerMapper.findCareerById(id));
+	}
+
+	@Override
+	public Career create(Career career) {
+		CareerDTO dto = this.dtoMapper.modelToDto(career);
+		this.careerMapper.insert(dto);
+		career.setId(dto.getId());
+		return career;
+	}
+	
+	@Override
+	public Career update(Career career) {
+		CareerDTO dto = this.dtoMapper.modelToDto(career);
+		this.careerMapper.update(dto);
+		return career;
+	}
+	
+	@Override
+	public boolean delete(Career career) {
+		int deletedRows = this.careerMapper.delete(career.getId());
+		return deletedRows == 1;
+	}
+	
 }
