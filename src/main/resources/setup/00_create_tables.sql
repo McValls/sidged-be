@@ -1,5 +1,5 @@
-create schema saraza;
-use saraza;
+create schema sidged;
+use sidged;
 
 CREATE TABLE `career` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -23,6 +23,16 @@ CREATE TABLE `time` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
 
+CREATE TABLE `subject` (
+	`id` bigint(20) not null auto_increment,
+	`name` varchar(200) not null,
+	`code` varchar(100) not null,
+    `career_id` bigint(20) not null,
+    primary key (id),
+    UNIQUE KEY `code_UNIQUE` (`code`),
+    foreign key (career_id) references `career`(id),
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+
 CREATE TABLE course (
 	id bigint(20) not null auto_increment,
 	code varchar(150) not null,
@@ -32,12 +42,12 @@ CREATE TABLE course (
     period_id bigint(20) not null,
     time_start_id bigint(20) not null,
     time_end_id bigint(20) not null,
-    career_id bigint(20) not null,
+    subject_id bigint(20) not null,
     primary key (id),
     foreign key (period_id) references period(id),
     foreign key (time_start_id) references `time`(id),
     foreign key (time_end_id) references `time`(id),
-    foreign key (career_id) references `career`(id)
+    foreign key (subject_id) references `subject`(id)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `course_class` (

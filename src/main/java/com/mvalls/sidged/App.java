@@ -24,6 +24,7 @@ import com.mvalls.sidged.core.repositories.CourseRepository;
 import com.mvalls.sidged.core.repositories.PeriodRepository;
 import com.mvalls.sidged.core.repositories.StudentLinkRepository;
 import com.mvalls.sidged.core.repositories.StudentRepository;
+import com.mvalls.sidged.core.repositories.SubjectRepository;
 import com.mvalls.sidged.core.repositories.TeacherRepository;
 import com.mvalls.sidged.core.repositories.TimeRepository;
 import com.mvalls.sidged.core.repositories.UserRepository;
@@ -42,6 +43,7 @@ import com.mvalls.sidged.core.services.PeriodService;
 import com.mvalls.sidged.core.services.PresentismDataService;
 import com.mvalls.sidged.core.services.StudentLinkService;
 import com.mvalls.sidged.core.services.StudentService;
+import com.mvalls.sidged.core.services.SubjectService;
 import com.mvalls.sidged.core.services.TeacherService;
 import com.mvalls.sidged.core.services.TimeService;
 import com.mvalls.sidged.core.services.UserStudentService;
@@ -58,6 +60,7 @@ import com.mvalls.sidged.database.mybatis.mappers.CourseMapper;
 import com.mvalls.sidged.database.mybatis.mappers.PeriodMapper;
 import com.mvalls.sidged.database.mybatis.mappers.StudentLinkMapper;
 import com.mvalls.sidged.database.mybatis.mappers.StudentMapper;
+import com.mvalls.sidged.database.mybatis.mappers.SubjectMapper;
 import com.mvalls.sidged.database.mybatis.mappers.TeacherMapper;
 import com.mvalls.sidged.database.mybatis.mappers.TimeMapper;
 import com.mvalls.sidged.database.mybatis.mappers.UserMapper;
@@ -72,6 +75,7 @@ import com.mvalls.sidged.database.repositories.CourseDatabaseRepository;
 import com.mvalls.sidged.database.repositories.PeriodDatabaseRepository;
 import com.mvalls.sidged.database.repositories.StudentDatabaseRepository;
 import com.mvalls.sidged.database.repositories.StudentLinkDatabaseRepository;
+import com.mvalls.sidged.database.repositories.SubjectDatabaseRepository;
 import com.mvalls.sidged.database.repositories.TeacherDatabaseRepository;
 import com.mvalls.sidged.database.repositories.TimeDatabaseRepository;
 import com.mvalls.sidged.database.repositories.UserDatabaseRepository;
@@ -124,6 +128,7 @@ public class App {
 	@Autowired private StudentLinkMapper studentLinkMapper;
 	@Autowired private PeriodMapper periodMapper;
 	@Autowired private TimeMapper timeMapper;
+	@Autowired private SubjectMapper subjectMapper;
 	
 	@Bean
 	public WebMvcConfigurer corsConfigurer() {
@@ -172,7 +177,7 @@ public class App {
 		return new CourseService(courseRepository(), 
 				timeService(), 
 				periodService(), 
-				careerRepository());
+				subjectRepository());
 	}
 	
 	@Bean
@@ -277,6 +282,11 @@ public class App {
 				this.env.getProperty("email.desertors.subject"));
 	}
 	
+	@Bean
+	public SubjectService subjectService() {
+		return new SubjectService(subjectRepository(), careerRepository());
+	}
+	
 	/***** REPOSITORIES *********/
 	
 	@Bean
@@ -351,6 +361,11 @@ public class App {
 	@Bean
 	public StudentLinkRepository studentLinkRepository() {
 		return new StudentLinkDatabaseRepository(studentLinkMapper);
+	}
+	
+	@Bean
+	public SubjectRepository subjectRepository() {
+		return new SubjectDatabaseRepository(subjectMapper);
 	}
 	
 }

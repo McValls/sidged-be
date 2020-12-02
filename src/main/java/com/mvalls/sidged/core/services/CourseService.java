@@ -3,14 +3,14 @@ package com.mvalls.sidged.core.services;
 import java.util.Collection;
 import java.util.List;
 
-import com.mvalls.sidged.core.model.Career;
 import com.mvalls.sidged.core.model.Course;
 import com.mvalls.sidged.core.model.Course.CourseBuilder;
 import com.mvalls.sidged.core.model.Period;
 import com.mvalls.sidged.core.model.PeriodType;
+import com.mvalls.sidged.core.model.Subject;
 import com.mvalls.sidged.core.model.Time;
-import com.mvalls.sidged.core.repositories.CareerRepository;
 import com.mvalls.sidged.core.repositories.CourseRepository;
+import com.mvalls.sidged.core.repositories.SubjectRepository;
 
 /**
  * 
@@ -36,18 +36,18 @@ import com.mvalls.sidged.core.repositories.CourseRepository;
 public class CourseService {
 
 	private final CourseRepository courseRepository;
-	private final CareerRepository careerRepository;
+	private final SubjectRepository subjectRepository;
 	private final TimeService timeService;
 	private final PeriodService periodService;
 
 	public CourseService(CourseRepository courseRepository, 
 			TimeService timeService, 
 			PeriodService periodService,
-			CareerRepository careerRepository) {
+			SubjectRepository subjectRepository) {
 		this.courseRepository = courseRepository;
 		this.timeService = timeService;
 		this.periodService = periodService;
-		this.careerRepository = careerRepository;
+		this.subjectRepository = subjectRepository;
 	}
 	
 	public List<Course> findAll() {
@@ -55,13 +55,13 @@ public class CourseService {
 	}
 
 	public void createCourse(CourseBuilder courseBuilder, Integer periodNumber, PeriodType periodType, Long timeSinceId,
-			Long timeUntilId, String careerCode) {
-		Career career = this.careerRepository.findByCode(careerCode);
+			Long timeUntilId, String subjectCode) {
+		Subject subject = this.subjectRepository.findByCode(subjectCode);
 		Time timeSince = timeService.findById(timeSinceId);
 		Time timeUntil = timeService.findById(timeUntilId);
 		Period period = periodService.findByTypeAndNumber(periodType, periodNumber);
 		
-		courseBuilder.career(career)
+		courseBuilder.subject(subject)
 			.timeStart(timeSince)
 			.timeEnd(timeUntil)
 			.period(period);

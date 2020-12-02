@@ -1,4 +1,4 @@
-package com.mvalls.sidged.test.services;
+package com.mvalls.sidged.test.core.services;
 
 import org.junit.Before;
 import org.junit.Test;

@@ -2,14 +2,14 @@ package com.mvalls.sidged.database.repositories.mappers;
 
 import com.mvalls.sidged.core.model.Course;
 import com.mvalls.sidged.core.repositories.RepositoryDTOMapper;
-import com.mvalls.sidged.database.dtos.CareerDTO;
 import com.mvalls.sidged.database.dtos.CourseDTO;
 import com.mvalls.sidged.database.dtos.PeriodDTO;
+import com.mvalls.sidged.database.dtos.SubjectDTO;
 import com.mvalls.sidged.database.dtos.TimeDTO;
 
 public class CourseRepositoryDTOMapper implements RepositoryDTOMapper<Course, CourseDTO> {
 
-	private final CareerRepositoryDTOMapper careerDTOMapper = new CareerRepositoryDTOMapper();
+	private final SubjectRepositoryDTOMapper subjectDTOMapper = new SubjectRepositoryDTOMapper();
 	private final PeriodRepositoryDTOMapper periodDTOMapper = new PeriodRepositoryDTOMapper();
 	private final TimeRepositoryDTOMapper timeDTOMapper = new TimeRepositoryDTOMapper();
 	
@@ -21,7 +21,7 @@ public class CourseRepositoryDTOMapper implements RepositoryDTOMapper<Course, Co
 				.name(dto.getName())
 				.shift(dto.getShift())
 				.year(dto.getYear())
-				.career(careerDTOMapper.dtoToModel(dto.getCareer()))
+				.subject(subjectDTOMapper.dtoToModel(dto.getSubject()))
 				.period(periodDTOMapper.dtoToModel(dto.getPeriod()))
 				.timeStart(timeDTOMapper.dtoToModel(dto.getTimeStart()))
 				.timeEnd(timeDTOMapper.dtoToModel(dto.getTimeEnd()))
@@ -36,8 +36,8 @@ public class CourseRepositoryDTOMapper implements RepositoryDTOMapper<Course, Co
 				.name(model.getName())
 				.shift(model.getShift())
 				.year(model.getYear())
-				.career(CareerDTO.builder()
-						.id(model.getCareer().getId())
+				.subject(SubjectDTO.builder()
+						.id(model.getSubject().getId())
 						.build())
 				.period(PeriodDTO.builder()
 						.id(model.getPeriod().getId())
@@ -47,9 +47,6 @@ public class CourseRepositoryDTOMapper implements RepositoryDTOMapper<Course, Co
 						.build())
 				.timeEnd(TimeDTO.builder()
 						.id(model.getTimeEnd().getId())
-						.build())
-				.career(CareerDTO.builder()
-						.id(model.getCareer().getId())
 						.build())
 				.build();
 	}
