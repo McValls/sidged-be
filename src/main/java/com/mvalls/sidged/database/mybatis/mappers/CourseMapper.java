@@ -29,7 +29,7 @@ public interface CourseMapper {
 			@Result(property = "period", javaType = PeriodDTO.class, column = "period_id", one = @One(select = "com.mvalls.sidged.database.mybatis.mappers.PeriodMapper.findPeriodById")),
 			@Result(property = "timeStart", javaType = TimeDTO.class, column = "time_start_id", one = @One(select = "com.mvalls.sidged.database.mybatis.mappers.TimeMapper.findTimeById")),
 			@Result(property = "timeEnd", javaType = TimeDTO.class, column = "time_end_id", one = @One(select = "com.mvalls.sidged.database.mybatis.mappers.TimeMapper.findTimeById")),
-			@Result(property = "career", javaType = CareerDTO.class, column = "career_id", one = @One(select = "com.mvalls.sidged.database.mybatis.mappers.CareerMapper.findCareerById"))
+			@Result(property = "subject", javaType = CareerDTO.class, column = "subject_id", one = @One(select = "com.mvalls.sidged.database.mybatis.mappers.SubjectMapper.findSubjectById"))
 	})
 	List<CourseDTO> findAll();
 
@@ -40,7 +40,7 @@ public interface CourseMapper {
 			@Result(property = "period", javaType = PeriodDTO.class, column = "period_id", one = @One(select = "com.mvalls.sidged.database.mybatis.mappers.PeriodMapper.findPeriodById")),
 			@Result(property = "timeStart", javaType = TimeDTO.class, column = "time_start_id", one = @One(select = "com.mvalls.sidged.database.mybatis.mappers.TimeMapper.findTimeById")),
 			@Result(property = "timeEnd", javaType = TimeDTO.class, column = "time_end_id", one = @One(select = "com.mvalls.sidged.database.mybatis.mappers.TimeMapper.findTimeById")),
-			@Result(property = "career", javaType = CareerDTO.class, column = "career_id", one = @One(select = "com.mvalls.sidged.database.mybatis.mappers.CareerMapper.findCareerById"))
+			@Result(property = "subject", javaType = CareerDTO.class, column = "subject_id", one = @One(select = "com.mvalls.sidged.database.mybatis.mappers.SubjectMapper.findSubjectById"))
 	})
 	List<CourseDTO> findByTeacherId(Long teacherId);
 
@@ -51,7 +51,7 @@ public interface CourseMapper {
 			@Result(property = "period", javaType = PeriodDTO.class, column = "period_id", one = @One(select = "com.mvalls.sidged.database.mybatis.mappers.PeriodMapper.findPeriodById")),
 			@Result(property = "timeStart", javaType = TimeDTO.class, column = "time_start_id", one = @One(select = "com.mvalls.sidged.database.mybatis.mappers.TimeMapper.findTimeById")),
 			@Result(property = "timeEnd", javaType = TimeDTO.class, column = "time_end_id", one = @One(select = "com.mvalls.sidged.database.mybatis.mappers.TimeMapper.findTimeById")),
-			@Result(property = "career", javaType = CareerDTO.class, column = "career_id", one = @One(select = "com.mvalls.sidged.database.mybatis.mappers.CareerMapper.findCareerById"))
+			@Result(property = "subject", javaType = CareerDTO.class, column = "subject_id", one = @One(select = "com.mvalls.sidged.database.mybatis.mappers.SubjectMapper.findSubjectById"))
 	})
 	List<CourseDTO> findByStudentId(Long studentId);
 	
@@ -63,7 +63,7 @@ public interface CourseMapper {
 			@Result(property = "period", javaType = PeriodDTO.class, column = "period_id", one = @One(select = "com.mvalls.sidged.database.mybatis.mappers.PeriodMapper.findPeriodById")),
 			@Result(property = "timeStart", javaType = TimeDTO.class, column = "time_start_id", one = @One(select = "com.mvalls.sidged.database.mybatis.mappers.TimeMapper.findTimeById")),
 			@Result(property = "timeEnd", javaType = TimeDTO.class, column = "time_end_id", one = @One(select = "com.mvalls.sidged.database.mybatis.mappers.TimeMapper.findTimeById")),
-			@Result(property = "career", javaType = CareerDTO.class, column = "career_id", one = @One(select = "com.mvalls.sidged.database.mybatis.mappers.CareerMapper.findCareerById"))
+			@Result(property = "subject", javaType = CareerDTO.class, column = "subject_id", one = @One(select = "com.mvalls.sidged.database.mybatis.mappers.SubjectMapper.findSubjectById"))
 	})
 	Optional<CourseDTO> findByCourseClassId(Long courseClassId);
 
@@ -72,7 +72,7 @@ public interface CourseMapper {
 			@Result(property = "period", javaType = PeriodDTO.class, column = "period_id", one = @One(select = "com.mvalls.sidged.database.mybatis.mappers.PeriodMapper.findPeriodById")),
 			@Result(property = "timeStart", javaType = TimeDTO.class, column = "time_start_id", one = @One(select = "com.mvalls.sidged.database.mybatis.mappers.TimeMapper.findTimeById")),
 			@Result(property = "timeEnd", javaType = TimeDTO.class, column = "time_end_id", one = @One(select = "com.mvalls.sidged.database.mybatis.mappers.TimeMapper.findTimeById")),
-			@Result(property = "career", javaType = CareerDTO.class, column = "career_id", one = @One(select = "com.mvalls.sidged.database.mybatis.mappers.CareerMapper.findCareerById"))
+			@Result(property = "subject", javaType = CareerDTO.class, column = "subject_id", one = @One(select = "com.mvalls.sidged.database.mybatis.mappers.SubjectMapper.findSubjectById"))
 	})
 	List<CourseDTO> findByYear(Integer year);
 
@@ -81,7 +81,7 @@ public interface CourseMapper {
 			@Result(property = "period", javaType = PeriodDTO.class, column = "period_id", one = @One(select = "com.mvalls.sidged.database.mybatis.mappers.PeriodMapper.findPeriodById")),
 			@Result(property = "timeStart", javaType = TimeDTO.class, column = "time_start_id", one = @One(select = "com.mvalls.sidged.database.mybatis.mappers.TimeMapper.findTimeById")),
 			@Result(property = "timeEnd", javaType = TimeDTO.class, column = "time_end_id", one = @One(select = "com.mvalls.sidged.database.mybatis.mappers.TimeMapper.findTimeById")),
-			@Result(property = "career", javaType = CareerDTO.class, column = "career_id", one = @One(select = "com.mvalls.sidged.database.mybatis.mappers.CareerMapper.findCareerById"))
+			@Result(property = "subject", javaType = CareerDTO.class, column = "subject_id", one = @One(select = "com.mvalls.sidged.database.mybatis.mappers.SubjectMapper.findSubjectById"))
 	})
 	Optional<CourseDTO> findByCode(String code);
 
@@ -90,7 +90,7 @@ public interface CourseMapper {
 			@Result(property = "period", javaType = PeriodDTO.class, column = "period_id", one = @One(select = "com.mvalls.sidged.database.mybatis.mappers.PeriodMapper.findPeriodById")),
 			@Result(property = "timeStart", javaType = TimeDTO.class, column = "time_start_id", one = @One(select = "com.mvalls.sidged.database.mybatis.mappers.TimeMapper.findTimeById")),
 			@Result(property = "timeEnd", javaType = TimeDTO.class, column = "time_end_id", one = @One(select = "com.mvalls.sidged.database.mybatis.mappers.TimeMapper.findTimeById")),
-			@Result(property = "career", javaType = CareerDTO.class, column = "career_id", one = @One(select = "com.mvalls.sidged.database.mybatis.mappers.CareerMapper.findCareerById"))
+			@Result(property = "subject", javaType = CareerDTO.class, column = "subject_id", one = @One(select = "com.mvalls.sidged.database.mybatis.mappers.SubjectMapper.findSubjectById"))
 	})
 	CourseDTO findById(Long id);
 	

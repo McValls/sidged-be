@@ -38,7 +38,7 @@ public class CourseListMapper {
 				.shift(course.getShift())
 				.timeSince(course.getTimeStart().getSince().toString())
 				.timeUntil(course.getTimeEnd().getUntil().toString())
-				.career(course.getCareer().getName())
+				.career(course.getSubject().getCareer().getName())
 				.year(course.getYear())
 				.build();
 	}

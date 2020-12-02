@@ -43,7 +43,7 @@ public class Course implements Model {
 	private Time timeStart;
 	private Time timeEnd;
 	private String chair;
-	private Career career;
+	private Subject subject;
 	
 	@Builder.Default private Set<Teacher> teachers = new HashSet<>();
 	@Builder.Default private Set<Student> students = new HashSet<>();
