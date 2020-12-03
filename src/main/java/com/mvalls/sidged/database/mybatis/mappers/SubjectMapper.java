@@ -28,7 +28,7 @@ public interface SubjectMapper {
 	@Results(value = {
 			@Result(property = "career", javaType = CareerDTO.class, column = "career_id", one = @One(select = "com.mvalls.sidged.database.mybatis.mappers.CareerMapper.findCareerById"))
 	})
-	SubjectDTO findBySubjectId(Long id);
+	SubjectDTO findSubjectById(Long id);
 
 	@Select("select * from subject")
 	@Results(value = {

@@ -85,7 +85,7 @@ public class CourseRestController {
 				dto.getPeriodType(),
 				dto.getTimeSinceId(),
 				dto.getTimeUntilId(),
-				dto.getCareerCode());
+				dto.getSubjectCode());
 	}
 	
 	@JwtTeacher

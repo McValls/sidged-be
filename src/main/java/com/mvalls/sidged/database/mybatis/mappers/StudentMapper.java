@@ -34,7 +34,6 @@ public interface StudentMapper {
 	
 	@Insert("insert into course_student (course_id, student_id) values "
 			+ "((select c.id from course as c where c.code = #{courseCode}), #{studentId})")
-	@Options(useGeneratedKeys = true, keyColumn = "id", keyProperty = "id")
 	void addCourseStudent(String courseCode, Long studentId);
 	
 	@Select("select * from student")

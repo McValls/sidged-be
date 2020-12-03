@@ -19,8 +19,8 @@ import com.mvalls.sidged.database.dtos.TimeDTO;
 @Mapper
 public interface CourseMapper {
 
-	@Insert("insert into course(code, name, shift, year, period_id, time_start_id, time_end_id, career_id) "
-			+ "values (#{code}, #{name}, #{shift}, #{year}, #{period.id}, #{timeStart.id}, #{timeEnd.id}, #{career.id})")
+	@Insert("insert into course(code, name, shift, year, period_id, time_start_id, time_end_id, subject_id) "
+			+ "values (#{code}, #{name}, #{shift}, #{year}, #{period.id}, #{timeStart.id}, #{timeEnd.id}, #{subject.id})")
 	@Options(useGeneratedKeys = true, keyColumn = "id", keyProperty = "id")
 	void insert(CourseDTO dto);
 	

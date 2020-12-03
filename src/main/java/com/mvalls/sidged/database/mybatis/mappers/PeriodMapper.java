@@ -17,4 +17,9 @@ public interface PeriodMapper {
 			+ "and number = #{number} ")
 	PeriodDTO findByPeriodTypeAndNumber(PeriodType type, Integer number);
 	
+	@Select("select * from period where "
+			+ "period_type = #{type} "
+			+ "and number is null")
+	PeriodDTO findByPeriodType(PeriodType type);
+	
 }

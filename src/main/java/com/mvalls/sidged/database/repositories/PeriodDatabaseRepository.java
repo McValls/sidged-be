@@ -17,7 +17,12 @@ public class PeriodDatabaseRepository implements PeriodRepository {
 
 	@Override
 	public Period findByPeriodTypeAndNumber(PeriodType type, Integer number) {
-		PeriodDTO dto = this.periodMapper.findByPeriodTypeAndNumber(type, number);
+		PeriodDTO dto;
+		if (number == null) {
+			dto = this.periodMapper.findByPeriodType(type);
+		} else {
+			dto = this.periodMapper.findByPeriodTypeAndNumber(type, number);
+		}
 		return Period.builder()
 				.id(dto.getId())
 				.number(dto.getNumber())

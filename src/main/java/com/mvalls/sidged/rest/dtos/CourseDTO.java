@@ -43,7 +43,7 @@ public class CourseDTO extends DataTransferObject {
 	private Integer periodNumber;
 	private Long timeSinceId;
 	private Long timeUntilId;
-	private String careerCode;
+	private String subjectCode;
 	private String chair;
 
 }
