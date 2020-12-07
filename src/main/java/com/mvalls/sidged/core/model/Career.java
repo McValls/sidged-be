@@ -2,6 +2,7 @@ package com.mvalls.sidged.core.model;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 
@@ -25,6 +26,7 @@ import lombok.Data;
  */
 @Data
 @Builder
+@EqualsAndHashCode(of = {"name", "code"})
 public class Career implements Model {
 
 	private Long id;
