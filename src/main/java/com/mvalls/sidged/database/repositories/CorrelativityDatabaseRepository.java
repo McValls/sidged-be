@@ -43,20 +43,30 @@ public class CorrelativityDatabaseRepository implements CorrelativityRepository 
 	public Correlativity addCorrelativity(Subject subject, Subject newCorrelativeSubject) {
 		SubjectDTO subjectDTO = dtoMapper.modelToDto(subject);
 		SubjectDTO newCorrelativeSubjectDTO = dtoMapper.modelToDto(newCorrelativeSubject);
+		
 		Optional<SubjectDependenciesDTO> subjectDependenciesDTO = 
 				this.subjectDependenciesMapper.findBySubjectId(subjectDTO);
 		
-		SubjectDependenciesDTO updatedDTO = subjectDependenciesDTO
-			.map(dto -> new SubjectDependenciesDTO(dto.getSubject(), 
-					Stream
-						.of(dto.getDependencies(), List.of(newCorrelativeSubjectDTO))
-						.flatMap(Collection::stream)
-						.distinct()
-						.collect(Collectors.toList())))
-			.orElseGet(() -> new SubjectDependenciesDTO(subjectDTO, List.of(newCorrelativeSubjectDTO)));
-		
+		return subjectDependenciesDTO
+			.map(dto -> updateDependencies(dto, newCorrelativeSubjectDTO))
+			.orElseGet(() -> createDependency(subjectDTO, newCorrelativeSubjectDTO));
+	}
+	
+	private Correlativity updateDependencies(SubjectDependenciesDTO dto, SubjectDTO newCorrelativeSubjectDTO) {
+		var updatedDTO = new SubjectDependenciesDTO(dto.getSubject(), 
+				Stream
+				.of(dto.getDependencies(), List.of(newCorrelativeSubjectDTO))
+				.flatMap(Collection::stream)
+				.distinct()
+				.collect(Collectors.toList()));
 		this.subjectDependenciesMapper.update(updatedDTO);
 		return mapCorrelativity(updatedDTO);
+	}
+	
+	private Correlativity createDependency(SubjectDTO subjectDTO, SubjectDTO newCorrelativeSubjectDTO) {
+		var newDTO = new SubjectDependenciesDTO(subjectDTO, List.of(newCorrelativeSubjectDTO));
+		this.subjectDependenciesMapper.insert(newDTO);
+		return mapCorrelativity(newDTO);
 	}
 	
 	@Override
@@ -103,4 +113,5 @@ public class CorrelativityDatabaseRepository implements CorrelativityRepository 
 		return this.subjectDependenciesMapper.findBySubjectId(subjectDTO)
 				.orElseGet(() -> new SubjectDependenciesDTO(subjectDTO, List.of()));
 	}
+	
 }

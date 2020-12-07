@@ -1,18 +1,25 @@
 package com.mvalls.sidged.database.dtos;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class SubjectDependenciesDTO {
 
-	private final SubjectDTO subject;
-	private final List<SubjectDTO> dependencies;
-
-	public SubjectDependenciesDTO(SubjectDTO subject, List<SubjectDTO> dependencies) {
-		this.subject = subject;
-		this.dependencies = dependencies;
-	}
+	private SubjectDTO subject;
+	private List<SubjectDTO> dependencies;
+	
+	public String getDependenciesIds() {
+		return String.join(",", 
+				this.dependencies.stream()
+				.map(dep -> dep.getId().toString())
+				.collect(Collectors.toList()));
+	}	
 
 }

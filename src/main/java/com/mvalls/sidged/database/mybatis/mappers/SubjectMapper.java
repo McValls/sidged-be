@@ -35,6 +35,13 @@ public interface SubjectMapper {
 			@Result(property = "career", javaType = CareerDTO.class, column = "career_id", one = @One(select = "com.mvalls.sidged.database.mybatis.mappers.CareerMapper.findCareerById"))
 	})
 	List<SubjectDTO> findAll();
+	
+	@Select("select * from subject "
+			+ "where id in (#{commaSeparatedIds})")
+	@Results(value = {
+			@Result(property = "career", javaType = CareerDTO.class, column = "career_id", one = @One(select = "com.mvalls.sidged.database.mybatis.mappers.CareerMapper.findCareerById"))
+	})
+	List<SubjectDTO> findAllByIds(String commaSeparatedIds);
 
 	@Insert("insert into subject (name, code, career_id) "
 			+ "values (#{name}, #{code}, #{career.id})")

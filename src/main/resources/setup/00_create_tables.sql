@@ -190,3 +190,11 @@ CREATE TABLE `course_teacher` (
   FOREIGN KEY (`course_id`) REFERENCES `course` (`id`),
   FOREIGN KEY (`teacher_id`) REFERENCES `teacher` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `subject_dependencies` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `subject_id` bigint(20) NOT NULL,
+  `dependencies_subject_ids` varchar(350) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  foreign key (subject_id) references `subject`(id)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;

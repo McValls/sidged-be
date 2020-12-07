@@ -118,6 +118,16 @@ public class CorrelativityServiceTest {
 		this.service.addCorrelativity("en1", "en2");
 	}
 	
+	@Test(expected = IllegalArgumentException.class)
+	public void addCorrelativitiesToNonExistentSubjectsShouldFail() {
+		this.service.addCorrelativity("chinnese1", "en2");
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void addNonExistentSubjectAsCorrelativityShouldFail() {
+		this.service.addCorrelativity("en2", "chinesse1");
+	}
+	
 	@Test
 	public void deleteCorrelativity() {
 		var allCorrelativities = this.service.findAllByCareerCode("MOCKED");

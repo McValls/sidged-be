@@ -29,7 +29,10 @@ public class CorrelativityService {
 
 	public Correlativity addCorrelativity(String subjectCode, String newCorrelativeSubjectCode) {
 		var subject = subjectRepository.findByCode(subjectCode);
+		if (subject == null) throw new IllegalArgumentException("Subject code " + subjectCode + " is not a valid subject.");
+		
 		var newCorrelativeSubject = subjectRepository.findByCode(newCorrelativeSubjectCode);
+		if (newCorrelativeSubject == null) throw new IllegalArgumentException("Subject code " + newCorrelativeSubject + " is not a valid subject.");
 		
 		var correlativity = 
 				this.correlativityRepository.findBySubjectCode(subjectCode)
