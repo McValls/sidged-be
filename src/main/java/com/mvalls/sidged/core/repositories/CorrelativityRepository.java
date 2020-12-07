@@ -14,4 +14,6 @@ public interface CorrelativityRepository {
 
 	Correlativity addCorrelativity(Subject subject, Subject newCorrelativeSubject);
 
+	Correlativity deleteCorrelativity(Subject subject, Subject correlativeToDelete);
+
 }

@@ -1,6 +1,7 @@
 package com.mvalls.sidged.test.database.correlativities;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.eq;
@@ -100,5 +101,23 @@ public class CorrelativityDatabaseRepositoryTest {
 		
 		Correlativity correlativity = this.correlativityRepository.addCorrelativity(en2, en1);
 		assertEquals(correlativityEnglish2, correlativity);
+	}
+	
+	@Test
+	public void deleteCorrelativity() {
+		var aCareer = Career.builder().name("MOCKED").code("MOCKED").build();
+		var en1 = new Subject("English A", "en1", aCareer);
+		var en2 = new Subject("English B", "en2", aCareer);
+		
+		Correlativity aCorrelativity =
+				this.correlativityRepository.findBySubjectCode("en2").get(); 
+		
+		Correlativity updateCorrelativity =
+				this.correlativityRepository.deleteCorrelativity(en2, en1);
+		
+		assertEquals(aCorrelativity.getSubject(), updateCorrelativity.getSubject());
+		assertEquals(aCorrelativity.getDependencies().size() - 1, updateCorrelativity.getDependencies().size());
+		assertTrue(aCorrelativity.dependsOn(en1));
+		assertFalse(updateCorrelativity.dependsOn(en1));
 	}
 }

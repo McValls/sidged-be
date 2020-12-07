@@ -59,6 +59,25 @@ public class CorrelativityDatabaseRepository implements CorrelativityRepository 
 		return mapCorrelativity(updatedDTO);
 	}
 	
+	@Override
+	public Correlativity deleteCorrelativity(Subject subject, Subject correlativeToDelete) {
+		SubjectDTO subjectDTO = dtoMapper.modelToDto(subject);
+		SubjectDTO correlativeToDeleteDTO = dtoMapper.modelToDto(correlativeToDelete);
+		
+		Optional<SubjectDependenciesDTO> subjectDependenciesDTO = 
+				this.subjectDependenciesMapper.findBySubjectId(subjectDTO);
+		
+		SubjectDependenciesDTO updatedDTO = subjectDependenciesDTO
+				.map(dto -> new SubjectDependenciesDTO(dto.getSubject(), 
+						dto.getDependencies().stream()
+						.filter(dep -> !dep.equals(correlativeToDeleteDTO))
+						.collect(Collectors.toList())))
+				.orElseGet(() -> new SubjectDependenciesDTO(subjectDTO, List.of()));
+		
+		this.subjectDependenciesMapper.update(updatedDTO);
+		return mapCorrelativity(updatedDTO);
+	}
+	
 	private Correlativity mapCorrelativity(SubjectDependenciesDTO subjectDependencies) {
 		return new Correlativity(
 				mapSubject(subjectDependencies.getSubject()),

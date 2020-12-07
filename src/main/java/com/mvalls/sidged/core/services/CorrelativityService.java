@@ -50,4 +50,11 @@ public class CorrelativityService {
 		return this.correlativityRepository.addCorrelativity(subject, newCorrelativeSubject);
 	}
 
+	public Correlativity deleteCorrelativity(String subjectCode, String subjectToRemoveCode) {
+		var subject = subjectRepository.findByCode(subjectCode);
+		var subjectToRemove = subjectRepository.findByCode(subjectToRemoveCode);
+		
+		return this.correlativityRepository.deleteCorrelativity(subject, subjectToRemove);
+	}
+
 }
