@@ -2,6 +2,7 @@ package com.mvalls.sidged.core.services;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -27,6 +28,10 @@ public class CorrelativityService {
 		return this.correlativityRepository.findAllByCareerCode(careerCode);
 	}
 
+	public Optional<Correlativity> findBySubjectCode(String subjectCode) {
+		return this.correlativityRepository.findBySubjectCode(subjectCode);
+	}
+	
 	public Correlativity addCorrelativity(String subjectCode, String newCorrelativeSubjectCode) {
 		var subject = subjectRepository.findByCode(subjectCode);
 		if (subject == null) throw new IllegalArgumentException("Subject code " + subjectCode + " is not a valid subject.");
@@ -59,5 +64,6 @@ public class CorrelativityService {
 		
 		return this.correlativityRepository.deleteCorrelativity(subject, subjectToRemove);
 	}
+
 
 }

@@ -24,6 +24,7 @@ import com.mvalls.sidged.database.dtos.CareerDTO;
 import com.mvalls.sidged.database.dtos.SubjectDTO;
 import com.mvalls.sidged.database.dtos.SubjectDependenciesDTO;
 import com.mvalls.sidged.database.mybatis.mappers.SubjectDependenciesMapper;
+import com.mvalls.sidged.database.mybatis.mappers.SubjectMapper;
 import com.mvalls.sidged.database.repositories.CorrelativityDatabaseRepository;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -32,6 +33,7 @@ public class CorrelativityDatabaseRepositoryTest {
 	private CorrelativityRepository correlativityRepository;
 	
 	@Mock private SubjectDependenciesMapper subjectDependenciesMapper;
+	@Mock private SubjectMapper subjectMapper;
 	
 	@Before
 	public void setup() {
@@ -39,10 +41,10 @@ public class CorrelativityDatabaseRepositoryTest {
 				.code("MOCKED")
 				.id(1L)
 				.build();
-		var english1 = SubjectDTO.builder().name("English A").code("en1").career(mockedCareer).build();
-		var english2 = SubjectDTO.builder().name("English B").code("en2").career(mockedCareer).build();
+		var english1 = SubjectDTO.builder().id(1L).name("English A").code("en1").career(mockedCareer).build();
+		var english2 = SubjectDTO.builder().id(2L).name("English B").code("en2").career(mockedCareer).build();
 		var sd1 = new SubjectDependenciesDTO(english1, List.of());
-		var sd2 = new SubjectDependenciesDTO(english2, List.of(english1));
+		var sd2 = new SubjectDependenciesDTO(english2, List.of(english1), "1");
 		
 		when(subjectDependenciesMapper.findByCareerCode(eq("MOCKED")))
 			.thenReturn(List.of(sd1, sd2));
@@ -59,7 +61,12 @@ public class CorrelativityDatabaseRepositoryTest {
 		when(subjectDependenciesMapper.findBySubjectCode("en1"))
 			.thenReturn(Optional.empty());
 		
-		this.correlativityRepository = new CorrelativityDatabaseRepository(subjectDependenciesMapper);
+		when(subjectMapper.findAllByIds(eq(new long[] {1L}))).thenReturn(List.of(english1));
+		when(subjectMapper.findAllByIds(eq(new long[] {2L}))).thenReturn(List.of(english2));
+		when(subjectMapper.findAllByIds(eq(new long[] {1L, 2L}))).thenReturn(List.of(english1, english2));
+		when(subjectMapper.findAllByIds(eq(new long[] {2L, 1L}))).thenReturn(List.of(english2, english1));
+		
+		this.correlativityRepository = new CorrelativityDatabaseRepository(subjectDependenciesMapper, subjectMapper);
 	}
 	
 	@Test

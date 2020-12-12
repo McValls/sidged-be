@@ -375,12 +375,12 @@ public class App {
 	
 	@Bean
 	public SubjectRepository subjectRepository() {
-		return new SubjectDatabaseRepository(subjectMapper);
+		return new SubjectDatabaseRepository(subjectMapper, subjectDependenciesMapper);
 	}
 	
 	@Bean
 	public CorrelativityRepository correlativityRepository() {
-		return new CorrelativityDatabaseRepository(subjectDependenciesMapper);
+		return new CorrelativityDatabaseRepository(subjectDependenciesMapper, subjectMapper);
 	}
 	
 }

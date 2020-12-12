@@ -57,5 +57,9 @@ public class SubjectService {
 		return this.subjectRepository.delete(code);
 	}
 
+	public List<Subject> findByCareerCode(String careerCode) {
+		return this.subjectRepository.findByCareerCode(careerCode);
+	}
+
 
 }

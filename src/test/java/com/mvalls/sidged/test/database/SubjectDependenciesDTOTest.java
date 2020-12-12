@@ -1,5 +1,6 @@
 package com.mvalls.sidged.test.database;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
@@ -25,8 +26,12 @@ public class SubjectDependenciesDTOTest {
 
 	@Test
 	public void createSubjectDependenciesDTO() {
-		var dto = new SubjectDependenciesDTO(englishA, List.of(englishB));
+		var dto = new SubjectDependenciesDTO(englishB, List.of(englishA));
 		assertNotNull(dto);
+		assertEquals("1", dto.getDependenciesIds());
+		assertEquals(1, dto.getDependencies().size());
+		assertEquals(englishA, dto.getDependencies().get(0));
+		assertEquals(1L, dto.getDependenciesIdsAsLongArray()[0]);
 	}
 	
 }

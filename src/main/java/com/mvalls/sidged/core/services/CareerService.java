@@ -64,5 +64,9 @@ public class CareerService {
 	public Career findById(Long id) {
 		return this.careerRepository.findById(id);
 	}
+
+	public List<Career> findByStudentIdentificationNumber(String studentIdentificationNumber) {
+		return this.careerRepository.findByStudentIdentificationNumber(studentIdentificationNumber);
+	}
 	
 }

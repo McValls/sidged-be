@@ -1,6 +1,8 @@
 package com.mvalls.sidged.database.mybatis.mappers;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
@@ -36,12 +38,18 @@ public interface SubjectMapper {
 	})
 	List<SubjectDTO> findAll();
 	
-	@Select("select * from subject "
-			+ "where id in (#{commaSeparatedIds})")
+	
+	default List<SubjectDTO> findAllByIds(long[] ids) {
+		return Arrays.stream(ids).mapToObj(id -> findSubjectById(id)).collect(Collectors.toList());
+	}
+
+	@Select("select * from subject as s "
+			+ "inner join career as c on s.career_id = c.id "
+			+ "where c.code = #{careerCode}")
 	@Results(value = {
 			@Result(property = "career", javaType = CareerDTO.class, column = "career_id", one = @One(select = "com.mvalls.sidged.database.mybatis.mappers.CareerMapper.findCareerById"))
 	})
-	List<SubjectDTO> findAllByIds(String commaSeparatedIds);
+	List<SubjectDTO> findByCareerCode(String careerCode);
 
 	@Insert("insert into subject (name, code, career_id) "
 			+ "values (#{name}, #{code}, #{career.id})")
@@ -53,5 +61,6 @@ public interface SubjectMapper {
 
 	@Delete("delete from subject where code = #{code}")
 	int delete(String code);
+
 	
 }

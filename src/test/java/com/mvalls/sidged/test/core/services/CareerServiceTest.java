@@ -29,6 +29,8 @@ public class CareerServiceTest {
 	@Mock
 	private CareerRepository careerRepository;
 	
+	private Career informatic, mechanics;
+	
 	@Before
 	public void setup() {
 		this.initMocks();
@@ -36,13 +38,13 @@ public class CareerServiceTest {
 	}
 	
 	private void initMocks() {
-		Career informatic = Career.builder()
+		informatic = Career.builder()
 				.id(1L)
 				.code("infMock")
 				.name("informatic")
 				.build();
 		
-		Career mechanics = Career.builder()
+		mechanics = Career.builder()
 				.id(2L)
 				.code("mecMock")
 				.name("mechanics")
@@ -66,6 +68,8 @@ public class CareerServiceTest {
 		
 		when(careerRepository.findById(1L)).thenReturn(informatic);
 		when(careerRepository.findById(not(eq(1L)))).thenReturn(null);
+		
+		when(careerRepository.findByStudentIdentificationNumber("12344321")).thenReturn(List.of(informatic));
 	}
 	
 	@Test
@@ -90,6 +94,14 @@ public class CareerServiceTest {
 	public void findByIdNull() {
 		Career career = this.careerService.findById(1000L);
 		assertNull(career);
+	}
+	
+	@Test
+	public void findByStudentIdentificationNumber() {
+		List<Career> careers = this.careerService.findByStudentIdentificationNumber("12344321");
+		assertNotNull(careers);
+		assertFalse(careers.isEmpty());
+		assertEquals(informatic, careers.get(0));
 	}
 	
 	@Test

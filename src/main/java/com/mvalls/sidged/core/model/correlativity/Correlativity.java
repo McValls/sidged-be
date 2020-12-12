@@ -1,7 +1,9 @@
 package com.mvalls.sidged.core.model.correlativity;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.mvalls.sidged.core.model.Career;
 import com.mvalls.sidged.core.model.Subject;
@@ -124,11 +126,28 @@ public final class Correlativity implements Comparable<Correlativity> {
 	
 	/**
 	 * 
-	 * @return subjects of all the correlativities
+	 * @return subjects of all the correlativities recursively
 	 */
 	private List<Subject> mapCorrelativitiesToDependencies() {
 		return this.correlativities.stream()
-				.map(correlativity -> correlativity.subject)
+				.parallel()
+				.map(c -> mapCorrelativitiesToDependenciesRecursively(c))
+				.flatMap(Collection::stream)
+				.distinct()
+				.collect(Collectors.toList());
+	}
+	
+	private List<Subject> mapCorrelativitiesToDependenciesRecursively(Correlativity correlativity) {
+		if (correlativity.correlativities.isEmpty()) {
+			return List.of(correlativity.subject);
+		}
+		return Stream.of(
+				correlativity.correlativities.stream()
+					.map(c -> mapCorrelativitiesToDependenciesRecursively(c))
+					.flatMap(Collection::stream)
+					.collect(Collectors.toList()),
+				List.of(correlativity.subject))
+				.flatMap(Collection::stream)
 				.collect(Collectors.toList());
 	}
 	

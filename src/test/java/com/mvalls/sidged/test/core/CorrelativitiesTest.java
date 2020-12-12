@@ -14,29 +14,6 @@ import com.mvalls.sidged.core.model.Career;
 import com.mvalls.sidged.core.model.Subject;
 import com.mvalls.sidged.core.model.correlativity.Correlativity;
 
-/*
- * TODO Test List
- * 
- * english 1 has no dependencies -> OK
- * programation 1 has no dependencies -> OK
- * english 2 depends on english 1 -> OK
- * programation 3 depends on programation 2 and programation 2 depends on programation 1 -> OK
- * programation 3 does not depends directly on programation 1 -> OK
- * finalProject depends on programation 3 and english 2 -> OK
- * finalProject does not depends directly on english 1 or programation 2 or programation 1 -> OK
- * 
- * english1.height == 0 -> OK
- * english2.height == 1 -> OK
- * programation1.height == 0 -> OK
- * programation2.height == 1 -> OK
- * programation3.height == 2 -> OK
- * finalProject.height == 3 -> OK
- * 
- * subject.career == dependency.career -> OK
- * 
- * if english2 depends on english1 then english1 cannot depend on english2 (circular dependency) -> OK
- * 
- */
 public class CorrelativitiesTest {
 	
 	private Subject english1, english2, programation1, programation2, programation3, finalProject;
@@ -159,11 +136,26 @@ public class CorrelativitiesTest {
 	@Test
 	public void dependencyTree() {
 		List<Subject> dependenciesTree = fp.getDependenciesTree();
-		assertEquals(programation3, dependenciesTree.get(0));
-		assertEquals(english2, dependenciesTree.get(1));
-		assertEquals(programation2, dependenciesTree.get(2));
+		assertEquals(5, dependenciesTree.size());
+		assertEquals(programation1, dependenciesTree.get(0));
+		assertEquals(programation2, dependenciesTree.get(1));
+		assertEquals(programation3, dependenciesTree.get(2));
 		assertEquals(english1, dependenciesTree.get(3));
-		assertEquals(programation1, dependenciesTree.get(4));
+		assertEquals(english2, dependenciesTree.get(4));
 	}
+	
+	@Test
+	public void dependencyTreeComplete() {
+		var fp = new Correlativity(finalProject, List.of(pr3, en2, pr2));
+		List<Subject> dependenciesTree = fp.getDependenciesTree();
+		assertFalse(dependenciesTree.contains(finalProject));
+		assertEquals(5, dependenciesTree.size());
+		assertEquals(programation1, dependenciesTree.get(0));
+		assertEquals(programation2, dependenciesTree.get(1));
+		assertEquals(programation3, dependenciesTree.get(2));
+		assertEquals(english1, dependenciesTree.get(3));
+		assertEquals(english2, dependenciesTree.get(4));
+	}
+	
 
 }

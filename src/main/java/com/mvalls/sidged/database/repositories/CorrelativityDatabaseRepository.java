@@ -12,21 +12,26 @@ import com.mvalls.sidged.core.repositories.CorrelativityRepository;
 import com.mvalls.sidged.database.dtos.SubjectDTO;
 import com.mvalls.sidged.database.dtos.SubjectDependenciesDTO;
 import com.mvalls.sidged.database.mybatis.mappers.SubjectDependenciesMapper;
+import com.mvalls.sidged.database.mybatis.mappers.SubjectMapper;
 import com.mvalls.sidged.database.repositories.mappers.SubjectRepositoryDTOMapper;
 
 public class CorrelativityDatabaseRepository implements CorrelativityRepository {
 
 	private final SubjectDependenciesMapper subjectDependenciesMapper;
+	private final SubjectMapper subjectMapper;
 	private final SubjectRepositoryDTOMapper dtoMapper = new SubjectRepositoryDTOMapper();
 
-	public CorrelativityDatabaseRepository(SubjectDependenciesMapper subjectDependenciesMapper) {
+	public CorrelativityDatabaseRepository(SubjectDependenciesMapper subjectDependenciesMapper,
+			SubjectMapper subjectMapper) {
 		this.subjectDependenciesMapper = subjectDependenciesMapper;
+		this.subjectMapper = subjectMapper;
 	}
 
 	@Override
 	public List<Correlativity> findAllByCareerCode(String careerCode) {
 		List<SubjectDependenciesDTO> subjectDependenciesList = 
 				this.subjectDependenciesMapper.findByCareerCode(careerCode);
+		subjectDependenciesList = getDTOWithDependencies(subjectDependenciesList);
 		
 		return subjectDependenciesList.stream()
 			.map(this::mapCorrelativity)
@@ -36,6 +41,7 @@ public class CorrelativityDatabaseRepository implements CorrelativityRepository 
 	@Override
 	public Optional<Correlativity> findBySubjectCode(String subjectCode) {
 		return this.subjectDependenciesMapper.findBySubjectCode(subjectCode)
+				.map(this::getDTOWithDependencies)
 				.map(this::mapCorrelativity);
 	}
 	
@@ -48,8 +54,19 @@ public class CorrelativityDatabaseRepository implements CorrelativityRepository 
 				this.subjectDependenciesMapper.findBySubjectId(subjectDTO);
 		
 		return subjectDependenciesDTO
+			.map(this::getDTOWithDependencies)
 			.map(dto -> updateDependencies(dto, newCorrelativeSubjectDTO))
 			.orElseGet(() -> createDependency(subjectDTO, newCorrelativeSubjectDTO));
+	}
+	
+	private List<SubjectDependenciesDTO> getDTOWithDependencies(List<SubjectDependenciesDTO> subjectDependenciesList) {
+		return subjectDependenciesList.stream()
+			.map(this::getDTOWithDependencies)
+			.collect(Collectors.toList());
+	}
+	
+	private SubjectDependenciesDTO getDTOWithDependencies(SubjectDependenciesDTO dto) {
+		return new SubjectDependenciesDTO(dto.getSubject(), subjectMapper.findAllByIds(dto.getDependenciesIdsAsLongArray()));
 	}
 	
 	private Correlativity updateDependencies(SubjectDependenciesDTO dto, SubjectDTO newCorrelativeSubjectDTO) {
@@ -75,7 +92,9 @@ public class CorrelativityDatabaseRepository implements CorrelativityRepository 
 		SubjectDTO correlativeToDeleteDTO = dtoMapper.modelToDto(correlativeToDelete);
 		
 		Optional<SubjectDependenciesDTO> subjectDependenciesDTO = 
-				this.subjectDependenciesMapper.findBySubjectId(subjectDTO);
+				this.subjectDependenciesMapper
+					.findBySubjectId(subjectDTO)
+					.map(this::getDTOWithDependencies);
 		
 		SubjectDependenciesDTO updatedDTO = subjectDependenciesDTO
 				.map(dto -> new SubjectDependenciesDTO(dto.getSubject(), 
@@ -111,6 +130,7 @@ public class CorrelativityDatabaseRepository implements CorrelativityRepository 
 	
 	private SubjectDependenciesDTO findBySubjectIdOrDefault(SubjectDTO subjectDTO) {
 		return this.subjectDependenciesMapper.findBySubjectId(subjectDTO)
+				.map(this::getDTOWithDependencies)
 				.orElseGet(() -> new SubjectDependenciesDTO(subjectDTO, List.of()));
 	}
 	

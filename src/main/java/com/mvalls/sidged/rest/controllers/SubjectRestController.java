@@ -39,6 +39,14 @@ public class SubjectRestController {
 				.collect(Collectors.toList());
 	}
 	
+	@GetMapping("/career/{careerCode}")
+	public List<SubjectFindAllResponseDTO> getAllByCareer(@PathVariable("careerCode") String careerCode) {
+		return this.subjectService.findByCareerCode(careerCode)
+				.stream()
+				.map(SubjectFindAllResponseDTO::build)
+				.collect(Collectors.toList());
+	}
+	
 	@JwtBackOffice
 	@PostMapping
 	public void create(HttpServletRequest request,

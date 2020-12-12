@@ -14,6 +14,4 @@ public class SubjectDTO extends DataTransferObject {
 	private final String code;
 	private final String name;
 	
-	
-	
 }
