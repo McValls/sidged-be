@@ -19,6 +19,7 @@ import com.mvalls.sidged.core.repositories.SubjectRepository;
 import com.mvalls.sidged.core.services.SubjectService;
 import com.mvalls.sidged.database.dtos.CareerDTO;
 import com.mvalls.sidged.database.dtos.SubjectDTO;
+import com.mvalls.sidged.database.mybatis.mappers.SubjectDependenciesMapper;
 import com.mvalls.sidged.database.mybatis.mappers.SubjectMapper;
 import com.mvalls.sidged.database.repositories.SubjectDatabaseRepository;
 
@@ -27,19 +28,27 @@ public class SubjectServiceTest {
 	
 	private SubjectService subjectService;
 	@Mock private SubjectMapper subjectMapper;
+	@Mock private SubjectDependenciesMapper subjectDependenciesMapper;
 	@Mock private CareerRepository careerRepository;
 	
 	@Before
 	public void setup() {
 		this.initSubjectMapper();
 		this.initCareerRepository();
-		SubjectRepository subjectRepository = new SubjectDatabaseRepository(this.subjectMapper);
+		SubjectRepository subjectRepository = new SubjectDatabaseRepository(this.subjectMapper, this.subjectDependenciesMapper);
 		this.subjectService = new SubjectService(subjectRepository, careerRepository);
 	}
 	
 	@Test
 	public void testFindAll() {
 		List<Subject> subjects = this.subjectService.findAll();
+		assertNotNull(subjects);
+		assertFalse(subjects.isEmpty());
+	}
+	
+	@Test
+	public void testFindAllByCareerCode() {
+		List<Subject> subjects = this.subjectService.findByCareerCode("Career1");
 		assertNotNull(subjects);
 		assertFalse(subjects.isEmpty());
 	}
@@ -107,7 +116,7 @@ public class SubjectServiceTest {
 	/** INIT MOCKS **/
 	private void initSubjectMapper() {
 
-		var careerDTO = CareerDTO.builder().build();
+		var careerDTO = CareerDTO.builder().code("Career1").build();
 		var dto1 = SubjectDTO.builder()
 				.id(1L)
 				.name("Maths1")
@@ -121,6 +130,8 @@ public class SubjectServiceTest {
 		
 		when(subjectMapper.findAll()).thenReturn(List.of(dto1, dto2));
 		when(subjectMapper.findByCode(eq("MOCKED"))).thenReturn(dto1);
+		when(subjectMapper.findByCareerCode(eq("Career1"))).thenReturn(List.of(dto1, dto2));
+		when(subjectMapper.findByCareerCode(eq("Career2"))).thenReturn(List.of());
 		
 		doAnswer(invocation -> {
 			SubjectDTO dto = (SubjectDTO) invocation.getArguments()[0];

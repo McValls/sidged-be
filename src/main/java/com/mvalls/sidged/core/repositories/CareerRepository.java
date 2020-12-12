@@ -9,6 +9,7 @@ public interface CareerRepository {
 	Career findByCode(String careerCode);
 	Career findById(Long id);
 	List<Career> findAll();
+	List<Career> findByStudentIdentificationNumber(String studentIdentificationNumber);
 	Career create(Career career);
 	Career update(Career career);
 	boolean delete(Career career);

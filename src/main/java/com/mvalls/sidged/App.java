@@ -19,6 +19,7 @@ import com.mvalls.sidged.core.repositories.CareerRepository;
 import com.mvalls.sidged.core.repositories.ClassFileDocumentRepository;
 import com.mvalls.sidged.core.repositories.ClassStudentPresentRepository;
 import com.mvalls.sidged.core.repositories.ContactDataRepository;
+import com.mvalls.sidged.core.repositories.CorrelativityRepository;
 import com.mvalls.sidged.core.repositories.CourseClassRepository;
 import com.mvalls.sidged.core.repositories.CourseRepository;
 import com.mvalls.sidged.core.repositories.PeriodRepository;
@@ -33,6 +34,7 @@ import com.mvalls.sidged.core.repositories.UserTeacherRepository;
 import com.mvalls.sidged.core.services.CareerService;
 import com.mvalls.sidged.core.services.ClassFileDocumentService;
 import com.mvalls.sidged.core.services.ClassStudentPresentService;
+import com.mvalls.sidged.core.services.CorrelativityService;
 import com.mvalls.sidged.core.services.CourseClassService;
 import com.mvalls.sidged.core.services.CourseService;
 import com.mvalls.sidged.core.services.DesertorService;
@@ -60,6 +62,7 @@ import com.mvalls.sidged.database.mybatis.mappers.CourseMapper;
 import com.mvalls.sidged.database.mybatis.mappers.PeriodMapper;
 import com.mvalls.sidged.database.mybatis.mappers.StudentLinkMapper;
 import com.mvalls.sidged.database.mybatis.mappers.StudentMapper;
+import com.mvalls.sidged.database.mybatis.mappers.SubjectDependenciesMapper;
 import com.mvalls.sidged.database.mybatis.mappers.SubjectMapper;
 import com.mvalls.sidged.database.mybatis.mappers.TeacherMapper;
 import com.mvalls.sidged.database.mybatis.mappers.TimeMapper;
@@ -70,6 +73,7 @@ import com.mvalls.sidged.database.repositories.CareerDatabaseRepository;
 import com.mvalls.sidged.database.repositories.ClassFileDocumentDatabaseRepository;
 import com.mvalls.sidged.database.repositories.ClassStudentPresentDatabaseRepository;
 import com.mvalls.sidged.database.repositories.ContactDataDatabaseRepository;
+import com.mvalls.sidged.database.repositories.CorrelativityDatabaseRepository;
 import com.mvalls.sidged.database.repositories.CourseClassDatabaseRepository;
 import com.mvalls.sidged.database.repositories.CourseDatabaseRepository;
 import com.mvalls.sidged.database.repositories.PeriodDatabaseRepository;
@@ -129,6 +133,7 @@ public class App {
 	@Autowired private PeriodMapper periodMapper;
 	@Autowired private TimeMapper timeMapper;
 	@Autowired private SubjectMapper subjectMapper;
+	@Autowired private SubjectDependenciesMapper subjectDependenciesMapper;
 	
 	@Bean
 	public WebMvcConfigurer corsConfigurer() {
@@ -287,6 +292,11 @@ public class App {
 		return new SubjectService(subjectRepository(), careerRepository());
 	}
 	
+	@Bean
+	public CorrelativityService correlativityService() {
+		return new CorrelativityService(correlativityRepository(), subjectRepository());
+	}
+	
 	/***** REPOSITORIES *********/
 	
 	@Bean
@@ -365,7 +375,12 @@ public class App {
 	
 	@Bean
 	public SubjectRepository subjectRepository() {
-		return new SubjectDatabaseRepository(subjectMapper);
+		return new SubjectDatabaseRepository(subjectMapper, subjectDependenciesMapper);
+	}
+	
+	@Bean
+	public CorrelativityRepository correlativityRepository() {
+		return new CorrelativityDatabaseRepository(subjectDependenciesMapper, subjectMapper);
 	}
 	
 }

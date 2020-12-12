@@ -58,5 +58,11 @@ public class CareerDatabaseRepository implements CareerRepository {
 		int deletedRows = this.careerMapper.delete(career.getId());
 		return deletedRows == 1;
 	}
+
+	@Override
+	public List<Career> findByStudentIdentificationNumber(String studentIdentificationNumber) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }

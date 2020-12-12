@@ -7,6 +7,7 @@ import com.mvalls.sidged.core.model.Subject;
 public interface SubjectRepository {
 
 	List<Subject> findAll();
+	List<Subject> findByCareerCode(String careerCode);
 	Subject findByCode(String code);
 	Subject create(Subject subject);
 	Subject update(Subject subject);
