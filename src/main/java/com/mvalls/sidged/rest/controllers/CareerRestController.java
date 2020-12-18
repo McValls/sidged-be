@@ -47,7 +47,7 @@ public class CareerRestController {
 
 	private final CareerService careerService;
 	private final CareerMapper careerMapper;
-
+	
 	@Autowired
 	public CareerRestController(CareerService careerService) {
 		super();

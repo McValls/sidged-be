@@ -61,8 +61,10 @@ public class CareerDatabaseRepository implements CareerRepository {
 
 	@Override
 	public List<Career> findByStudentIdentificationNumber(String studentIdentificationNumber) {
-		// TODO Auto-generated method stub
-		return null;
+		List<CareerDTO> dtos = this.careerMapper.findByStudentIdentificationNumber(studentIdentificationNumber);
+		return dtos.stream()
+				.map(dtoMapper::dtoToModel)
+				.collect(Collectors.toList());
 	}
 	
 }
