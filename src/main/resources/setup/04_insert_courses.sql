@@ -1,1 +1,0 @@
-insert into course (id, code, chair, name, shift, year, career_code, period_id, time_start_id, time_end_id) values (default, 'sem-tn-an-2020-p60', null, 'Seminario', 'NIGHT', 2020, 'PLAN60', 1, 18, 23);
