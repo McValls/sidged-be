@@ -4,6 +4,6 @@ import com.mvalls.sidged.core.model.Desertor;
 
 public interface DesertorRepository {
 
-    Desertor findByLanguage(String language);
+    Desertor findByCodeAndLanguage(String code, String language);
     
 }

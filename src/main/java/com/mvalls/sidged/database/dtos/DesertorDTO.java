@@ -16,5 +16,7 @@ public class DesertorDTO implements RepositoryDTO{
   private Long id;
   private String text;
   private String language;
+  private String code;
+
     
 }

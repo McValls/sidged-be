@@ -16,8 +16,8 @@ public class DesertorDataBaseRepository implements DesertorRepository{
 	}
 
     @Override
-    public Desertor findByLanguage(String language) {
-		return dtoMapper.dtoToModel(this.desertorMapper.findByLanguage(language));
+    public Desertor findByCodeAndLanguage(String code, String language) {
+		return dtoMapper.dtoToModel(this.desertorMapper.findByCodeAndLanguage(code, language));
 	}
     
 }

@@ -14,4 +14,5 @@ public class Desertor implements Model {
     private Long id;
     private String text;
     private String language;
+    private String code;
 }

@@ -14,6 +14,7 @@ public class DesertorRepositoryDTOMapper implements RepositoryDTOMapper<Desertor
 				.id(dto.getId())
 				.text(dto.getText())
 				.language(dto.getLanguage())
+                .code(dto.getCode())
 				.build();
     }
 
@@ -23,6 +24,7 @@ public class DesertorRepositoryDTOMapper implements RepositoryDTOMapper<Desertor
         .id(model.getId())
         .text(model.getText())
         .language(model.getLanguage())
+        .code(model.getCode())
         .build();
     }
     
